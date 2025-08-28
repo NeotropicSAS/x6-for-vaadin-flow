@@ -14,9 +14,9 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
 
 - x6-flow-root/x6-flow/src/main/resources/META-INF/resources/frontend/src/`x-6.ts`
 
-## Requirement:
-- Make sure you have Maven installed.
-- Ensure you are using **Java 11**.
+## Requirements
+* Maven 3.9+.
+* Java 17+.
   
 > **Note:**
 > 
