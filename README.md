@@ -1,5 +1,5 @@
 # vaadin-flow-x6
-This repository contains a Vaadin Flow add-on for the web component for the popular Javascript diagramming library X6 (also developed by Neotropic SAS)
+This repository contains a Vaadin Flow add-on for the web component for the popular Javascript diagramming library X6 (also developed by Neotropic SAS).
 
 The project that containing the x6 web component can be found in the following repository: [X6 Web Component](https://github.com/NeotropicSAS/webcomponent-x6)
 
