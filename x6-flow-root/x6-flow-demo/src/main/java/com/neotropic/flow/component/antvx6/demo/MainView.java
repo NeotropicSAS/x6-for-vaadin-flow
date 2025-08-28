@@ -29,10 +29,6 @@ import com.vaadin.flow.server.PWA;
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
 @Route
-@PWA(name = "Vaadin Application",
-        shortName = "Vaadin App",
-        description = "This is an example Vaadin application.",
-        enableInstallPrompt = false)
 public class MainView extends VerticalLayout {
 
     private static String HEADER_TEXT = "Vaddin Flow X6 Examples";

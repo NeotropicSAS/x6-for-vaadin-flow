@@ -12,9 +12,9 @@ import com.neotropic.flow.component.antvx6.objects.X6EdgeLabel;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -202,7 +202,7 @@ public class ExampleStyles extends VerticalLayout{
                 new ListItem("Z-Index")
         );
         VerticalLayout nodeStylesSection = new VerticalLayout(
-                new Label("Node Styles"),
+                new Span("Node Styles"),
                 nodeStylesList
         );
 
@@ -213,7 +213,7 @@ public class ExampleStyles extends VerticalLayout{
                 new ListItem("Label Position")
         );
         VerticalLayout labelStylesSection = new VerticalLayout(
-                new Label("Label Styles"),
+                new Span("Label Styles"),
                 labelStylesList
         );
 
@@ -236,7 +236,7 @@ public class ExampleStyles extends VerticalLayout{
                 new ListItem("Z-Index")
         );
         VerticalLayout edgeStylesSection = new VerticalLayout(
-                new Label("Edge Styles"),
+                new Span("Edge Styles"),
                 edgeStylesList
         );
 

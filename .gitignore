@@ -1,5 +1,12 @@
 /target/
 .idea/
+x6-flow-root/x6-flow/.idea
+x6-flow-root/x6-flow/node_modules
+x6-flow-root/x6-flow/target/
+x6-flow-root/x6-flow-demo/.idea
+x6-flow-root/x6-flow-demo/target/
+x6-flow-root/x6-flow-demo/frontend/generated/
+
 .settings
 .project
 .classpath
