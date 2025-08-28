@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-import {LitElement, customElement, query, html, css, property } from 'lit-element';
+import { LitElement, html, css } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 import { Edge, Graph, Node } from '@antv/x6';
 import{ Snapline }from'@antv/x6-plugin-snapline';
 import { Transform } from '@antv/x6-plugin-transform';
