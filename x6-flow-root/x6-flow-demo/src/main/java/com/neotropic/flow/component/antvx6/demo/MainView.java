@@ -23,7 +23,6 @@ import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 
 /**
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
