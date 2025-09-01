@@ -47,7 +47,7 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
     >
     > ```bash
     >  export M2_HOME=/ROUTE_TO_YOUR_MAVEN-3.9+/
-    > export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+    >  export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
     > ```
 
     ```bash
