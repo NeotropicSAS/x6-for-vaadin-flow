@@ -1,5 +1,5 @@
 # vaadin-flow-x6
-This repository contains a Vaadin Flow add-on for the web component for the popular Javascript diagramming library X6 (also developed by Neotropic SAS)
+This repository contains a Vaadin Flow add-on for the web component for the popular Javascript diagramming library X6.
 
 The project that containing the x6 web component can be found in the following repository: [X6 Web Component](https://github.com/NeotropicSAS/webcomponent-x6)
 
@@ -14,9 +14,9 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
 
 - x6-flow-root/x6-flow/src/main/resources/META-INF/resources/frontend/src/`x-6.ts`
 
-## Requirement:
-- Maven 3.9+
-- Java 17+
+## Requirements
+* Maven 3.9+.
+* Java 17+.
 
 > **Note:**
 > 
