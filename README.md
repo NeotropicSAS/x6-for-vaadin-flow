@@ -17,10 +17,10 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
 ## Requirements
 * Maven 3.9+.
 * Java 17+.
-  
+
 > **Note:**
 > 
->You can use your preferred IDE to execute the project by performing a "Clean and Build," and then running the program. However, if you prefer to execute it through the terminal, continue with the tutorial.
+>You can use your preferred IDE to execute the project by performing a "Clean and Install (Build in some IDEs)," and then running the program. However, if you prefer to execute it through the terminal, continue with the tutorial.
 >
 
   
@@ -36,13 +36,19 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
    
     > **Note:**
     >
-    >If Java 11 is not set as your primary Java version, configure it as an environment variable:
+    >If Java 17 is not set as your primary Java version, configure it as an environment variable:
     >
     > ```bash
-    >   export JAVA_HOME=/ROUTE-TO-YOUR-JAVA11/
+    >   export JAVA_HOME=/ROUTE-TO-YOUR-JAVA17/
     >   PATH=$JAVA_HOME/bin:$PATH
     >   java --version # Check your Java version
     >```
+    > And configure Maven
+    >
+    > ```bash
+    >  export M2_HOME=/ROUTE_TO_YOUR_MAVEN-3.9+/
+    >  export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+    > ```
 
     ```bash
         mvn clean install --no-transfer-progress
@@ -66,11 +72,11 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
         mvn exec:java -Dexec.mainClass=com.neotropic.flow.component.antvx6.demo.Application
     ```
    
-    you'll be able to find the demo at: http://localhost:8080/
+    you'll be able to find the demo tutorial at: http://localhost:8080/
 
-    |![Web Client](images/canvas_x6_kuwaiba.png) |
+    |![Tutorial](tutorial.png) |
     |:--:|
-    | ***X6 Component Demo for Vaadin Flow*** |
+    | ***X6 Component Demo Tutorial for Vaadin Flow*** |
 
 
     > **Note:**
@@ -81,7 +87,7 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
     >    <dependency>
     >       <groupId>com.neotropic.flow.component</groupId>
     >       <artifactId>x6-flow</artifactId>
-    >       <version>1.0</version>
+    >       <version>2.3.0</version>
     >       <type>jar</type>
     >    </dependency>
     >```
