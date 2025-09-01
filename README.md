@@ -72,11 +72,11 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
         mvn exec:java -Dexec.mainClass=com.neotropic.flow.component.antvx6.demo.Application
     ```
    
-    you'll be able to find the demo at: http://localhost:8080/
+    you'll be able to find the demo tutorial at: http://localhost:8080/
 
-    |![Web Client](canvas_x6.png) |
+    |![Tutorial](tutorial.png) |
     |:--:|
-    | ***X6 Component Demo for Vaadin Flow*** |
+    | ***X6 Component Demo Tutorial for Vaadin Flow*** |
 
 
     > **Note:**
