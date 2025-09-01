@@ -15,12 +15,12 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
 - x6-flow-root/x6-flow/src/main/resources/META-INF/resources/frontend/src/`x-6.ts`
 
 ## Requirement:
-- Make sure you have Maven installed.
-- Ensure you are using **Java 11**.
-  
+- Maven 3.9+
+- Java 17+
+
 > **Note:**
 > 
->You can use your preferred IDE to execute the project by performing a "Clean and Build," and then running the program. However, if you prefer to execute it through the terminal, continue with the tutorial.
+>You can use your preferred IDE to execute the project by performing a "Clean and Install (Build in some IDEs)," and then running the program. However, if you prefer to execute it through the terminal, continue with the tutorial.
 >
 
   
@@ -36,13 +36,19 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
    
     > **Note:**
     >
-    >If Java 11 is not set as your primary Java version, configure it as an environment variable:
+    >If Java 17 is not set as your primary Java version, configure it as an environment variable:
     >
     > ```bash
-    >   export JAVA_HOME=/ROUTE-TO-YOUR-JAVA11/
+    >   export JAVA_HOME=/ROUTE-TO-YOUR-JAVA17/
     >   PATH=$JAVA_HOME/bin:$PATH
     >   java --version # Check your Java version
     >```
+    > And configure Maven
+    >
+    > ```bash
+    >  export M2_HOME=/ROUTE_TO_YOUR_MAVEN-3.9+/
+    > export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+    > ```
 
     ```bash
         mvn clean install --no-transfer-progress
@@ -68,7 +74,7 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
    
     you'll be able to find the demo at: http://localhost:8080/
 
-    |![Web Client](images/canvas_x6_kuwaiba.png) |
+    |![Web Client](canvas_x6.png) |
     |:--:|
     | ***X6 Component Demo for Vaadin Flow*** |
 
