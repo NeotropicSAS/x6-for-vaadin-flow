@@ -3,9 +3,11 @@
 x6-flow-root/x6-flow/.idea
 x6-flow-root/x6-flow/node_modules
 x6-flow-root/x6-flow/target/
+x6-flow-root/x6-flow/package-lock.json
 x6-flow-root/x6-flow-demo/.idea
 x6-flow-root/x6-flow-demo/target/
 x6-flow-root/x6-flow-demo/frontend/generated/
+x6-flow-root/x6-flow-demo/package-lock.json
 
 .settings
 .project
