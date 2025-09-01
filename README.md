@@ -87,7 +87,7 @@ The TypeScript file (`x-6.ts`) of the web component can be found at the followin
     >    <dependency>
     >       <groupId>com.neotropic.flow.component</groupId>
     >       <artifactId>x6-flow</artifactId>
-    >       <version>1.0</version>
+    >       <version>2.3.0</version>
     >       <type>jar</type>
     >    </dependency>
     >```
