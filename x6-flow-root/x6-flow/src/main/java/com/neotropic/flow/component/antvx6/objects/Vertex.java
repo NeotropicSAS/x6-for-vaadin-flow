@@ -16,11 +16,13 @@
 package com.neotropic.flow.component.antvx6.objects;
 
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  * Represents a vertex on the line of an edge that connects two nodes.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class Vertex implements Serializable{
     private double x;
     private double y;
@@ -29,22 +31,6 @@ public class Vertex implements Serializable{
     
     public Vertex(double x, double y){
         this.x = x;
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
         this.y = y;
     }
 }

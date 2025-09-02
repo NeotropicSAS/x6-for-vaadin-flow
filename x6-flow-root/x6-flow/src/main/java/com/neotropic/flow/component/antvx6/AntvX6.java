@@ -436,16 +436,16 @@ public class AntvX6 extends Div {
         nodeStyles.addProperty("strokeWidth", background.getNodeStyles().getStrokeWidth());
         nodeStyles.addProperty("dash", background.getNodeStyles().getDash());
         nodeStyles.addProperty("borderRadius", background.getNodeStyles().getBorderRadius());
-        nodeStyles.addProperty("zIndex", background.getNodeStyles().getzIndex());
-        backgroundData.add("styles", nodeStyles);
+        nodeStyles.addProperty("zIndex", background.getNodeStyles().getZIndex());
+        backgroundData.add("nodeStyles", nodeStyles);
         
         JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", background.getLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", background.getLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", background.getLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", background.getLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", background.getLabelStyles().getVisibility());
-        backgroundData.add("labelStyles", labelStyles);
+        labelStyles.addProperty("fontColor", background.getNodeLabelStyles().getFontColor());
+        labelStyles.addProperty("fontSize", background.getNodeLabelStyles().getFontSize());
+        labelStyles.addProperty("fontFamily", background.getNodeLabelStyles().getFontFamily());
+        labelStyles.addProperty("labelPosition", background.getNodeLabelStyles().getLabelPosition());
+        labelStyles.addProperty("visibility", background.getNodeLabelStyles().getVisibility());
+        backgroundData.add("nodeLabelStyles", labelStyles);
 
         getElement().callJsFunction(
             "drawBackground", backgroundData.toString()
@@ -505,16 +505,16 @@ public class AntvX6 extends Div {
         nodeStyles.addProperty("strokeWidth", node.getNodeStyles().getStrokeWidth());
         nodeStyles.addProperty("dash", node.getNodeStyles().getDash());
         nodeStyles.addProperty("borderRadius", node.getNodeStyles().getBorderRadius());
-        nodeStyles.addProperty("zIndex", node.getNodeStyles().getzIndex());
-        nodeData.add("styles", nodeStyles);
+        nodeStyles.addProperty("zIndex", node.getNodeStyles().getZIndex());
+        nodeData.add("nodeStyles", nodeStyles);
         
         JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", node.getLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", node.getLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", node.getLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", node.getLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", node.getLabelStyles().getVisibility());
-        nodeData.add("labelStyles", labelStyles);
+        labelStyles.addProperty("fontColor", node.getNodeLabelStyles().getFontColor());
+        labelStyles.addProperty("fontSize", node.getNodeLabelStyles().getFontSize());
+        labelStyles.addProperty("fontFamily", node.getNodeLabelStyles().getFontFamily());
+        labelStyles.addProperty("labelPosition", node.getNodeLabelStyles().getLabelPosition());
+        labelStyles.addProperty("visibility", node.getNodeLabelStyles().getVisibility());
+        nodeData.add("nodeLabelStyles", labelStyles);
 
         nodeData.addProperty("port", node.isPort());
         
@@ -560,18 +560,16 @@ public class AntvX6 extends Div {
         nodeStyles.addProperty("strokeColor", nodeText.getNodeStyles().getStrokeColor());
         nodeStyles.addProperty("strokeWidth", nodeText.getNodeStyles().getStrokeWidth());
         nodeStyles.addProperty("dash", nodeText.getNodeStyles().getDash());
-        nodeStyles.addProperty("zIndex", nodeText.getNodeStyles().getzIndex());
-        textData.add("styles", nodeStyles);
+        nodeStyles.addProperty("zIndex", nodeText.getNodeStyles().getZIndex());
+        textData.add("nodeStyles", nodeStyles);
         
         JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", nodeText.getLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", nodeText.getLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", nodeText.getLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", nodeText.getLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", nodeText.getLabelStyles().getVisibility());
-        textData.add("labelStyles", labelStyles);
-
-        textData.addProperty("labelPositionRelative", nodeText.getLabelPositionRelative());
+        labelStyles.addProperty("fontColor", nodeText.getNodeLabelStyles().getFontColor());
+        labelStyles.addProperty("fontSize", nodeText.getNodeLabelStyles().getFontSize());
+        labelStyles.addProperty("fontFamily", nodeText.getNodeLabelStyles().getFontFamily());
+        labelStyles.addProperty("labelPosition", nodeText.getNodeLabelStyles().getLabelPosition());
+        labelStyles.addProperty("visibility", nodeText.getNodeLabelStyles().getVisibility());
+        textData.add("nodeLabelStyles", labelStyles);
 
         getElement().callJsFunction(
             "drawText", textData.toString()
@@ -649,30 +647,30 @@ public class AntvX6 extends Div {
         edgeData.add("vertices", verticesArray);
         
         JsonArray labelsArray = new JsonArray();
-        for (X6EdgeLabel label : edge.getLabels()) {
+        for (X6EdgeLabel label : edge.getEdgeLabels()) {
             JsonObject labelObj = new JsonObject();
             labelObj.addProperty("label", label.getLabel());
             labelObj.addProperty("distance", label.getDistance());
             
             JsonObject edgeLabelStyles = new JsonObject();
-            edgeLabelStyles.addProperty("fillColor", label.getStyles().getFillColor());
-            edgeLabelStyles.addProperty("fontColor", label.getStyles().getFontColor());
-            edgeLabelStyles.addProperty("fontSize", label.getStyles().getFontSize());
-            edgeLabelStyles.addProperty("fontFamily", label.getStyles().getFontFamily());
-            edgeLabelStyles.addProperty("borderRadius", label.getStyles().getBorderRadius());
-            labelObj.add("styles", edgeLabelStyles);
+            edgeLabelStyles.addProperty("fillColor", label.getEdgeLabelStyles().getFillColor());
+            edgeLabelStyles.addProperty("fontColor", label.getEdgeLabelStyles().getFontColor());
+            edgeLabelStyles.addProperty("fontSize", label.getEdgeLabelStyles().getFontSize());
+            edgeLabelStyles.addProperty("fontFamily", label.getEdgeLabelStyles().getFontFamily());
+            edgeLabelStyles.addProperty("borderRadius", label.getEdgeLabelStyles().getBorderRadius());
+            labelObj.add("edgeLabelStyles", edgeLabelStyles);
             
             labelsArray.add(labelObj);
         }
-        edgeData.add("labels", labelsArray);
+        edgeData.add("edgeLabels", labelsArray);
         
         JsonObject edgeStyles = new JsonObject();
         edgeStyles.addProperty("strokeColor", edge.getEdgeStyles().getStrokeColor());
         edgeStyles.addProperty("strokeWidth", edge.getEdgeStyles().getStrokeWidth());
         edgeStyles.addProperty("dash", edge.getEdgeStyles().getDash());
         edgeStyles.addProperty("borderRadius", edge.getEdgeStyles().getBorderRadius());
-        edgeStyles.addProperty("zIndex", edge.getEdgeStyles().getzIndex());
-        edgeData.add("styles", edgeStyles);
+        edgeStyles.addProperty("zIndex", edge.getEdgeStyles().getZIndex());
+        edgeData.add("edgeStyles", edgeStyles);
 
         getElement().callJsFunction(
             "drawEdge", edgeData.toString() 

@@ -28,21 +28,21 @@ import java.util.UUID;
  */
 @Route("/basic/examples/styles")
 public class ExampleStyles extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Styles";
-    private static String STYLES_NODE = "Node Styles"; 
-    private static String STYLES_EDGE = "Edge Styles"; 
-    private static String DESCRIPTION = "The x6 add-on supports handling styles for nodes and edges.";
-    private static String DESCRIPTION_STYLES_NODE = "The supported styles for nodes apply to all node types available in the Add-on: X6Node, X6NodeBackground, and X6NodeText.";
-    private static String DESCRIPTION_STYLES_EDGE = "The supported styles for edges apply to all edges types available in the Add-on: X6BasicEdge, X6Edge and soon X6EdgeMultipleLabels.";
-    private static String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
-    private static String EXAMPLE_CHANGE_COLOR = "Example change color";
-    private static String EXAMPLE_CHANGE_COLOR_DESCRIPTION = "You can use the vaadin button click event to update the UI. (Any X6 or vaadin event will work and DON'T forget to always update the model";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Styles";
+    private static final String STYLES_NODE = "Node Styles"; 
+    private static final String STYLES_EDGE = "Edge Styles"; 
+    private static final String DESCRIPTION = "The x6 add-on supports handling styles for nodes and edges.";
+    private static final String DESCRIPTION_STYLES_NODE = "The supported styles for nodes apply to all node types available in the Add-on: X6Node, X6NodeBackground, and X6NodeText.";
+    private static final String DESCRIPTION_STYLES_EDGE = "The supported styles for edges apply to all edges types available in the Add-on: X6BasicEdge, X6Edge and soon X6EdgeMultipleLabels.";
+    private static final String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
+    private static final String EXAMPLE_CHANGE_COLOR = "Example change color";
+    private static final String EXAMPLE_CHANGE_COLOR_DESCRIPTION = "You can use the vaadin button click event to update the UI. (Any X6 or vaadin event will work and DON'T forget to always update the model";
     
     private int currentColor = 0;
     
-    public ExampleStyles(){
-        this.factory = new X6Factory();
+    public ExampleStyles(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -67,7 +67,7 @@ public class ExampleStyles extends VerticalLayout{
     
     private VerticalLayout createNodeStyles(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //Through an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -84,13 +84,13 @@ public class ExampleStyles extends VerticalLayout{
             node.getNodeStyles().setFillColor("red");
             node.getNodeStyles().setStrokeColor("blue");
             node.getNodeStyles().setStrokeWidth(3);
-            node.getNodeStyles().setzIndex(2);
+            node.getNodeStyles().setZIndex(2);
             
             //Apply styles to Node's label
-            node.getLabelStyles().setFontFamily("Courier");
-            node.getLabelStyles().setFontSize(15);
-            node.getLabelStyles().setFontColor("red");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node.getNodeLabelStyles().setFontFamily("Courier");
+            node.getNodeLabelStyles().setFontSize(15);
+            node.getNodeLabelStyles().setFontColor("red");
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             
             //Add the nodes to the canvas
@@ -103,7 +103,7 @@ public class ExampleStyles extends VerticalLayout{
     
     private VerticalLayout createEdgeStyles(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //Through an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -133,15 +133,15 @@ public class ExampleStyles extends VerticalLayout{
             edge.getEdgeStyles().setDash(4.4);
             edge.getEdgeStyles().setStrokeColor("red");
             edge.getEdgeStyles().setStrokeWidth(5);
-            edge.getEdgeStyles().setzIndex(1);
+            edge.getEdgeStyles().setZIndex(1);
             
             X6EdgeLabel label = edge.getLabelAt(0);
             
-            label.getStyles().setFillColor("gray");
-            label.getStyles().setFontColor("red");
-            label.getStyles().setFontSize(15);
-            label.getStyles().setFontFamily("Courier");
-            label.getStyles().setBorderRadius(4);
+            label.getEdgeLabelStyles().setFillColor("gray");
+            label.getEdgeLabelStyles().setFontColor("red");
+            label.getEdgeLabelStyles().setFontSize(15);
+            label.getEdgeLabelStyles().setFontFamily("Courier");
+            label.getEdgeLabelStyles().setBorderRadius(4);
 
             //Add the elements to the canvas
             basicCanvas.drawNode(source);
@@ -155,7 +155,7 @@ public class ExampleStyles extends VerticalLayout{
     
     private VerticalLayout createExampleChangeColor(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         Button btnChangeColor = new Button("Change color");
         //Through an event , we draw the nodes
@@ -166,7 +166,7 @@ public class ExampleStyles extends VerticalLayout{
             node.setGeometry(new Geometry(50, 200, 50, 50));
             node.setShape(X6Constants.SHAPE_RECT);
             node.setLabel("I'm a X6Node");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             //Add the elements to the canvas
             basicCanvas.drawNode(node);

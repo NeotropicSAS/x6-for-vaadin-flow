@@ -15,10 +15,17 @@
  */
 package com.neotropic.flow.component.antvx6.objects;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+
 /**
  * Represents a node in the X6 graph.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class X6Node extends X6AbstractNode{
     private boolean port;
     
@@ -30,13 +37,4 @@ public class X6Node extends X6AbstractNode{
         super(id, x ,y ,width, height, shape);
         this.port = false;
     }
-
-    public boolean isPort() {
-        return port;
-    }
-
-    public void setPort(boolean port) {
-        this.port = port;
-    }
-
 }

@@ -16,52 +16,29 @@
 package com.neotropic.flow.component.antvx6.objects;
 
 import com.neotropic.flow.component.antvx6.styles.X6EdgeLabelStyles;
+import lombok.Data;
 
 /**
  * Represents a label of an edge.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class X6EdgeLabel {
     private String label;
     //Value between 0 and 1, for example to place the label in the middle: 0.5
     private double distance;
-    private X6EdgeLabelStyles styles;
+    private X6EdgeLabelStyles edgeLabelStyles;
     
     //Sets the label in the middle of the edge
     public X6EdgeLabel(String label){
         this.label = label;
         this.distance = 0.5;
-        this.styles = new X6EdgeLabelStyles();
+        this.edgeLabelStyles = new X6EdgeLabelStyles();
     }
     
     public X6EdgeLabel(String label, double distance){
         this.label = label;
         this.distance = distance;
-        this.styles = new X6EdgeLabelStyles();
+        this.edgeLabelStyles = new X6EdgeLabelStyles();
     }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public X6EdgeLabelStyles getStyles() {
-        return styles;
-    }
-
-    public void setStyles(X6EdgeLabelStyles styles) {
-        this.styles = styles;
-    }
-
 }

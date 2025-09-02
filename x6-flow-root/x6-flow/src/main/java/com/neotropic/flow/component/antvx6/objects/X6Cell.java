@@ -19,11 +19,15 @@ import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Represents a cell in the X6 graph.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
+@SuperBuilder
 public class X6Cell {
     private String id;
     private Geometry geometry;
@@ -49,38 +53,6 @@ public class X6Cell {
         this.styles = new HashMap<>();
         this.tools = new ArrayList<>();
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
-    }
-
-    public String getCellType() {
-        return cellType;
-    }
-
-    public void setCellType(String cellType) {
-        this.cellType = cellType;
-    }
-    
-    public HashMap<String, String> getStyles() {
-        return styles;
-    }
-
-    public void setStyles(HashMap<String, String> styles) {
-        this.styles = styles;
-    }
     
     public boolean isEdge(){
         return this.cellType.equals(X6Constants.CELL_EDGE);
@@ -93,13 +65,4 @@ public class X6Cell {
     public void setStyle(String style, String value){
         styles.put(style, value);
     }
-
-    public List<String> getTools() {
-        return tools;
-    }
-
-    public void setTools(List<String> tools) {
-        this.tools = tools;
-    }
-    
 }

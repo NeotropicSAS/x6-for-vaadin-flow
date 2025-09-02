@@ -15,11 +15,14 @@
  */
 package com.neotropic.flow.component.antvx6.objects;
 
+import lombok.Data;
+
 /**
  * Represents the geometric properties of a cell.
  * Contains the coordinates and dimensions.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class Dimension {
     private double width;
     private double height;
@@ -29,22 +32,5 @@ public class Dimension {
     public Dimension (double width, double height) {
         this.width = width;
         this.height = height;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-    
+    } 
 }

@@ -15,12 +15,19 @@
  */
 package com.neotropic.flow.component.antvx6.objects;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+
 /**
  * Represents a background node in the X6 graph.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class X6NodeBackground extends X6AbstractNode {
-
+    
     public X6NodeBackground(){
         super();
     }

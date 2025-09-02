@@ -23,23 +23,23 @@ import java.util.UUID;
  */
 @Route("/basic/examples/edges")
 public class ExampleEdges extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Edge";
-    private static String DRAW_EDGE_BASIC = "Draw Edge without labels";
-    private static String DRAW_EDGE_WITH_LABEL = "Draw Edge with a unique label";
-    private static String DRAW_EDGE_MULTIPLE_LABELS = "Draw Edge with multiple labels";
-    private static String DRAW_EDGE_THROUGH_PORT = "Draw Edge through ports";
-    private static String DRAW_EDGE_VERTICES = "Draw Edge with Vertices";
-    private static String DESCRIPTION = "The X6 add-on supports edge handling, from edges without labels to edges with multiple labels.";
-    private static String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
-    private static String DESCRIPTION_DRAW_EDGE_BASIC = "Edge without labels";
-    private static String DESCRIPTION_DRAW_EDGE_WITH_LABEL = "Edge with a single label";
-    private static String DESCRIPTION_DRAW_EDGE_MULTIPLE_LABELS = "Edge with multiple labels";
-    private static String DESCRIPTION_DRAW_EDGE_THROUGH_PORT = "We can create edges through nodes that manage ports (Only nodes of type X6Node have the characteristic of managing a connection port).";
-    private static String DESCRIPTION_DRAW_EDGE_VERTICES = "We can create vertices which are points inside the edges. If you want to add vertices from the UI use the add vertices and segments tool.";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Edge";
+    private static final String DRAW_EDGE_BASIC = "Draw Edge without labels";
+    private static final String DRAW_EDGE_WITH_LABEL = "Draw Edge with a unique label";
+    private static final String DRAW_EDGE_MULTIPLE_LABELS = "Draw Edge with multiple labels";
+    private static final String DRAW_EDGE_THROUGH_PORT = "Draw Edge through ports";
+    private static final String DRAW_EDGE_VERTICES = "Draw Edge with Vertices";
+    private static final String DESCRIPTION = "The X6 add-on supports edge handling, from edges without labels to edges with multiple labels.";
+    private static final String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
+    private static final String DESCRIPTION_DRAW_EDGE_BASIC = "Edge without labels";
+    private static final String DESCRIPTION_DRAW_EDGE_WITH_LABEL = "Edge with a single label";
+    private static final String DESCRIPTION_DRAW_EDGE_MULTIPLE_LABELS = "Edge with multiple labels";
+    private static final String DESCRIPTION_DRAW_EDGE_THROUGH_PORT = "We can create edges through nodes that manage ports (Only nodes of type X6Node have the characteristic of managing a connection port).";
+    private static final String DESCRIPTION_DRAW_EDGE_VERTICES = "We can create vertices which are points inside the edges. If you want to add vertices from the UI use the add vertices and segments tool.";
     
-    public ExampleEdges(){
-        this.factory = new X6Factory();
+    public ExampleEdges(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -67,7 +67,7 @@ public class ExampleEdges extends VerticalLayout{
     
     private VerticalLayout createAddBasicEdge(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
         
         //Through an event, draw the elements
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -98,7 +98,7 @@ public class ExampleEdges extends VerticalLayout{
     
     private VerticalLayout createAddX6EdgeSingleLabel(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //Through an event, we create the elements
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -129,7 +129,7 @@ public class ExampleEdges extends VerticalLayout{
     
     private VerticalLayout createAddX6EdgeMultipleLabels(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //Through an event, we create the elements
         basicCanvas.addGraphCreatedListener(evt -> {
