@@ -15,27 +15,24 @@
  */
 package com.neotropic.flow.component.antvx6.objects;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+
 /**
  * Represents a text node in the X6 graph.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class X6NodeText extends X6AbstractNode{
-    // Position relative to its node parent
-    private String labelPositionRelative;
-    
+   
     public X6NodeText(){
         super();
     }
     
     public X6NodeText(String id, double x, double y, double width, double height, String shape) {
         super(id, x, y, width, height, shape);
-    }
-    
-    public String getLabelPositionRelative(){
-        return labelPositionRelative;
-    }
-    
-    public void setLabelPositionRelative(String labelPositionRelative){
-        this.labelPositionRelative = labelPositionRelative;
     }
 }

@@ -16,11 +16,13 @@
 package com.neotropic.flow.component.antvx6.styles;
 
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
+import lombok.Data;
 
 /**
  * Represents the label styles of a edge
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class X6EdgeLabelStyles {
     private String fillColor;
     private String fontColor;
@@ -34,46 +36,5 @@ public class X6EdgeLabelStyles {
         this.fontSize = 14;
         this.fontFamily = "Arial";
         this.borderRadius = 0;
-    }
-
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    public String getFontColor() {
-        return fontColor;
-    }
-
-    public void setFontColor(String fontColor) {
-        this.fontColor = fontColor;
-    }
-
-    public double getFontSize() {
-        return fontSize;
-    }
-
-    public void setFontSize(double fontSize) {
-        this.fontSize = fontSize;
-    }
-
-    public String getFontFamily() {
-        return fontFamily;
-    }
-
-    public void setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
-    }
-
-    public int getBorderRadius() {
-        return borderRadius;
-    }
-
-    public void setBorderRadius(int borderRadius) {
-        this.borderRadius = borderRadius;
-    }
-    
+    }    
 }

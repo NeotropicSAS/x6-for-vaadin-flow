@@ -16,11 +16,13 @@
 package com.neotropic.flow.component.antvx6.styles;
 
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
+import lombok.Data;
 
 /**
  * Represents the styles of a node
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class X6NodeStyles {
     private String fillColor;
     private String strokeColor;
@@ -37,53 +39,4 @@ public class X6NodeStyles {
         this.borderRadius = 0;
         this.zIndex = 1;
     }
-
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    public String getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    public double getStrokeWidth() {
-        return strokeWidth;
-    }
-
-    public void setStrokeWidth(double strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
-
-    public String getDash() {
-        return dash;
-    }
-
-    public void setDash(String dash) {
-        this.dash = dash;
-    }
-
-    public int getBorderRadius() {
-        return borderRadius;
-    }
-
-    public void setBorderRadius(int borderRadius) {
-        this.borderRadius = borderRadius;
-    }
-
-    public int getzIndex() {
-        return zIndex;
-    }
-
-    public void setzIndex(int zIndex) {
-        this.zIndex = zIndex;
-    }
-    
 }

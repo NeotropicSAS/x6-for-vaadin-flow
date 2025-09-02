@@ -18,27 +18,33 @@ package com.neotropic.flow.component.antvx6.objects;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import com.neotropic.flow.component.antvx6.styles.X6NodeLabelStyles;
 import com.neotropic.flow.component.antvx6.styles.X6NodeStyles;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Represents a basic node in the X6 graph model.
  * This abstract class serves as a base for {@link X6Node}, {@link X6NodeBackground} and {@link X6NodeText}.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public abstract class X6AbstractNode extends X6Cell { 
     private String shape;
     private String imgUrl;
     private boolean movable; 
     private String parentId;
     private String label;
-    private X6NodeStyles styles;
-    private X6NodeLabelStyles labelStyles;
-    
+    private X6NodeStyles nodeStyles;
+    private X6NodeLabelStyles nodeLabelStyles;
+
     public X6AbstractNode(){
         super();
         this.setCellType(X6Constants.CELL_NODE);
         this.movable = true;
-        this.styles = new X6NodeStyles();
-        this.labelStyles = new X6NodeLabelStyles();
+        this.nodeStyles = new X6NodeStyles();
+        this.nodeLabelStyles = new X6NodeLabelStyles();
     }
     
     public X6AbstractNode(String id, double x, double y,double width, double height, String shape){
@@ -49,65 +55,7 @@ public abstract class X6AbstractNode extends X6Cell {
         this.movable = true;
         this.parentId = "";
         this.label = "";
-        this.styles = new X6NodeStyles();
-        this.labelStyles = new X6NodeLabelStyles();
+        this.nodeStyles = new X6NodeStyles();
+        this.nodeLabelStyles = new X6NodeLabelStyles();
     }
-
-    public String getShape() {
-        return shape;
-    }
-
-    public void setShape(String shape) {
-        this.shape = shape;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public boolean isMovable() {
-        return movable;
-    }
-
-    public void setMovable(boolean movable) {
-        this.movable = movable;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public X6NodeStyles getNodeStyles() {
-        return styles;
-    }
-
-    public void setNodeStyles(X6NodeStyles styles) {
-        this.styles = styles;
-    }
-
-    public X6NodeLabelStyles getLabelStyles() {
-        return labelStyles;
-    }
-
-    public void setLabelStyles(X6NodeLabelStyles labelStyles) {
-        this.labelStyles = labelStyles;
-    }
-    
-    
 }

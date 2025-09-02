@@ -16,11 +16,13 @@
 package com.neotropic.flow.component.antvx6.styles;
 
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
+import lombok.Data;
 
 /**
  * Represents the label styles of a node
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class X6NodeLabelStyles {
     private String fontColor;
     private double fontSize;
@@ -35,45 +37,4 @@ public class X6NodeLabelStyles {
         this.labelPosition = X6Constants.LABEL_NODE_POSITION_DEFAULT;
         this.visibility = X6Constants.LABEL_NODE_VISIBLE;
     }
-
-    public String getFontColor() {
-        return fontColor;
-    }
-
-    public void setFontColor(String fontColor) {
-        this.fontColor = fontColor;
-    }
-
-    public double getFontSize() {
-        return fontSize;
-    }
-
-    public void setFontSize(double fontSize) {
-        this.fontSize = fontSize;
-    }
-
-    public String getFontFamily() {
-        return fontFamily;
-    }
-
-    public void setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
-    }
-
-    public String getLabelPosition() {
-        return labelPosition;
-    }
-
-    public void setLabelPosition(String labelPosition) {
-        this.labelPosition = labelPosition;
-    }
-
-    public String getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
-    }
-    
 }

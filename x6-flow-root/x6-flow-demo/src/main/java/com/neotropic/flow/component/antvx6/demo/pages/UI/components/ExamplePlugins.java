@@ -19,24 +19,24 @@ import java.util.UUID;
  */
 @Route("/UI/components/examples/plugins")
 public class ExamplePlugins extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Plugins";
-    private static String PLUGIN_SCROLLER = "Scroller Plugin";
-    private static String PLUGIN_EXPORT = "Export Plugin";
-    private static String PLUGIN_SNAPLINE = "Snapline Plugin";
-    private static String PLUGIN_TRANSFORM = "Transform Plugin";
-    private static String PLUGIN_SELECTION = "Selection Plugin";
-    private static String PLUGIN_MINIMAP = "Minimap Plugin";
-    private static String DESCRIPTION = "They are UI components used to add features and behaviors to the visualization of graphs.";
-    private static String DESCRIPTION_PLUGIN_SCROLLER = "Create a scroll bar on the canvas.";
-    private static String DESCRIPTION_PLUGIN_EXPORT = "allows you to export the graph as an image.";
-    private static String DESCRIPTION_PLUGIN_SNAPLINE = "Create reference lines to position nodes.";
-    private static String DESCRIPTION_PLUGIN_TRANSFORM = "Allows resizing and rotating nodes within the canvas.";
-    private static String DESCRIPTION_PLUGIN_SELECTION = "Allows the selection of one or more nodes on the canvas.";
-    private static String DESCRIPTION_PLUGIN_MINIMAP = "Creates a minimap of the current canvas";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Plugins";
+    private static final String PLUGIN_SCROLLER = "Scroller Plugin";
+    private static final String PLUGIN_EXPORT = "Export Plugin";
+    private static final String PLUGIN_SNAPLINE = "Snapline Plugin";
+    private static final String PLUGIN_TRANSFORM = "Transform Plugin";
+    private static final String PLUGIN_SELECTION = "Selection Plugin";
+    private static final String PLUGIN_MINIMAP = "Minimap Plugin";
+    private static final String DESCRIPTION = "They are UI components used to add features and behaviors to the visualization of graphs.";
+    private static final String DESCRIPTION_PLUGIN_SCROLLER = "Create a scroll bar on the canvas.";
+    private static final String DESCRIPTION_PLUGIN_EXPORT = "allows you to export the graph as an image.";
+    private static final String DESCRIPTION_PLUGIN_SNAPLINE = "Create reference lines to position nodes.";
+    private static final String DESCRIPTION_PLUGIN_TRANSFORM = "Allows resizing and rotating nodes within the canvas.";
+    private static final String DESCRIPTION_PLUGIN_SELECTION = "Allows the selection of one or more nodes on the canvas.";
+    private static final String DESCRIPTION_PLUGIN_MINIMAP = "Creates a minimap of the current canvas";
     
-    public ExamplePlugins(){
-        this.factory = new X6Factory();
+    public ExamplePlugins(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -62,7 +62,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createScrollerPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         basicCanvas.addGraphCreatedListener(evt -> {
             
@@ -74,7 +74,7 @@ public class ExamplePlugins extends VerticalLayout{
             node.setGeometry(new Geometry(100, 100, 50, 50));
             node.setShape(X6Constants.SHAPE_RECT);
             node.setLabel("drag me");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
 
             //Add the nodes to the canvas
             basicCanvas.drawNode(node);
@@ -86,7 +86,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createExportPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         basicCanvas.addGraphCreatedListener(evt -> {
             
@@ -100,14 +100,14 @@ public class ExamplePlugins extends VerticalLayout{
             node1.setGeometry(new Geometry(100, 100, 50, 50));
             node1.setShape(X6Constants.SHAPE_RECT);
             node1.setLabel("Hello!");
-            node1.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
+            node1.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
             
             X6Node node2 = new X6Node();
             node2.setId(UUID.randomUUID().toString());
             node2.setGeometry(new Geometry(300, 100, 50, 50));
             node2.setShape(X6Constants.SHAPE_RECT);
             node2.setLabel("Hi!");
-            node2.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
+            node2.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
 
             //Add the nodes to the canvas
             basicCanvas.drawNode(node1);
@@ -125,7 +125,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createSnaplinePlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the snapline plugin
@@ -136,14 +136,14 @@ public class ExamplePlugins extends VerticalLayout{
             node1.setGeometry(new Geometry(100, 100, 50, 50));
             node1.setShape(X6Constants.SHAPE_RECT);
             node1.setLabel("Move me");
-            node1.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node1.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node node2 = new X6Node();
             node2.setId(UUID.randomUUID().toString());
             node2.setGeometry(new Geometry(300, 100, 50, 50));
             node2.setShape(X6Constants.SHAPE_RECT);
             node2.setLabel("I'll wait....");
-            node2.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node2.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
 
             //Add the nodes to the canvas
             basicCanvas.drawNode(node1);
@@ -157,7 +157,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createTransformPlugin() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
 
         Div dimensionsInfo = new Div();
         dimensionsInfo.setText("Width: N/A, Height: N/A");
@@ -194,7 +194,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createSelectionPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the selection plugin
@@ -211,14 +211,14 @@ public class ExamplePlugins extends VerticalLayout{
             node1.setGeometry(new Geometry(100, 100, 50, 50));
             node1.setShape(X6Constants.SHAPE_RECT);
             node1.setLabel("Select me");
-            node1.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node1.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node node2 = new X6Node();
             node2.setId("node 2");
             node2.setGeometry(new Geometry(300, 100, 50, 50));
             node2.setShape(X6Constants.SHAPE_RECT);
             node2.setLabel("Me too...");
-            node2.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node2.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
 
             //Add the nodes to the canvas
             basicCanvas.drawNode(node1);
@@ -254,7 +254,7 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createMinimapPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //Activate the div that wraps the minimap
         basicCanvas.setMinimapState(true);
@@ -270,7 +270,7 @@ public class ExamplePlugins extends VerticalLayout{
             node.setGeometry(new Geometry(100, 100, 50, 50));
             node.setShape(X6Constants.SHAPE_RECT);
             node.setLabel("I'm a X6Node");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
            
             //Add the nodes to the canvas
             basicCanvas.drawNode(node);

@@ -17,16 +17,16 @@ import java.util.UUID;
  */
 @Route("/basic/examples/canvas")
 public class ExampleCanvas extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Canvas";
-    private static String DESCRIPTION = "The X6 add-on currently supports two types of canvas:";
-    private static String BASIC_CANVAS = "Basic Canvas";
-    private static String INTERACTIONS_CANVAS = "Interactions Canvas";
-    private static String DESCRIPTION_BASIC_CANVAS = "It's a basic canvas where there are no human-node iteration restrictions.";
-    private static String DESCRIPTION_INTERACTIONS_CANVAS = "It's a canvas where you can restrict or not the interaction of human-node, for the node you want.";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Canvas";
+    private static final String DESCRIPTION = "The X6 add-on currently supports two types of canvas:";
+    private static final String BASIC_CANVAS = "Basic Canvas";
+    private static final String INTERACTIONS_CANVAS = "Interactions Canvas";
+    private static final String DESCRIPTION_BASIC_CANVAS = "It's a basic canvas where there are no human-node iteration restrictions.";
+    private static final String DESCRIPTION_INTERACTIONS_CANVAS = "It's a canvas where you can restrict or not the interaction of human-node, for the node you want.";
     
-    public ExampleCanvas(){
-        this.factory = new X6Factory();
+    public ExampleCanvas(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -46,7 +46,7 @@ public class ExampleCanvas extends VerticalLayout{
         node.setGeometry(new Geometry(x, y, width, height));
         node.setShape(X6Constants.SHAPE_RECT);
         node.setLabel(label);
-        node.getLabelStyles().setLabelPosition(labelPosition);
+        node.getNodeLabelStyles().setLabelPosition(labelPosition);
         node.setMovable(movable);
         
         return node;
@@ -69,7 +69,7 @@ public class ExampleCanvas extends VerticalLayout{
         VerticalLayout lytBasicCanvas = new VerticalLayout();
         
         // Here we create the canvas (take a look to class X6Factory)
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
         
         /*
             Whenever a change is made to the canvas, it must be notified with an event, so that it is updated.
@@ -89,7 +89,7 @@ public class ExampleCanvas extends VerticalLayout{
     private VerticalLayout createInteractionsCanvas(){  
         VerticalLayout lytInteractionsCanvas = new VerticalLayout();
         // Here we create the canvas (take a look to class X6Factory)
-        AntvX6 interactionsCanvas = this.factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 interactionsCanvas = factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
         
         /*
             Whenever a change is made to the canvas, it must be notified with an event, so that it is updated.

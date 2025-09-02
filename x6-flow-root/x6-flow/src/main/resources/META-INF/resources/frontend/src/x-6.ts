@@ -112,8 +112,8 @@ interface X6AbstractNode extends X6Cell{
   movable: boolean;
   parentId: string;
   label: string;
-  styles : X6NodeStyles;
-  labelStyles : X6NodeLabelStyles;
+  nodeStyles : X6NodeStyles;
+  nodeLabelStyles : X6NodeLabelStyles;
 }
 
 /**
@@ -134,8 +134,7 @@ interface X6Node extends X6AbstractNode{
 * Represents a text node in the graph.
 */
 interface X6NodeText extends X6AbstractNode{
-  // position respect to its parent node (top, bottom)
-  labelPositionRelative: string;
+
 }
 
 /**
@@ -153,8 +152,8 @@ interface X6Edge extends X6Cell{
   idSource: string;
   idTarget: string;
   vertices: string | Vertex[];
-  labels: string | X6EdgeLabel[];
-  styles: X6EdgeStyles;
+  edgeLabels: string | X6EdgeLabel[];
+  edgeStyles: X6EdgeStyles;
 }
 
 /**
@@ -163,7 +162,7 @@ interface X6Edge extends X6Cell{
 interface X6EdgeLabel{
   label: string;
   distance: number;
-  styles: X6EdgeLabelStyles;
+  edgeLabelStyles: X6EdgeLabelStyles;
 }
 
 /**
@@ -1247,18 +1246,18 @@ export class X6 extends LitElement {
         imageUrl:X6NodeBackground.imgUrl,
         attrs: {
           body: {
-            fill: X6NodeBackground.styles.fillColor,
-            stroke: X6NodeBackground.styles.strokeColor,
-            strokeWidth: X6NodeBackground.styles.strokeWidth,
-            strokeDasharray: X6NodeBackground.styles.dash,
-            rx: X6NodeBackground.styles.borderRadius,
-            ry: X6NodeBackground.styles.borderRadius
+            fill: X6NodeBackground.nodeStyles.fillColor,
+            stroke: X6NodeBackground.nodeStyles.strokeColor,
+            strokeWidth: X6NodeBackground.nodeStyles.strokeWidth,
+            strokeDasharray: X6NodeBackground.nodeStyles.dash,
+            rx: X6NodeBackground.nodeStyles.borderRadius,
+            ry: X6NodeBackground.nodeStyles.borderRadius
           },
           label: {
             ...labelPosition,
           },
         },
-        zIndex:X6NodeBackground.styles.zIndex
+        zIndex:X6NodeBackground.nodeStyles.zIndex
       });
     }
   }
@@ -1284,12 +1283,12 @@ export class X6 extends LitElement {
         imageUrl: node.imgUrl,
         attrs: {
           body: {
-            fill: node.styles.fillColor,
-            stroke: node.styles.strokeColor,
-            strokeWidth: node.styles.strokeWidth,
-            strokeDasharray: node.styles.dash,
-            rx: node.styles.borderRadius,
-            ry: node.styles.borderRadius
+            fill: node.nodeStyles.fillColor,
+            stroke: node.nodeStyles.strokeColor,
+            strokeWidth: node.nodeStyles.strokeWidth,
+            strokeDasharray: node.nodeStyles.dash,
+            rx: node.nodeStyles.borderRadius,
+            ry: node.nodeStyles.borderRadius
           },
           label: {
             ...labelPosition,
@@ -1298,7 +1297,7 @@ export class X6 extends LitElement {
         ports: {
           ...port
         },
-        zIndex: node.styles.zIndex,
+        zIndex: node.nodeStyles.zIndex,
       })
 
       this.setNodeTools(node);
@@ -1326,12 +1325,12 @@ export class X6 extends LitElement {
         data: { enableMove: nodeText.movable },
         attrs: {
           body:{
-            fill: nodeText.styles.fillColor,
-            stroke: nodeText.styles.strokeColor,
-            strokeWidth: nodeText.styles.strokeWidth,
-            strokeDasharray: nodeText.styles.dash,
-            rx: nodeText.styles.borderRadius,
-            ry: nodeText.styles.borderRadius,
+            fill: nodeText.nodeStyles.fillColor,
+            stroke: nodeText.nodeStyles.strokeColor,
+            strokeWidth: nodeText.nodeStyles.strokeWidth,
+            strokeDasharray: nodeText.nodeStyles.dash,
+            rx: nodeText.nodeStyles.borderRadius,
+            ry: nodeText.nodeStyles.borderRadius,
           },
           label: {
             ...labelDefaultPosition,
@@ -1362,15 +1361,15 @@ export class X6 extends LitElement {
         id: edge.id,
         source: edge.idSource,
         target: edge.idTarget,
-        zIndex: edge.styles.zIndex,
+        zIndex: edge.edgeStyles.zIndex,
         connector: { ...edgeConnector },
         attrs: {
             line: {
               sourceMarker: null,
               targetMarker: null,
-              stroke: edge.styles.strokeColor,
-              strokeWidth: edge.styles.strokeWidth,
-              strokeDasharray: edge.styles.dash
+              stroke: edge.edgeStyles.strokeColor,
+              strokeWidth: edge.edgeStyles.strokeWidth,
+              strokeDasharray: edge.edgeStyles.dash
             }
         }
       });
@@ -1401,30 +1400,30 @@ export class X6 extends LitElement {
   private getNodeLabelConfiguration(node: X6AbstractNode) {
     let labelPosition;
     
-    if (node.labelStyles.labelPosition === 'bottom') {
+    if (node.nodeLabelStyles.labelPosition === 'bottom') {
       labelPosition = {
         text: node.label,
-        fontSize: node.labelStyles.fontSize,
-        fontFamily: node.labelStyles.fontFamily,
-        fill: node.labelStyles.fontColor,
+        fontSize: node.nodeLabelStyles.fontSize,
+        fontFamily: node.nodeLabelStyles.fontFamily,
+        fill: node.nodeLabelStyles.fontColor,
         refX: 0.5,
         refY: '100%',
         refY2: 4,
         textAnchor: 'middle',
         textVerticalAnchor: 'top',
-        visibility: node.labelStyles.visibility
+        visibility: node.nodeLabelStyles.visibility
       };
     } else {
       labelPosition = {
         text: node.label,
-        fontSize: node.labelStyles.fontSize,
-        fontFamily: node.labelStyles.fontFamily,
-        fill: node.labelStyles.fontColor,
+        fontSize: node.nodeLabelStyles.fontSize,
+        fontFamily: node.nodeLabelStyles.fontFamily,
+        fill: node.nodeLabelStyles.fontColor,
         refX: 0.5,
         refY: 0.5,
         textAnchor: 'middle',
         textVerticalAnchor: 'middle',
-        visibility: node.labelStyles.visibility
+        visibility: node.nodeLabelStyles.visibility
       };
     }
     
@@ -1473,7 +1472,7 @@ export class X6 extends LitElement {
 
   private getEdgeLabelsConfiguration(edge: X6Edge){
     const labelConfigs = [] as any[];
-    const x6Labels = edge.labels as X6EdgeLabel[];
+    const x6Labels = edge.edgeLabels as X6EdgeLabel[];
     
     if(x6Labels.length !== 0){
       x6Labels.forEach((currentLabel) => {
@@ -1483,14 +1482,14 @@ export class X6 extends LitElement {
             attrs: {
               text: {
                 text: currentLabel.label,
-                fontSize: currentLabel.styles.fontSize,
-                fontFamily: currentLabel.styles.fontFamily,
-                fill: currentLabel.styles.fontColor,
+                fontSize: currentLabel.edgeLabelStyles.fontSize,
+                fontFamily: currentLabel.edgeLabelStyles.fontFamily,
+                fill: currentLabel.edgeLabelStyles.fontColor,
                 textAnchor: 'middle',
                 textVerticalAnchor: 'middle',
               },
               rect: {
-                fill: currentLabel.styles.fillColor,
+                fill: currentLabel.edgeLabelStyles.fillColor,
                 ref: 'text',
                 refX: -4,
                 refY: -2,
@@ -1500,8 +1499,8 @@ export class X6 extends LitElement {
                 refHeight2: 5,
                 stroke: "black",
                 strokeWidth: 1,
-                rx: currentLabel.styles.borderRadius,
-                ry: currentLabel.styles.borderRadius,
+                rx: currentLabel.edgeLabelStyles.borderRadius,
+                ry: currentLabel.edgeLabelStyles.borderRadius,
               }
             },
             position: {
@@ -1534,8 +1533,8 @@ export class X6 extends LitElement {
     let valueRadius = 0;
     let nameConnector = 'normal';
 
-    if(edge.styles.borderRadius && edge.styles.borderRadius > 0){
-      valueRadius = edge.styles.borderRadius;
+    if(edge.edgeStyles.borderRadius && edge.edgeStyles.borderRadius > 0){
+      valueRadius = edge.edgeStyles.borderRadius;
       nameConnector = 'rounded';
       edgeConnector = {
         name: nameConnector,

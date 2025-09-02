@@ -100,29 +100,29 @@ public class X6EdgeUtilities {
         X6EdgeLabel label = edge.getLabelAt(labelPos);
         
         if(label != null){
-            if(label.getStyles() == null)
-                label.setStyles(new X6EdgeLabelStyles());
+            if(label.getEdgeLabelStyles() == null)
+                label.setEdgeLabelStyles(new X6EdgeLabelStyles());
         
             if(edge.getStyles() == null)
                 edge.setStyles(new HashMap<>());
             
             //Font size
-            double fontSize = label.getStyles().getFontSize() ;
+            double fontSize = label.getEdgeLabelStyles().getFontSize() ;
             edge.setStyle(X6Constants.STYLE_FONTSIZE, fontSize + "");
 
             //Font color
-            String fontColor = label.getStyles().getFontColor();
+            String fontColor = label.getEdgeLabelStyles().getFontColor();
             if (fontColor == null || fontColor.isBlank()) {
                 fontColor = "black";
-                label.getStyles().setFontColor(fontColor);
+                label.getEdgeLabelStyles().setFontColor(fontColor);
             }
             edge.setStyle(X6Constants.STYLE_FONTCOLOR, fontColor);
 
             //Font family
-            String fontFamily = label.getStyles().getFontFamily();
+            String fontFamily = label.getEdgeLabelStyles().getFontFamily();
             if (fontFamily == null || fontFamily.isBlank()) {
                 fontFamily = "Arial";
-                label.getStyles().setFontFamily(fontFamily);
+                label.getEdgeLabelStyles().setFontFamily(fontFamily);
             }
             edge.setStyle(X6Constants.STYLE_FONTFAMILY, fontFamily);
         }
@@ -176,19 +176,19 @@ public class X6EdgeUtilities {
         if(label != null){
             if (stylePropertyMap.containsKey(X6Constants.STYLE_FONTSIZE) && !stylePropertyMap.get(X6Constants.STYLE_FONTSIZE).isBlank()) {
                 double fontSize = Double.parseDouble(stylePropertyMap.get(X6Constants.STYLE_FONTSIZE));
-                label.getStyles().setFontSize(fontSize);
+                label.getEdgeLabelStyles().setFontSize(fontSize);
             }else
-                label.getStyles().setFontSize(14.0);
+                label.getEdgeLabelStyles().setFontSize(14.0);
 
             if (stylePropertyMap.containsKey(X6Constants.STYLE_FONTCOLOR) && !stylePropertyMap.get(X6Constants.STYLE_FONTCOLOR).isBlank())
-                label.getStyles().setFontColor(stylePropertyMap.get(X6Constants.STYLE_FONTCOLOR));
+                label.getEdgeLabelStyles().setFontColor(stylePropertyMap.get(X6Constants.STYLE_FONTCOLOR));
             else
-                label.getStyles().setFontColor("black");
+                label.getEdgeLabelStyles().setFontColor("black");
 
             if (stylePropertyMap.containsKey(X6Constants.STYLE_FONTFAMILY) && !stylePropertyMap.get(X6Constants.STYLE_FONTFAMILY).isBlank())
-                label.getStyles().setFontFamily(stylePropertyMap.get(X6Constants.STYLE_FONTFAMILY));
+                label.getEdgeLabelStyles().setFontFamily(stylePropertyMap.get(X6Constants.STYLE_FONTFAMILY));
             else
-                label.getStyles().setFontFamily("Helvetica");
+                label.getEdgeLabelStyles().setFontFamily("Helvetica");
         }
     }
 }

@@ -149,7 +149,7 @@ public class X6Constants {
     * Represents the default (center) position of the label on the node.
     */
     public static final String LABEL_NODE_POSITION_DEFAULT = "default";
-
+    
     /*
     * Represents whether the node should be hidden
     */

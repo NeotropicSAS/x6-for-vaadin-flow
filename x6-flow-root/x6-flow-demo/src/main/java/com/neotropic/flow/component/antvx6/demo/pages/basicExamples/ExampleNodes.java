@@ -21,20 +21,20 @@ import java.util.UUID;
  */
 @Route("/basic/examples/nodes")
 public class ExampleNodes extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Nodes";
-    private static String DRAW_NODE = "Draw Node";
-    private static String DRAW_BACKGROUND = "Draw Node Background";
-    private static String DRAW_NODE_TEXT = "Draw Node Text";
-    private static String DESCRIPTION = "The X6 add-on supports three types of nodes with different responsibilities.";
-    private static String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
-    private static String DESCRIPTION_DRAW_NODE = "It's the basic node that is drawn on a canvas.";
-    private static String DESCRIPTION_DRAW_BACKGROUND = "It is a resizable node that acts as a background for other nodes on the canvas. By double clicking on the background you can resize it.";
-    private static String DESCRIPTION_DRAW_BACKGROUND_NOTE = "Don't forget to add the transform plugin and the background resize event." ;
-    private static String DESCRIPTION_DRAW_NODE_TEXT = "They are nodes that serve as texts for other nodes, it is commonly used when more customization of the basic labels of a node is needed.";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Nodes";
+    private static final String DRAW_NODE = "Draw Node";
+    private static final String DRAW_BACKGROUND = "Draw Node Background";
+    private static final String DRAW_NODE_TEXT = "Draw Node Text";
+    private static final String DESCRIPTION = "The X6 add-on supports three types of nodes with different responsibilities.";
+    private static final String NOTE = "Whenever a change is made to the canvas (add nodes, edges, change styles, etc.), it must be done through an x6 or vaadin event, to update the current view.";
+    private static final String DESCRIPTION_DRAW_NODE = "It's the basic node that is drawn on a canvas.";
+    private static final String DESCRIPTION_DRAW_BACKGROUND = "It is a resizable node that acts as a background for other nodes on the canvas. By double clicking on the background you can resize it.";
+    private static final String DESCRIPTION_DRAW_BACKGROUND_NOTE = "Don't forget to add the transform plugin and the background resize event." ;
+    private static final String DESCRIPTION_DRAW_NODE_TEXT = "They are nodes that serve as texts for other nodes, it is commonly used when more customization of the basic labels of a node is needed.";
     
-    public ExampleNodes(){
-        this.factory = new X6Factory();
+    public ExampleNodes(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -60,7 +60,7 @@ public class ExampleNodes extends VerticalLayout{
     
     private VerticalLayout createAddNode(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         // Thorough an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -70,21 +70,21 @@ public class ExampleNodes extends VerticalLayout{
             rect.setGeometry(new Geometry(100, 100, 50, 50));
             rect.setShape(X6Constants.SHAPE_RECT);
             rect.setLabel("I'm a Rectangle of X6");
-            rect.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            rect.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node ellipse = new X6Node();
             ellipse.setId(UUID.randomUUID().toString());
             ellipse.setGeometry(new Geometry(250, 100, 50, 80));
             ellipse.setShape(X6Constants.SHAPE_ELLIPSE);
             ellipse.setLabel("I'm a Ellipse of X6");
-            ellipse.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            ellipse.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node circle = new X6Node();
             circle.setId(UUID.randomUUID().toString());
             circle.setGeometry(new Geometry(400, 100, 50, 50));
             circle.setShape(X6Constants.SHAPE_CIRCLE);
             circle.setLabel("I'm a Circle of X6");
-            circle.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            circle.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node image = new X6Node();
             image.setId(UUID.randomUUID().toString());
@@ -92,7 +92,7 @@ public class ExampleNodes extends VerticalLayout{
             image.setShape(X6Constants.SHAPE_IMAGE);
             image.setLabel("I'm a Image of X6");
             image.setImgUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaZj-3Gf3IOMX44LXAIpUVhghfvXsCEId-EYmMtnvoKLnsMLUQxmuj4EH8aUfYiJoMn9o&usqp=CAU");
-            image.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            image.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             //Add the nodes to the canvas
             basicCanvas.drawNode(rect);
@@ -107,7 +107,7 @@ public class ExampleNodes extends VerticalLayout{
     
     private VerticalLayout createAddBackground(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         // through an event, we create the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -124,14 +124,14 @@ public class ExampleNodes extends VerticalLayout{
             background.setShape(X6Constants.SHAPE_IMAGE);
             background.setLabel("I'm a Background of X6");
             background.setImgUrl("https://www.livehome3d.com/assets/img/articles/how-to-draw-a-floor-plan/floor-plan-of-a-house-with-a-pool.jpg");
-            background.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            background.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             X6Node andElement = new X6Node();
             andElement.setId(UUID.randomUUID().toString());
             andElement.setGeometry(new Geometry(100, 100, 20, 20));
             andElement.setShape(X6Constants.SHAPE_RECT);
             andElement.setLabel("I'm not the background");
-            andElement.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            andElement.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             
             //add the nodes
             basicCanvas.drawNodeBackground(background);
@@ -144,7 +144,7 @@ public class ExampleNodes extends VerticalLayout{
     
     private VerticalLayout createAddNodeText(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         //through an event, we create the node
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -154,7 +154,7 @@ public class ExampleNodes extends VerticalLayout{
             node.setGeometry(new Geometry(100, 100, 100, 100));
             node.setShape(X6Constants.SHAPE_RECT);
             node.setLabel("I'm the main node.");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
             node.setMovable(true);
             
             //node text
@@ -163,20 +163,19 @@ public class ExampleNodes extends VerticalLayout{
             text.setGeometry(new Geometry(0, 0, 0, 0));
             text.setShape(X6Constants.SHAPE_RECT);
             text.setLabel("I'm the node text of the main node.");
-            text.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
+            text.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_DEFAULT);
             //we set its parent (main node)
             text.setParentId(node.getId());
             text.setMovable(false);
             //position it below the node
-            text.setLabelPositionRelative(X6Constants.BOTTOM);
-            text.getLabelStyles().setFontColor("gray");
+            text.getNodeLabelStyles().setFontColor("gray");
             text.getNodeStyles().setBorderRadius(8);
             text.getNodeStyles().setStrokeWidth(0);
             text.getNodeStyles().setFillColor("#DCD0FF");
             
             //Using utilities to create the dimensions and position of the NodeText
-            X6NodeTextUtilities.calculateLabelDimensions(text.getGeometry(), text.getLabel(), text.getLabelStyles().getFontSize());
-            X6NodeTextUtilities.calculateLabelPosition(node.getGeometry(), text.getGeometry(), text.getLabelPositionRelative(), 10);
+            X6NodeTextUtilities.calculateLabelDimensions(text.getGeometry(), text.getLabel(), text.getNodeLabelStyles().getFontSize());
+            X6NodeTextUtilities.calculateLabelPosition(node.getGeometry(), text.getGeometry(), X6Constants.BOTTOM, 10);
             
             //Draw the node
             basicCanvas.drawNode(node);

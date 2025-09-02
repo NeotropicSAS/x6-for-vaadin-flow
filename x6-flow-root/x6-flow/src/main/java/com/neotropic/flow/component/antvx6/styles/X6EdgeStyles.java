@@ -15,10 +15,13 @@
  */
 package com.neotropic.flow.component.antvx6.styles;
 
+import lombok.Data;
+
 /**
  * Represents the styles of an edge
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class X6EdgeStyles {
     private String strokeColor;
     private double strokeWidth;
@@ -33,45 +36,4 @@ public class X6EdgeStyles {
         this.borderRadius = 0;
         this.zIndex = 1;
     }
-
-    public String getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    public double getStrokeWidth() {
-        return strokeWidth;
-    }
-
-    public void setStrokeWidth(double strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
-
-    public double getDash() {
-        return dash;
-    }
-
-    public void setDash(double dash) {
-        this.dash = dash;
-    }
-
-    public int getBorderRadius() {
-        return borderRadius;
-    }
-
-    public void setBorderRadius(int borderRadius) {
-        this.borderRadius = borderRadius;
-    }
-
-    public int getzIndex() {
-        return zIndex;
-    }
-
-    public void setzIndex(int zIndex) {
-        this.zIndex = zIndex;
-    }
-
 }

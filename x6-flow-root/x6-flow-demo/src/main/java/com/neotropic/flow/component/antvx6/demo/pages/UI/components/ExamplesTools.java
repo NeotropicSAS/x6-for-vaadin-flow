@@ -18,18 +18,18 @@ import java.util.UUID;
  */
 @Route("/UI/components/examples/tools")
 public class ExamplesTools extends VerticalLayout{
-    private X6Factory factory;
-    private static String HEADER_TEXT = "X6 Tools";
-    private static String TOOL_NODE_EDITOR = "Node editor";
-    private static String TOOL_BUTTON_REMOVE = "Node Button remove";
-    private static String TOOL_VERTICES_SEGMENTS = "Vertices and Segments tool";
-    private static String DESCRIPTION = "They are small UI components rendered on the objects drawn on the canvas, such as nodes or edges.";
-    private static String DESCRIPTION_TOOL_NODE_EDITOR = "This tool creates a text field when double-clicking on a node, allowing us to modify the label of the node.";
-    private static String DESCRIPTION_TOOL_BUTTON_REMOVE = "This tool creates a button to delete nodes. When hovering over a node, the delete button appears.";
-    private static String DESCRIPTION_TOOL_VERTICES_SEGMENTS = "This tool allows creating vertices from the UI and, through segments, positioning straight lines within the edge.";
+    private final X6Factory factory;
+    private static final String HEADER_TEXT = "X6 Tools";
+    private static final String TOOL_NODE_EDITOR = "Node editor";
+    private static final String TOOL_BUTTON_REMOVE = "Node Button remove";
+    private static final String TOOL_VERTICES_SEGMENTS = "Vertices and Segments tool";
+    private static final String DESCRIPTION = "They are small UI components rendered on the objects drawn on the canvas, such as nodes or edges.";
+    private static final String DESCRIPTION_TOOL_NODE_EDITOR = "This tool creates a text field when double-clicking on a node, allowing us to modify the label of the node.";
+    private static final String DESCRIPTION_TOOL_BUTTON_REMOVE = "This tool creates a button to delete nodes. When hovering over a node, the delete button appears.";
+    private static final String DESCRIPTION_TOOL_VERTICES_SEGMENTS = "This tool allows creating vertices from the UI and, through segments, positioning straight lines within the edge.";
     
-    public ExamplesTools(){
-        this.factory = new X6Factory();
+    public ExamplesTools(X6Factory factory){
+        this.factory = factory;
         
         setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
@@ -54,7 +54,7 @@ public class ExamplesTools extends VerticalLayout{
     
     private VerticalLayout createNodeEditorTool(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
        
         // through an event, we create the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -64,7 +64,7 @@ public class ExamplesTools extends VerticalLayout{
             node.setGeometry(new Geometry(100, 100, 100, 100));
             node.setShape(X6Constants.SHAPE_RECT);
             node.setLabel("Double click on me");
-            node.getLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
+            node.getNodeLabelStyles().setLabelPosition(X6Constants.LABEL_NODE_POSITION_BOTTOM);
             /*This tool should be added when drawing the element. 
             *In this version of X6, it does not require handling through a double-click event (which was necessary in versions prior to 2.x.x.x).
             */
@@ -90,7 +90,7 @@ public class ExamplesTools extends VerticalLayout{
     
     private VerticalLayout createNodeButtonRemoveTool() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
 
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add events to add and remove node tools.
@@ -112,7 +112,7 @@ public class ExamplesTools extends VerticalLayout{
     
     private VerticalLayout createEdgeTools() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
 
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add events to vertices and segments

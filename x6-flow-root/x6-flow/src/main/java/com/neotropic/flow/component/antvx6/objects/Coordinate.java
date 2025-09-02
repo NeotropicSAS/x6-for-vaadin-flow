@@ -15,10 +15,13 @@
  */
 package com.neotropic.flow.component.antvx6.objects;
 
+import lombok.Data;
+
 /**
  * Represents the coordinates of a point in 2D space.
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
  */
+@Data
 public class Coordinate {
     private double x;
     private double y;
@@ -29,21 +32,4 @@ public class Coordinate {
         this.x = x;
         this.y = y;
     }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-    
 }

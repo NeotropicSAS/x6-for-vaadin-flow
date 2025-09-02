@@ -30,7 +30,7 @@ import com.vaadin.flow.router.Route;
 @Route
 public class MainView extends VerticalLayout {
 
-    private static String HEADER_TEXT = "Vaddin Flow X6 Examples";
+    private static final String HEADER_TEXT = "Vaddin Flow X6 Examples";
     
     public MainView(){
         initComponents();

@@ -2,10 +2,12 @@ package com.neotropic.flow.component.antvx6.demo.factory;
 
 import com.neotropic.flow.component.antvx6.AntvX6;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
+import org.springframework.stereotype.Service;
 
 /**
 * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
 */
+@Service
 public class X6Factory {
 
     public X6Factory() {}
