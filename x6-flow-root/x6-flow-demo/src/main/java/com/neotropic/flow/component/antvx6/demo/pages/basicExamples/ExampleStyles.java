@@ -141,8 +141,6 @@ public class ExampleStyles extends VerticalLayout{
             label.getStyles().setFontColor("red");
             label.getStyles().setFontSize(15);
             label.getStyles().setFontFamily("Courier");
-            label.getStyles().setStrokeColor("red");
-            label.getStyles().setStrokeWidth(2);
             label.getStyles().setBorderRadius(4);
 
             //Add the elements to the canvas

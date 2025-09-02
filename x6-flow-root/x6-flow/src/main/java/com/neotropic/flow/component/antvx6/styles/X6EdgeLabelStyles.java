@@ -26,8 +26,6 @@ public class X6EdgeLabelStyles {
     private String fontColor;
     private double fontSize;
     private String fontFamily;
-    private String strokeColor;
-    private double strokeWidth;
     private int borderRadius;
     
     public X6EdgeLabelStyles(){
@@ -35,8 +33,6 @@ public class X6EdgeLabelStyles {
         this.fontColor = "black";
         this.fontSize = 14;
         this.fontFamily = "Arial";
-        this.strokeColor = "white";
-        this.strokeWidth = 0;
         this.borderRadius = 0;
     }
 
@@ -70,22 +66,6 @@ public class X6EdgeLabelStyles {
 
     public void setFontFamily(String fontFamily) {
         this.fontFamily = fontFamily;
-    }
-
-    public String getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    public double getStrokeWidth() {
-        return strokeWidth;
-    }
-
-    public void setStrokeWidth(double strokeWidth) {
-        this.strokeWidth = strokeWidth;
     }
 
     public int getBorderRadius() {
