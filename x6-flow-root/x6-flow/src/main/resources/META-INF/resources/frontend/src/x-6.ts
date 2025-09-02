@@ -57,8 +57,6 @@ interface X6EdgeLabelStyles {
   fontColor: string;
   fontSize: number;
   fontFamily: string;
-  strokeColor: string;
-  strokeWidth: number;
   borderRadius: number;
 }
 
@@ -1500,8 +1498,8 @@ export class X6 extends LitElement {
                 refHeight: '100%',
                 refWidth2: 8,
                 refHeight2: 5,
-                stroke: currentLabel.styles.strokeColor,
-                strokeWidth: currentLabel.styles.strokeWidth,
+                stroke: "black",
+                strokeWidth: 1,
                 rx: currentLabel.styles.borderRadius,
                 ry: currentLabel.styles.borderRadius,
               }
@@ -1631,20 +1629,29 @@ export class X6 extends LitElement {
       if(cell && cell.isEdge()){
         const edge = cell as Edge;
         if(style in this.stylesPathEdgeLabel){
-          //label of the edg
+          //label of the edge
           const label = edge.getLabelAt(labelPos);
           if(style == "fillColor"){
             if(label && label.attrs && label.attrs.rect)
               label.attrs.rect.fill = value;
           }else if(style == "fontColor"){
-            if(label && label.attrs && label.attrs.text)
-              label.attrs.text.fill = value;      
+            if(label && label.attrs && label.attrs.text){
+              label.attrs.text.fill = value;
+              edge.removeLabelAt(0);
+              edge.appendLabel(label);
+            }     
           }else if(style == "fontSize"){
-            if(label && label.attrs && label.attrs.text)
-              label.attrs.text.fontSize = value;   
+            if(label && label.attrs && label.attrs.text){
+              label.attrs.text.fontSize = value;  
+              edge.removeLabelAt(0);
+              edge.appendLabel(label);
+            } 
           }else if(style == "fontFamily"){
-            if(label && label.attrs && label.attrs.text)
-              label.attrs.text.fontFamily = value;
+            if(label && label.attrs && label.attrs.text){
+                label.attrs.text.fontFamily = value;
+                edge.removeLabelAt(0);
+                edge.appendLabel(label); 
+              }
           }else if(style == "strokeColor"){
             if(label && label.attrs && label.attrs.rect)
               label.attrs.rect.stroke = value;
@@ -1656,8 +1663,7 @@ export class X6 extends LitElement {
               label.attrs.rect.rx = value;
               label.attrs.rect.ry = value;
             }
-          }
-                
+          }  
         }
       }
     }

@@ -659,8 +659,6 @@ public class AntvX6 extends Div {
             edgeLabelStyles.addProperty("fontColor", label.getStyles().getFontColor());
             edgeLabelStyles.addProperty("fontSize", label.getStyles().getFontSize());
             edgeLabelStyles.addProperty("fontFamily", label.getStyles().getFontFamily());
-            edgeLabelStyles.addProperty("strokeColor", label.getStyles().getStrokeColor());
-            edgeLabelStyles.addProperty("strokeWidth", label.getStyles().getStrokeWidth());
             edgeLabelStyles.addProperty("borderRadius", label.getStyles().getBorderRadius());
             labelObj.add("styles", edgeLabelStyles);
             
