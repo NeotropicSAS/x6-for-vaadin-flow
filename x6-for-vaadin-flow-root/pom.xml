@@ -6,7 +6,7 @@
     <version>2.3.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>x6-flow</module>
+        <module>x6-for-vaadin-flow</module>
         <module>x6-for-vaadin-flow-demo</module>
     </modules>
     <properties>
