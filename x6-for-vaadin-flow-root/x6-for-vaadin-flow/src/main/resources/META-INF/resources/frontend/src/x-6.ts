@@ -753,18 +753,6 @@ export class X6 extends LitElement {
   graph_mouse_wheel: boolean = false;
 
   /**
-  * Whether to display node labels.
-  */
-  @property()
-  nodes_label_state: boolean = true;
-
-  /**
-  * Toggles the color of node labels.
-  */
-  @property()
-  nodes_label_color_toggle: boolean = false;
-
-  /**
   * The background color of node labels.
   */
   @property()
@@ -902,6 +890,7 @@ export class X6 extends LitElement {
   public initGraph(){
     this.graph = new Graph({
       container: this.target,
+      autoResize: true,
       width: this.graph_width, 
       height: this.graph_height,
       grid: this.graph_grid,
@@ -928,6 +917,7 @@ export class X6 extends LitElement {
   public initGraphWithInteractions(){
     this.graph = new Graph({
       container: this.target,
+      autoResize: true,
       width: this.graph_width, 
       height: this.graph_height,
       grid: this.graph_grid,
@@ -1590,6 +1580,26 @@ export class X6 extends LitElement {
     }
   }
 
+  public showNode(id: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(id);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        node.visible = true
+      }
+    }
+  }
+
+  public hideNode(id: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(id);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        node.visible = false;
+      }
+    }
+  }
+
   public setEdgeStyle(id: string, style: string, value: string) {
     if (this.graph) {
       const cell = this.graph.getCellById(id);
@@ -1922,6 +1932,25 @@ export class X6 extends LitElement {
     }
   }
 
+  public eventBackgroundChanged(){
+    if(this.graph){
+      this.graph.on('node:changed', ({ node }) => {
+        if(node.id === this.graph_node_background_id){
+          this.dispatchEvent(new CustomEvent('background-changed', {
+            detail: {
+              node: {
+                id: node.id,
+                x: node.getBBox().x,
+                y: node.getBBox().y,
+                width: node.getBBox().width,
+                height: node.getBBox().height,
+              }
+            }
+          }));
+        }
+      });
+    }  
+  }
 
   public eventNodeChanged(){
     if(this.graph){
@@ -2045,7 +2074,7 @@ export class X6 extends LitElement {
   * Creates a ghost( It's a non-visible and non-manipulable node) to manage the center of the canvas.
   * This node acts as a reference point for positioning the Scroller's bars of the graph.
   */
-  public createGhost(){
+  public centerCanvas(){
     if(this.graph){
       const center = this.graph.addNode({
         x: this.graph_width/2,
@@ -2512,80 +2541,6 @@ export class X6 extends LitElement {
         if(nodeParent){
           nodeParent.setProp({position : { x: currentX }});
           currentX = currentX + nodeParent.getBBox().width + 180;
-        }
-      }
-    }
-  }
-
-  
-  public setNodeLabelStateProperty(){
-    this.nodes_label_state = !this.nodes_label_state;
-  }
-
-  public updateNodesLabelState(){
-    if(this.graph){
-      let nodes = this.graph.getNodes();
-      if(nodes.length > 0){
-        if(this.nodes_label_state){
-          nodes.forEach((node) => {
-            node.setAttrs({
-              label:{
-                visibility: 'hidden',
-              }
-            });
-          });
-          this.setNodeLabelStateProperty();
-        }else{
-          nodes.forEach((node) => {
-            node.setAttrs({
-              label:{
-                visibility: 'visible',
-              }
-            });
-          });
-          this.setNodeLabelStateProperty();
-        }
-      }
-    }
-  }
-
-  public setNodesLabelColorProperty(){
-    this.nodes_label_color_toggle = !this.nodes_label_color_toggle;
-  }
-
-  public updateNodesLabelColor(){
-    if(this.graph){
-      let nodes = this.graph.getNodes();
-      if(nodes.length > 0){
-        if(!this.nodes_label_color_toggle){
-          nodes.forEach((node) => {
-            node.setAttrs({
-              label:{
-                fill: '#000000',
-                refY : '100%' ,
-                filter: {
-                  name: 'outline',
-                  args: {
-                    color: this.nodes_label_bgColor, 
-                    width: 3, 
-                    margin: 2, 
-                    opacity: 1.0
-                  }
-                }
-              }
-            });
-          });
-          this.setNodesLabelColorProperty();
-        }else{
-          nodes.forEach((node) => {
-            node.setAttrs({
-              label:{
-                fill: '#000000',
-                filter: null,
-              },
-            });
-          });
-          this.setNodesLabelColorProperty();
         }
       }
     }

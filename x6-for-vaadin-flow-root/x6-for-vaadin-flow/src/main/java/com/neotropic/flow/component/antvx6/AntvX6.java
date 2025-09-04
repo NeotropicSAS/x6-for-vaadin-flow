@@ -15,13 +15,13 @@
  */
 package com.neotropic.flow.component.antvx6;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.neotropic.flow.component.antvx6.objects.Geometry;
 import com.neotropic.flow.component.antvx6.objects.X6Edge;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
 import com.neotropic.flow.component.antvx6.objects.X6NodeBackground;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
+import com.neotropic.flow.component.antvx6.events.BackgroundChangedEvent;
 import com.neotropic.flow.component.antvx6.events.BringToFrontEvent;
 import com.neotropic.flow.component.antvx6.events.CellRemovedEvent;
 import com.neotropic.flow.component.antvx6.events.CellSelectedEvent;
@@ -36,8 +36,7 @@ import com.neotropic.flow.component.antvx6.events.NodeBackgroundResizedEvent;
 import com.neotropic.flow.component.antvx6.events.NodeChangedEvent;
 import com.neotropic.flow.component.antvx6.events.NodeMovedEvent;
 import com.neotropic.flow.component.antvx6.events.SendToBackEvent;
-import com.neotropic.flow.component.antvx6.objects.Vertex;
-import com.neotropic.flow.component.antvx6.objects.X6EdgeLabel;
+import com.neotropic.flow.component.antvx6.jsonGenerator.JsonGenerator;
 import com.neotropic.flow.component.antvx6.objects.X6NodeText;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
@@ -47,6 +46,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Julian David Camacho Erazo {@literal <julian.camacho@kuwaiba.org>}
@@ -60,6 +61,7 @@ import java.util.List;
 @NpmPackage(value = "@antv/x6-plugin-selection", version = "2.2.2")
 @NpmPackage(value = "@antv/x6-plugin-scroller", version = "2.0.10")
 @NpmPackage(value = "@antv/x6-plugin-minimap", version = "2.0.7")
+@Getter@Setter
 public class AntvX6 extends Div {
     /*
     * Basic graph configuration properties
@@ -73,8 +75,6 @@ public class AntvX6 extends Div {
     private static final String PROPERTY_GRAPH_GRID = "graph_grid";
     private static final String PROPERTY_GRAPH_PANNING = "graph_panning";
     private static final String PROPERTY_GRAPH_MOUSE_WHEEL = "graph_mouse_wheel";
-    private static final String PROPERTY_NODES_LABEL_STATE = "nodes_label_state";
-    private static final String PROPERTY_NODES_LABEL_COLOR_TOGGLE = "nodes_label_color_toggle";
     private static final String PROPERTY_NODES_LABEL_BGCOLOR = "nodes_label_bgColor";
     private static final String PROPERTY_PADDING_EXPORT_GRAPH_JPEG = "padding_export_graph_JPEG";
     private static final String PROPERTY_GRAPH_ZOOM = "graph_zoom";
@@ -195,24 +195,6 @@ public class AntvX6 extends Div {
     */
     public void setMouseWheel(boolean mouseWheel){
         getElement().setProperty(PROPERTY_GRAPH_MOUSE_WHEEL, mouseWheel);
-    }
-    
-    /**
-    * Sets the label visibility state for nodes.
-    *
-    * @param state true to show labels, false to hide them.
-    */
-    public void setNodesLabelState(boolean state){
-        getElement().setProperty(PROPERTY_NODES_LABEL_STATE, state);
-    }
-    
-    /**
-    * Toggles the color setting for node labels.
-    *
-    * @param toggle true if the node's label color has been toggled, false if it has not been toggled.
-    */
-    public void setNodesLabelColorToggle(boolean toggle){
-        getElement().setProperty(PROPERTY_NODES_LABEL_COLOR_TOGGLE, toggle);
     }
     
     /**
@@ -407,53 +389,11 @@ public class AntvX6 extends Div {
     * @param background the X6NodeBackground object
     */
     public void drawNodeBackground(X6NodeBackground background) {
-        JsonObject backgroundData = new JsonObject();
-
-        backgroundData.addProperty("id", background.getId());
-
-        JsonObject geometry = new JsonObject();
-        JsonObject coordinates = new JsonObject();
-        coordinates.addProperty("x", background.getGeometry().getCoordinates().getX());
-        coordinates.addProperty("y", background.getGeometry().getCoordinates().getY());
-        geometry.add("coordinates", coordinates);
-
-        JsonObject dimensions = new JsonObject();
-        dimensions.addProperty("width", background.getGeometry().getDimensions().getWidth());
-        dimensions.addProperty("height", background.getGeometry().getDimensions().getHeight());
-        geometry.add("dimensions", dimensions);
-
-        backgroundData.add("geometry", geometry);
-
-        backgroundData.addProperty("shape", background.getShape());
-        backgroundData.addProperty("imgUrl", background.getImgUrl());
-        backgroundData.addProperty("movable", background.isMovable());
-        backgroundData.addProperty("parentId", background.getParentId());
-        backgroundData.addProperty("label", background.getLabel());
-
-        JsonObject nodeStyles = new JsonObject();
-        nodeStyles.addProperty("fillColor", background.getNodeStyles().getFillColor());
-        nodeStyles.addProperty("strokeColor", background.getNodeStyles().getStrokeColor());
-        nodeStyles.addProperty("strokeWidth", background.getNodeStyles().getStrokeWidth());
-        nodeStyles.addProperty("dash", background.getNodeStyles().getDash());
-        nodeStyles.addProperty("borderRadius", background.getNodeStyles().getBorderRadius());
-        nodeStyles.addProperty("zIndex", background.getNodeStyles().getZIndex());
-        backgroundData.add("nodeStyles", nodeStyles);
-        
-        JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", background.getNodeLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", background.getNodeLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", background.getNodeLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", background.getNodeLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", background.getNodeLabelStyles().getVisibility());
-        backgroundData.add("nodeLabelStyles", labelStyles);
-
-        getElement().callJsFunction(
-            "drawBackground", backgroundData.toString()
-        );
-
+        JsonObject backgroundData = JsonGenerator.generateJsonBackground(background);
+        getElement().callJsFunction("drawBackground", backgroundData.toString());
         nodeBackground = background;
     }
-    
+ 
     /**
     * Removes the node background of the the graph.
     */
@@ -471,58 +411,14 @@ public class AntvX6 extends Div {
     * @param node the X6Node object to be draw.
     */
     public void drawNode(X6Node node) {
-        JsonObject nodeData = new JsonObject();
-
-        nodeData.addProperty("id", node.getId());
-
-        JsonObject geometry = new JsonObject();
-        JsonObject coordinates = new JsonObject();
-        coordinates.addProperty("x", node.getGeometry().getCoordinates().getX());
-        coordinates.addProperty("y", node.getGeometry().getCoordinates().getY());
-        geometry.add("coordinates", coordinates);
-
-        JsonObject dimensions = new JsonObject();
-        dimensions.addProperty("width", node.getGeometry().getDimensions().getWidth());
-        dimensions.addProperty("height", node.getGeometry().getDimensions().getHeight());
-        geometry.add("dimensions", dimensions);
-
-        nodeData.add("geometry", geometry);
-        
-        JsonArray toolsArray = new JsonArray();
-        for (String tool : node.getTools()) 
-            toolsArray.add(tool);  
-        nodeData.add("tools", toolsArray);
-
-        nodeData.addProperty("shape", node.getShape());
-        nodeData.addProperty("imgUrl", node.getImgUrl());
-        nodeData.addProperty("movable", node.isMovable());
-        nodeData.addProperty("parentId", node.getParentId());
-        nodeData.addProperty("label", node.getLabel());
-
-        JsonObject nodeStyles = new JsonObject();
-        nodeStyles.addProperty("fillColor", node.getNodeStyles().getFillColor());
-        nodeStyles.addProperty("strokeColor", node.getNodeStyles().getStrokeColor());
-        nodeStyles.addProperty("strokeWidth", node.getNodeStyles().getStrokeWidth());
-        nodeStyles.addProperty("dash", node.getNodeStyles().getDash());
-        nodeStyles.addProperty("borderRadius", node.getNodeStyles().getBorderRadius());
-        nodeStyles.addProperty("zIndex", node.getNodeStyles().getZIndex());
-        nodeData.add("nodeStyles", nodeStyles);
-        
-        JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", node.getNodeLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", node.getNodeLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", node.getNodeLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", node.getNodeLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", node.getNodeLabelStyles().getVisibility());
-        nodeData.add("nodeLabelStyles", labelStyles);
-
-        nodeData.addProperty("port", node.isPort());
-        
-        getElement().callJsFunction(
-            "drawNode", nodeData.toString()
-        );
-
+        JsonObject nodeData = JsonGenerator.generateJsonNode(node);
+        getElement().callJsFunction("drawNode", nodeData.toString());
         nodes.add(node);
+    }
+    
+    public void drawNodeCenter(X6Node node) {
+        JsonObject nodeData = JsonGenerator.generateJsonNode(node);
+        getElement().callJsFunction("drawNode", nodeData.toString());
     }
 
     /**
@@ -531,53 +427,11 @@ public class AntvX6 extends Div {
     * @param nodeText the X6NodeText object to be draw
     */
     public void drawText(X6NodeText nodeText) {
-        JsonObject textData = new JsonObject();
-
-        textData.addProperty("id", nodeText.getId());
-
-        JsonObject geometry = new JsonObject();
-        JsonObject coordinates = new JsonObject();
-        coordinates.addProperty("x", nodeText.getGeometry().getCoordinates().getX());
-        coordinates.addProperty("y", nodeText.getGeometry().getCoordinates().getY());
-        geometry.add("coordinates", coordinates);
-
-        JsonObject dimensions = new JsonObject();
-        dimensions.addProperty("width", nodeText.getGeometry().getDimensions().getWidth());
-        dimensions.addProperty("height", nodeText.getGeometry().getDimensions().getHeight());
-        geometry.add("dimensions", dimensions);
-
-        textData.add("geometry", geometry);
-
-        textData.addProperty("shape", nodeText.getShape());
-        textData.addProperty("imgUrl", nodeText.getImgUrl());
-        textData.addProperty("movable", nodeText.isMovable());
-        textData.addProperty("parentId", nodeText.getParentId());
-        textData.addProperty("label", nodeText.getLabel());
-
-        JsonObject nodeStyles = new JsonObject();
-        nodeStyles.addProperty("borderRadius", nodeText.getNodeStyles().getBorderRadius());
-        nodeStyles.addProperty("fillColor", nodeText.getNodeStyles().getFillColor());
-        nodeStyles.addProperty("strokeColor", nodeText.getNodeStyles().getStrokeColor());
-        nodeStyles.addProperty("strokeWidth", nodeText.getNodeStyles().getStrokeWidth());
-        nodeStyles.addProperty("dash", nodeText.getNodeStyles().getDash());
-        nodeStyles.addProperty("zIndex", nodeText.getNodeStyles().getZIndex());
-        textData.add("nodeStyles", nodeStyles);
-        
-        JsonObject labelStyles = new JsonObject();
-        labelStyles.addProperty("fontColor", nodeText.getNodeLabelStyles().getFontColor());
-        labelStyles.addProperty("fontSize", nodeText.getNodeLabelStyles().getFontSize());
-        labelStyles.addProperty("fontFamily", nodeText.getNodeLabelStyles().getFontFamily());
-        labelStyles.addProperty("labelPosition", nodeText.getNodeLabelStyles().getLabelPosition());
-        labelStyles.addProperty("visibility", nodeText.getNodeLabelStyles().getVisibility());
-        textData.add("nodeLabelStyles", labelStyles);
-
-        getElement().callJsFunction(
-            "drawText", textData.toString()
-        );
-
+        JsonObject textData = JsonGenerator.generateJsonNodeText(nodeText);
+        getElement().callJsFunction("drawText", textData.toString());
         textNodes.add(nodeText);
     }
-    
+
     /**
     * Sets the style for a specific node.
     * 
@@ -631,54 +485,11 @@ public class AntvX6 extends Div {
     * @param edge the X6Edge object to be draw.
     */
     public void drawEdge(X6Edge edge) {
-        JsonObject edgeData = new JsonObject();
-        
-        edgeData.addProperty("id", edge.getId());
-        edgeData.addProperty("idSource", edge.getIdSource());
-        edgeData.addProperty("idTarget", edge.getIdTarget());
-        
-        JsonArray verticesArray = new JsonArray();
-        for (Vertex vertex : edge.getVertices()) {
-            JsonObject vertexObj = new JsonObject();
-            vertexObj.addProperty("x", vertex.getX());
-            vertexObj.addProperty("y", vertex.getY());
-            verticesArray.add(vertexObj);
-        }
-        edgeData.add("vertices", verticesArray);
-        
-        JsonArray labelsArray = new JsonArray();
-        for (X6EdgeLabel label : edge.getEdgeLabels()) {
-            JsonObject labelObj = new JsonObject();
-            labelObj.addProperty("label", label.getLabel());
-            labelObj.addProperty("distance", label.getDistance());
-            
-            JsonObject edgeLabelStyles = new JsonObject();
-            edgeLabelStyles.addProperty("fillColor", label.getEdgeLabelStyles().getFillColor());
-            edgeLabelStyles.addProperty("fontColor", label.getEdgeLabelStyles().getFontColor());
-            edgeLabelStyles.addProperty("fontSize", label.getEdgeLabelStyles().getFontSize());
-            edgeLabelStyles.addProperty("fontFamily", label.getEdgeLabelStyles().getFontFamily());
-            edgeLabelStyles.addProperty("borderRadius", label.getEdgeLabelStyles().getBorderRadius());
-            labelObj.add("edgeLabelStyles", edgeLabelStyles);
-            
-            labelsArray.add(labelObj);
-        }
-        edgeData.add("edgeLabels", labelsArray);
-        
-        JsonObject edgeStyles = new JsonObject();
-        edgeStyles.addProperty("strokeColor", edge.getEdgeStyles().getStrokeColor());
-        edgeStyles.addProperty("strokeWidth", edge.getEdgeStyles().getStrokeWidth());
-        edgeStyles.addProperty("dash", edge.getEdgeStyles().getDash());
-        edgeStyles.addProperty("borderRadius", edge.getEdgeStyles().getBorderRadius());
-        edgeStyles.addProperty("zIndex", edge.getEdgeStyles().getZIndex());
-        edgeData.add("edgeStyles", edgeStyles);
-
-        getElement().callJsFunction(
-            "drawEdge", edgeData.toString() 
-        );
-
+        JsonObject edgeData = JsonGenerator.generateJsonEdge(edge);
+        getElement().callJsFunction("drawEdge", edgeData.toString());
         edges.add(edge);
     }
-    
+
     /**
     * Sets the style for an edge in the graph.
     *
@@ -750,12 +561,12 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("setPositionAbsoluteParent", jsonArray.toString());
     }
     
-    public void updateNodesLabelState(){
-        getElement().callJsFunction("updateNodesLabelState");
+    public void showNode(String id){
+        getElement().callJsFunction("showNode", id);
     }
     
-    public void updateNodesLabelColor(){
-        getElement().callJsFunction("updateNodesLabelColor");
+    public void hideNode(String id){
+        getElement().callJsFunction("hideNode", id);
     }
     
     /*
@@ -789,6 +600,10 @@ public class AntvX6 extends Div {
     
     public void initEventNodeChanged(){
         getElement().callJsFunction("eventNodeChanged");
+    }
+    
+    public void initEventBackgroundChanged(){
+        getElement().callJsFunction("eventBackgroundChanged");
     }
     
     public void initEventConfigureZIndexControls() {
@@ -853,10 +668,10 @@ public class AntvX6 extends Div {
     */
     
     /*
-    * Creates a ghost node in the middle of the canvas, it is used to organize the canvas
+    * Center a point in the middle of the canvas, it is used to organize the canvas
     */
-    public void addGhost(){
-        getElement().callJsFunction("createGhost");
+    public void centerGraph(String idNode){
+        getElement().callJsFunction("centerGraph", idNode);
     }
     
     /**
@@ -906,6 +721,10 @@ public class AntvX6 extends Div {
     public Registration addNodeChangedListener(ComponentEventListener<NodeChangedEvent> listener){
         return addListener(NodeChangedEvent.class, listener);
     }
+    
+    public Registration addBackgroundChangedListener(ComponentEventListener<BackgroundChangedEvent> listener){
+        return addListener(BackgroundChangedEvent.class, listener);
+    }
    
     public Registration addNodeMovedListener(ComponentEventListener<NodeMovedEvent> listener) {
         return addListener(NodeMovedEvent.class, listener);
@@ -939,42 +758,6 @@ public class AntvX6 extends Div {
     * End of Listeners
     */
     
-    /*
-    * Getter and Setter of AntvX6 
-    */
-
-    public X6NodeBackground getNodeBackground() {
-        return nodeBackground;
-    }
-
-    public void setNodeBackground(X6NodeBackground nodeBackground) {
-        this.nodeBackground = nodeBackground;
-    }
-    
-    public List<X6Node> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(List<X6Node> nodes) {
-        this.nodes = nodes;
-    }
-    
-    public List<X6Edge> getEdges() {
-        return edges;
-    }
-
-    public void setEdges(List<X6Edge> edges) {
-        this.edges = edges;
-    }
-    
-    public List<X6NodeText> getTextNodes() {
-        return textNodes;
-    }
-
-    public void setTextNodes(List<X6NodeText> textNodes) {
-        this.textNodes = textNodes;
-    }
-    
     public X6Node getNodeById(String id) {
         return nodes.stream()
                     .filter(node -> node.getId().equals(id))
@@ -989,9 +772,5 @@ public class AntvX6 extends Div {
                     .findFirst()
                     .orElse(null);
     }
-
-    
-    /*
-    * End of Getter and Setter of AntvX6 
-    */  
+ 
 }

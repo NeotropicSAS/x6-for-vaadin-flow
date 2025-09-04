@@ -33,7 +33,7 @@ public class X6Constants {
     /**
     * The width of the graph in pixels.
     */
-    public static final int GRAPH_WIDTH_OBJECT_VIEW = 600;
+    public static final int GRAPH_WIDTH_OBJECT_VIEW = 1000;
 
     /**
      * The height of the graph in pixels.
