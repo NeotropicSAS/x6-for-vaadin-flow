@@ -63,12 +63,12 @@ public class X6Constants {
     /**
      * The width of the graph in pixels for physical path view.
      */
-    public static final int GRAPH_WIDTH_PHYSICAL_PATH = 1500;
+    public static final int GRAPH_WIDTH_PHYSICAL_PATH = 1300;
 
     /**
      * The height of the graph in pixels for physical path view.
      */
-    public static final int GRAPH_HEIGHT_PHYSICAL_PATH = 500;
+    public static final int GRAPH_HEIGHT_PHYSICAL_PATH = 600;
 
     /**
     * The width of the graph in pixels for physical tree view.

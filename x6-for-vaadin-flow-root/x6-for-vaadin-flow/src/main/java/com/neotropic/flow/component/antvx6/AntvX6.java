@@ -513,6 +513,10 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("setEdgeLabelStyle", id, style, value, labelPos);
     }
     
+    public void changeNodeLabel(String nodeId, String newText){
+        getElement().callJsFunction("changeNodeLabel", nodeId, newText);
+    }
+    
     /*
     * End of methods to manipulate edges
     */
@@ -521,10 +525,6 @@ public class AntvX6 extends Div {
     * These methods will be deleted very soon and implemented in Java, because they cover business rules that are not necessary or of interest. 
     */
 
-    public void adjustNodeWidth(String id, int reserveSpace, int childSpacing, int heightIncrease){
-        getElement().callJsFunction("adjustNodeWidth", id, reserveSpace, childSpacing, heightIncrease);
-    }
-    
     public void executeTree(String containerId, int spacing){
         getElement().callJsFunction("executeTree", containerId, spacing);
     }
@@ -537,28 +537,12 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("adjustNodeHeight", id, childSpacing);
     }
     
-    public void centerChildrenHorizontally(String id, int startX, int childSpacing){
-        getElement().callJsFunction("centerChildrenHorizontally", id, startX, childSpacing);
-    }
-    
     public void centerChildrenVertically(String id, int childSpacing){
         getElement().callJsFunction("centerChildrenVertically", id, childSpacing);
     }
     
     public void establishHierarchyThroughEdges(){
         getElement().callJsFunction("establishHierarchyThroughEdges");
-    }
-    
-    public void setPositionAbsoluteParent(List<String> parentsId) {
-        StringBuilder jsonArray = new StringBuilder("[");
-        for (int i = 0; i < parentsId.size(); i++) {
-            jsonArray.append("\"").append(parentsId.get(i)).append("\"");
-            if (i < parentsId.size() - 1) {
-                jsonArray.append(","); 
-            }
-        }
-        jsonArray.append("]");
-        getElement().callJsFunction("setPositionAbsoluteParent", jsonArray.toString());
     }
     
     public void showNode(String id){

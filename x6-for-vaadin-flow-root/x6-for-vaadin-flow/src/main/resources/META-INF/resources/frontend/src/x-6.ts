@@ -1678,6 +1678,14 @@ export class X6 extends LitElement {
     }
   }
 
+  public changeNodeLabel(nodeId: string, newText: string){
+    if(this.graph){
+      let cell = this.graph.getCellById(nodeId);
+      let node = cell as Node;
+      node.attr('label/text', newText);
+    }
+  }
+
   /*
   * End of methods to set object styles 
   */
@@ -2230,38 +2238,6 @@ export class X6 extends LitElement {
     }
   }
 
-  public adjustNodeWidth(id: string, reserveSpace: number, childSpacing: number, heightIncrease: number){
-    if (this.graph) {
-      const currentNode = this.graph.getCellById(id);
-      if(currentNode){
-        const children = currentNode.getChildren();
-        let omega = reserveSpace;
-        let maxChildHeight = 0;
-
-        if(children && children.length > 0){
-          const childrenSize = children.length;
-          let totalWidth = 0;
-
-          if(childrenSize != 1)
-            omega = childSpacing*(children.length -1) + reserveSpace;
-          
-          children.forEach(child => {
-            if(child.getBBox().height > maxChildHeight)
-              maxChildHeight = child.getBBox().height;
-            totalWidth += child.getBBox().width;
-          });
-
-          currentNode.prop({
-            size: {
-              width: totalWidth + omega,
-              height: maxChildHeight + heightIncrease
-            }
-          });
-        }
-      }
-    }
-  }
-
   public adjustNodeHeight(id: string, childSpacing: number){
     if(this.graph){
       const currentNode = this.graph.getCellById(id);
@@ -2476,34 +2452,7 @@ export class X6 extends LitElement {
 
     return maxHeight;
   }
-
-  public centerChildrenHorizontally(id: string, startX: number, childSpacing: number){
-    if (this.graph) {
-      const currentNode = this.graph.getCellById(id);
-      if(currentNode){
-        const children = currentNode.getChildren();
-        const currentNodeBBox = currentNode.getBBox();
-        const parentCenterY = currentNodeBBox.y + currentNodeBBox.height / 2; 
-        if (children) {
-          let currentX = currentNodeBBox.x + startX; 
   
-          children.forEach(child => {
-            const bbox = child.getBBox();
-        
-            child.setProp({
-                position: {
-                  x: currentX,
-                  y: parentCenterY - bbox.height / 2 
-                }
-            });
-  
-            currentX += bbox.width + childSpacing; 
-          });
-        }
-      }
-    } 
-  }
-
   public centerChildrenVertically(id: string, childSpacing: number){
     if (this.graph) {
       const currentNode = this.graph.getCellById(id);
@@ -2530,20 +2479,6 @@ export class X6 extends LitElement {
         }
       }
     } 
-  }
-
-  public setPositionAbsoluteParent(parentsId: string){
-    if(this.graph){
-       const parsedIds = JSON.parse(parentsId); 
-      let currentX = 20;
-      for(let i = 0 ; i < parsedIds.length ; i++){
-        const nodeParent = this.graph.getCellById(parsedIds[i]);
-        if(nodeParent){
-          nodeParent.setProp({position : { x: currentX }});
-          currentX = currentX + nodeParent.getBBox().width + 180;
-        }
-      }
-    }
   }
 
   /*
