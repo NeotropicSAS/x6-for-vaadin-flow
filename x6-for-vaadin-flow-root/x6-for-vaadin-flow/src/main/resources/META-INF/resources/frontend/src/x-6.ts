@@ -775,6 +775,11 @@ export class X6 extends LitElement {
   */
   private graph: Graph | null = null;
 
+  /**
+  * The minimap instance.
+  */
+  private minimapPlugin: MiniMap | null = null;
+
   /*
   * A path that defines the location of a node style attribute in the X6 model.
   */
@@ -855,7 +860,7 @@ export class X6 extends LitElement {
   * The minimap element for providing an overview of the graph.
   */
   @query('#minimap')
-  minimap!: HTMLDivElement;
+  minimapDiv!: HTMLDivElement;
 
   protected firstUpdated() {
     if(this.target){
@@ -882,23 +887,39 @@ export class X6 extends LitElement {
     }));
   }
 
+  public eventGraphLoading(){
+    this.dispatchEvent(new CustomEvent('graph-loading', {
+      detail: {
+        status: 'success'
+      }
+    }));
+  }
+
+  public eventGraphLoaded(){
+    this.dispatchEvent(new CustomEvent('graph-loaded', {
+      detail: {
+        status: 'success'
+      }
+    }));
+  }
+
   /* Methods to init a X6 graph */
 
   /**
   * Initializes the graph with basic settings.
   */
-  public initGraph(){
+  public initGraph() {
     this.graph = new Graph({
       container: this.target,
-      autoResize: true,
+      autoResize: false,
       width: this.graph_width, 
       height: this.graph_height,
       grid: this.graph_grid,
-      panning: this.graph_panning,
+      ...(this.graph_panning
+        ? { panning: { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] } }
+        : {}),
       mousewheel: this.graph_mouse_wheel,
-      background: {
-        color: this.graph_background_color,
-      },
+      background: { color: this.graph_background_color },
       connecting: {
         snap: true, 
         allowBlank: false, 
@@ -914,31 +935,64 @@ export class X6 extends LitElement {
   /**
   * Initializes the graph with interactions.
   */
-  public initGraphWithInteractions(){
+  public initGraphWithInteractions() {
     this.graph = new Graph({
       container: this.target,
-      autoResize: true,
-      width: this.graph_width, 
+      autoResize: false,
+      width: this.graph_width,
       height: this.graph_height,
       grid: this.graph_grid,
-      panning: this.graph_panning,
+      panning: this.graph_panning
+        ? { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] }
+        : false,
       mousewheel: this.graph_mouse_wheel,
-      background: {
-        color: this.graph_background_color,
-      },
-      interacting:{
+      background: { color: this.graph_background_color },
+      interacting: {
         nodeMovable(view) {
           const node = view.cell
-          const { enableMove } = node.getData()
-          return enableMove
+          const data = node.getData?.()
+          return data?.enableMove ?? true
         },
       },
       connecting: {
-        snap: true,  
-        allowNode: true, 
-        allowMulti: 'withPort', 
+        snap: true,
+        allowNode: true,
+        allowMulti: 'withPort',
       },
-   });
+    })
+  }
+
+  public showGrid(
+    size: number,
+    mainColor: string,
+    mainThickness: number,
+    subColor: string,
+    subThickness: number,
+    factor: number
+  ) {
+    if (this.graph) {
+      this.graph.showGrid()
+      this.graph.drawGrid({
+        type: 'doubleMesh',
+        args: [
+          {
+            color: mainColor,
+            thickness: mainThickness,
+          },
+          {
+            color: subColor,
+            thickness: subThickness,
+            factor: factor,
+          },
+        ],
+      })
+      this.graph.setGridSize(size)
+    }
+  }
+
+  public hideGrid(){
+    if(this.graph)
+      this.graph.hideGrid();
   }
 
   /* End of methods to init a X6 graph */
@@ -951,35 +1005,27 @@ export class X6 extends LitElement {
   * Adds the scroller plugin to the graph with the specified configuration.
   */
   public addScrollerPlugin(
-    enabled: boolean,
-    pannable: boolean,
-    pageVisible: boolean,
-    pageBreak: boolean,
     width: number,
     height: number,
-    pageWidth: number,
-    pageHeight: number,
     padding: number,
-    autoResize: boolean,
-    scrollerPositionLeft: number,
-    scrollerPositionTop: number
+    minVisibleWidth: number,
+    minVisibleHeight: number,
   ) {
     if (this.graph) {
       const scrollerPlugin = new Scroller({
-        enabled: enabled,
-        pannable: pannable,
-        pageVisible: pageVisible,
-        pageBreak: pageBreak,
-        width: width,
-        height: height,
-        pageWidth: pageWidth,
-        pageHeight: pageHeight,
+        enabled: true,
+        pageVisible: false,
+        pageBreak: false,
+        width: width,                  
+        height: height,                  
+        autoResize: true,                
         padding: padding,
-        autoResize: autoResize
+        minVisibleWidth: minVisibleWidth,
+        minVisibleHeight: minVisibleHeight,
+        pannable: false
       });
-  
+
       this.graph.use(scrollerPlugin);
-      this.graph.setScrollbarPosition(scrollerPositionLeft, scrollerPositionTop);
     }
   }
 
@@ -1035,7 +1081,8 @@ export class X6 extends LitElement {
     multiple: boolean,
     rubberband: boolean, 
     movable: boolean,
-    showNodeSelectionBox: boolean
+    showNodeSelectionBox: boolean,
+    showEdgeSelectionBox: boolean
   ) {
     if (this.graph) {
       this.graph.use(new Selection({
@@ -1044,6 +1091,7 @@ export class X6 extends LitElement {
         rubberband: rubberband,
         movable: movable,
         showNodeSelectionBox: showNodeSelectionBox,
+        showEdgeSelectionBox: showEdgeSelectionBox
       }));
     }
   }
@@ -1052,16 +1100,32 @@ export class X6 extends LitElement {
   * Adds the mminimap plugin to the graph.
   */
   public addMinimapPlugin(width: number, height: number){
+    if(this.graph && this.minimapDiv && !this.minimapPlugin){
+      const minimap = new MiniMap({
+        container: this.minimapDiv,
+        width,
+        height,
+      });
+      this.graph.use(minimap);
+      this.minimapPlugin = minimap;
+    }
+  }
+
+  public addMinimapPluginDinamic(widthCanvas: number, heightCanvas: number, 
+    widthMiniMap: number, heightMiniMap: number){
     if(this.graph){
-      if(this.minimap){
-        const minimap = new MiniMap({
-          container: this.minimap,
-          width: width, 
-          height: height, 
-        });
-  
-        this.graph.use(minimap);
+      this.graph.resize(widthCanvas, heightCanvas);
+      if(!this.minimapPlugin){
+        this.addMinimapPlugin(widthMiniMap, heightMiniMap);
       }
+    }
+  }
+
+  public removeMinimapDinamic(widthCanvas: number, heightCanvas: number){
+    if(this.graph && this.minimapPlugin){
+      this.graph.resize(widthCanvas, heightCanvas);
+      this.minimapPlugin.dispose();
+      this.minimapPlugin = null;
     }
   }
 
@@ -1734,13 +1798,17 @@ export class X6 extends LitElement {
   * This method listens for the 'mouseenter' event on edges.
   * When the mouse enters an edge, it adds the 'vertices' and 'segments' tools to that edge.
   */
-  public eventAddEdgeVerticesTool(){
-    if(this.graph){
-      this.graph.on('edge:mouseenter',({ edge })=>{   
-        edge.addTools(['vertices','segments']) 
+  public eventAddEdgeVerticesTool() {
+    if (this.graph) {
+      this.graph.on('edge:mouseenter', ({ edge, e }) => {
+        const mouseEvent = e.originalEvent as MouseEvent
+        if (mouseEvent.ctrlKey) {
+          edge.addTools(['vertices', 'segments'])
+        }
       })
     }
   }
+
 
   public eventAddEdgeButtonRemoveTool(){
     if(this.graph){
@@ -1777,14 +1845,16 @@ export class X6 extends LitElement {
   public eventAddNodeButtonRemoveTool(){
     if(this.graph){
       this.graph.on('node:mouseenter', ({ node }) => {
-        node.addTools([
-        {
-          name: 'button-remove',
-          args: {
-            x: 0,
-            y: 0,
-          }
-        }])
+        if(node.id !== this.graph_node_background_id){
+            node.addTools([
+            {
+              name: 'button-remove',
+              args: {
+                x: 0,
+                y: 0,
+              }
+            }])
+        }
       });
     }
   }
