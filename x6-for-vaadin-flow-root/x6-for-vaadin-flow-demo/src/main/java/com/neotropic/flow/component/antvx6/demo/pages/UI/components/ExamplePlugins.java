@@ -67,7 +67,7 @@ public class ExamplePlugins extends VerticalLayout{
         basicCanvas.addGraphCreatedListener(evt -> {
             
             //Add the scroller plugin
-            basicCanvas.addScrollerPlugin(true, true, true, true, 600, 600, 600, 600, 0, true, 0, 0);
+            basicCanvas.addScrollerPlugin(600, 600, 100, 600, 600);
             
             X6Node node = new X6Node();
             node.setId(UUID.randomUUID().toString());
@@ -198,7 +198,7 @@ public class ExamplePlugins extends VerticalLayout{
        
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the selection plugin
-            basicCanvas.addSelectionPlugin(true, true, true, true, true);
+            basicCanvas.addSelectionPlugin(true, true, true, true, true, true);
             //This event detects if one or multiple cells has been selected
             basicCanvas.initEventCellSelected();
             //Returns the deselected cell id
@@ -261,7 +261,7 @@ public class ExamplePlugins extends VerticalLayout{
         
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the scroller plugin, It's not neccesary
-            basicCanvas.addScrollerPlugin(true, true, true, true, 600, 600, 600, 600, 0, true, 0, 0);
+            basicCanvas.addScrollerPlugin(600, 600, 100, 600, 600);
             // Add the plugin
             basicCanvas.addMinimapPlugin(200, 160);
             

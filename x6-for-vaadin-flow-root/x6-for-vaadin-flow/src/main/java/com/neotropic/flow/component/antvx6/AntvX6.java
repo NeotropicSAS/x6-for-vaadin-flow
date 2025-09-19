@@ -31,6 +31,8 @@ import com.neotropic.flow.component.antvx6.events.EdgeCreatedEvent;
 import com.neotropic.flow.component.antvx6.events.EdgeDblClickEvent;
 import com.neotropic.flow.component.antvx6.events.GraphCleanedEvent;
 import com.neotropic.flow.component.antvx6.events.GraphCreatedEvent;
+import com.neotropic.flow.component.antvx6.events.GraphLoadedEvent;
+import com.neotropic.flow.component.antvx6.events.GraphLoadingEvent;
 import com.neotropic.flow.component.antvx6.events.GraphRefreshedEvent;
 import com.neotropic.flow.component.antvx6.events.NodeBackgroundResizedEvent;
 import com.neotropic.flow.component.antvx6.events.NodeChangedEvent;
@@ -288,28 +290,11 @@ public class AntvX6 extends Div {
     
     /**
     * Adds a scroller plugin
-    *
-    * @param enabled              Whether the scroller is enabled.
-    * @param pannable             Whether the scroller is pannable.
-    * @param pageVisible          Whether the page is visible.
-    * @param pageBreak            Whether the page breaks are enabled.
-    * @param width                The width of the scroller.
-    * @param height               The height of the scroller.
-    * @param pageWidth            The width of the page.
-    * @param pageHeight           The height of the page.
-    * @param padding              The padding around the scroller.
-    * @param autoResize           Whether the scroller should auto-resize.
-    * @param scrollerPositionLeft The left position of the scroller.
-    * @param scrollerPositionTop  The top position of the scroller.
     */
-    public void addScrollerPlugin(boolean enabled, boolean pannable, boolean pageVisible, boolean pageBreak,
-        double width, double height, double pageWidth, double pageHeight, double padding, boolean autoResize,
-        double scrollerPositionLeft, int scrollerPositionTop)
+    public void addScrollerPlugin(int width, int height, int padding, int minVisibleWidth, int minVisibleHeight)
     {
         getElement().callJsFunction(
-            "addScrollerPlugin",enabled, pannable, pageVisible, pageBreak, 
-                                width, height, pageWidth, pageHeight, padding, autoResize, 
-                                scrollerPositionLeft, scrollerPositionTop
+            "addScrollerPlugin", width, height, padding, minVisibleWidth, minVisibleHeight
         );
     }
     
@@ -356,10 +341,12 @@ public class AntvX6 extends Div {
     * @param rubberband             Whether to enable the box selection node function.
     * @param movable                Whether selected nodes can be moved.
     * @param showNodeSelectionBox   Whether the node selection box is shown.
+     * @param showEdgeSelectionBox Whether the edge selection box is shown.
     */
-    public void addSelectionPlugin(boolean enabled, boolean multiple,boolean rubberband ,boolean movable, boolean showNodeSelectionBox) {
+    public void addSelectionPlugin(boolean enabled, boolean multiple,boolean rubberband ,boolean movable, boolean showNodeSelectionBox,
+            boolean showEdgeSelectionBox) {
         getElement().callJsFunction(
-            "addSelectionPlugin", enabled, multiple, rubberband ,movable, showNodeSelectionBox
+            "addSelectionPlugin", enabled, multiple, rubberband ,movable, showNodeSelectionBox, showEdgeSelectionBox
         );
     }
     
@@ -372,6 +359,14 @@ public class AntvX6 extends Div {
     public void addMinimapPlugin(int width, int height){
         getElement().callJsFunction("addMinimapPlugin", width, height);
     }
+    
+    public void addMinimapPluginDinamic(int widthCanvas, int heightCanvas, int widthMinimap, int heightMinimap){
+        getElement().callJsFunction("addMinimapPluginDinamic", widthCanvas, heightCanvas, widthMinimap, heightMinimap);
+    }
+    
+    public void removeMinimapPluginDimanic(int widthCanvas, int heightCanvas){
+        getElement().callJsFunction("removeMinimapDinamic", widthCanvas, heightCanvas);
+    }   
 
     /*
     * End of methods to add X6 plugins
@@ -641,6 +636,14 @@ public class AntvX6 extends Div {
     public void initEventCellRemoved(){
         getElement().callJsFunction("eventCellRemoved");
     }
+    
+    public void fireGraphLoading(){
+        getElement().callJsFunction("eventGraphLoading");
+    }
+    
+    public void fireGraphLoaded(){
+        getElement().callJsFunction("eventGraphLoaded");
+    }
 
     /*
     * End of X6 events
@@ -669,6 +672,28 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("exportGraphToJPEG", filename);
     }
     
+     /**
+     * Shows the grid on the graph with the given configuration.
+     *
+     * @param size The grid size (distance between lines or dots).
+     * @param mainColor The main grid color.
+     * @param mainThickness The thickness of the main grid lines.
+     * @param subColor The secondary grid color.
+     * @param subThickness The thickness of the secondary grid lines.
+     * @param factor The spacing factor between main and secondary lines.
+     */
+    public void showGrid(int size, String mainColor, double mainThickness,
+                         String subColor, double subThickness, int factor) {
+        getElement().callJsFunction("showGrid", size, mainColor, mainThickness, subColor, subThickness, factor);
+    }
+
+    /**
+     * Hides the grid on the graph.
+     */
+    public void hideGrid() {
+        getElement().callJsFunction("hideGrid");
+    }
+    
     /*
     * End of other methods
     */
@@ -684,6 +709,14 @@ public class AntvX6 extends Div {
     
     public Registration addGraphCreatedListener(ComponentEventListener<GraphCreatedEvent> listener) {
         return addListener(GraphCreatedEvent.class, listener);
+    }
+    
+    public Registration addGraphLoadingListener(ComponentEventListener<GraphLoadingEvent> listener) {
+        return addListener(GraphLoadingEvent.class, listener);
+    }
+    
+    public Registration addGraphLoadedListener(ComponentEventListener<GraphLoadedEvent> listener) {
+        return addListener(GraphLoadedEvent.class, listener);
     }
     
     public Registration addGraphCleanedListener(ComponentEventListener<GraphCleanedEvent> listener) {
