@@ -515,30 +515,6 @@ public class AntvX6 extends Div {
     /*
     * End of methods to manipulate edges
     */
-
-    /*
-    * These methods will be deleted very soon and implemented in Java, because they cover business rules that are not necessary or of interest. 
-    */
-
-    public void executeTree(String containerId, int spacing){
-        getElement().callJsFunction("executeTree", containerId, spacing);
-    }
-    
-    public void orderChildrenByName(String idContainer){
-        getElement().callJsFunction("orderChildrenByName", idContainer);
-    }
-    
-    public void adjustNodeHeight(String id, int childSpacing){
-        getElement().callJsFunction("adjustNodeHeight", id, childSpacing);
-    }
-    
-    public void centerChildrenVertically(String id, int childSpacing){
-        getElement().callJsFunction("centerChildrenVertically", id, childSpacing);
-    }
-    
-    public void establishHierarchyThroughEdges(){
-        getElement().callJsFunction("establishHierarchyThroughEdges");
-    }
     
     public void showNode(String id){
         getElement().callJsFunction("showNode", id);
@@ -548,9 +524,9 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("hideNode", id);
     }
     
-    /*
-    * End of  methods that will be deleted very soon and implemented in Java. 
-    */
+    public void resizeCanvas(int width, int height){
+        getElement().callJsFunction("resizeCanvas", width, height);
+    }
     
     /*
     * Events of X6
