@@ -911,7 +911,7 @@ export class X6 extends LitElement {
   public initGraph() {
     this.graph = new Graph({
       container: this.target,
-      autoResize: false,
+      autoResize: true,
       width: this.graph_width, 
       height: this.graph_height,
       grid: this.graph_grid,
@@ -938,7 +938,7 @@ export class X6 extends LitElement {
   public initGraphWithInteractions() {
     this.graph = new Graph({
       container: this.target,
-      autoResize: false,
+      autoResize: true,
       width: this.graph_width,
       height: this.graph_height,
       grid: this.graph_grid,
@@ -955,11 +955,20 @@ export class X6 extends LitElement {
         },
       },
       connecting: {
-        snap: true,
-        allowNode: true,
-        allowMulti: 'withPort',
+        snap: true, 
+        allowBlank: false, 
+        allowNode: true, 
+        allowEdge: false,
+        allowPort: true,
+        allowMulti: 'withPort', 
+        highlight: true,
       },
     })
+  }
+
+  public resizeCanvas(width: number, height: number){
+    if(this.graph)
+      this.graph.resize(width, height);
   }
 
   public showGrid(
@@ -2283,276 +2292,6 @@ export class X6 extends LitElement {
 
   /*
   * End of other methods
-  */
-
- /*
- * These methods will be deleted very soon and implemented in Java, because they cover business rules that are not necessary or of interest. 
- */
-
-  public establishHierarchyThroughEdges() {
-    if (this.graph) {
-        const edges = this.graph.getEdges();
-        
-        edges.forEach(edge => {
-          const source = edge.getSourceNode(); 
-          const target = edge.getTargetNode(); 
-
-          if(source && target){
-            const parentSource = source.getParent();
-            const parentTarget = target.getParent();
-            
-            if(parentSource && parentTarget)
-              parentSource.addChild(parentTarget);
-          } 
-        });
-    }
-  }
-
-  public adjustNodeHeight(id: string, childSpacing: number){
-    if(this.graph){
-      const currentNode = this.graph.getCellById(id);
-      if(currentNode){
-        const children = currentNode.getChildren();
-
-        if(children && children.length > 0){
-          const childrenSize = children.length;
-          const omega = childSpacing*(childrenSize + 1); 
-          let totalHeight = 0;
-          let maxChildWidth = 0;
-
-          children.forEach( child => {
-            if(child.getBBox().width > maxChildWidth)
-              maxChildWidth = child.getBBox().width;
-            totalHeight += child.getBBox().height;
-          });
-
-          currentNode.prop({
-            size: {
-              width: maxChildWidth*3,
-              height: totalHeight + omega
-            }
-          });
-        }
-      }
-    }
-  }
-
-  public orderChildrenByName(idContainer: string) {
-    if(this.graph){
-      const container = this.graph.getCellById(idContainer);
-      const children = container.getChildren();
-      const orderedChildren = [];
-
-      if(children){
-        for (let i = 0; i < children.length; i++) {
-          const child = children[i];
-          const label: string = child.getAttrByPath('label/text') || '';
-          let inserted = false;
-          for (let j = 0; j < orderedChildren.length; j++) {
-            let currentLabel: string = orderedChildren[j].getAttrByPath('label/text') as string || '';
-            if (label < currentLabel) {
-              orderedChildren.splice(j, 0, child);
-              inserted = true;
-              break;
-            }
-          }
-          if (!inserted) 
-            orderedChildren.push(child); 
-        }
-        container.setChildren(orderedChildren);
-      }
-    }
-  }
-
-  
-  public executeTree(containerId: string, spacing: number) {
-    if (this.graph) {
-      const container = this.graph.getCellById(containerId);
-      if (container){
-        const children = container.getChildren();
-        const edges = this.graph.getEdges();
-        let targets: (string | undefined)[] = [];
-        
-        if (children && edges && edges.length > 0) {
-          children.forEach(child => {
-            const source = child.id;
-            edges.forEach(edge => {
-              const targetNode = edge.getTargetNode();
-              if (targetNode && targetNode.id) {
-                if (edge.getSourceNode()?.id === source) {
-                  targets.push(targetNode.id);
-                }
-              }
-            });
-          });
-          
-          let currentY = container.getBBox().y;
-
-          if(targets && targets.length > 0){
-            let lastParentId = ' ';
-            targets.forEach(target => {
-              if (target) {
-                const currentNode = this.graph?.getCellById(target);
-                if (currentNode) {
-                  const parent = currentNode.getParent();
-                  if (parent) {
-                    if(lastParentId !== parent.id){  
-                      parent.setProp({
-                        position: {
-                          x: container.getBBox().x + container.getBBox().width + spacing,
-                          y: currentY
-                        }
-                      });
-
-                      currentY +=  parent.getBBox().height + this.getNeededSpace(parent.id);
-                      this.setTreePosition(parent.id , parent.getBBox().x, spacing);
-                    }
-
-                    lastParentId = parent.id;
-                  } 
-                }
-              }
-            });
-          }
-        }
-      }
-    }
-  }
-
-  public setTreePosition(containerId: string, initialX: number, spacing: number, visited: Set<string> = new Set(),depth = 0) {
-    let lastY = 0;
-    if (this.graph) {
-      const container = this.graph.getCellById(containerId);
-      if (!container) return 0;
-
-      lastY = container.getBBox().y + container.getBBox().height;
-
-      const children = container.getChildren();
-      const edges = this.graph.getEdges();
-      let targets: (string | undefined)[] = [];
-      
-      if (children && edges && edges.length > 0) {
-        children.forEach(child => {
-          if(!visited.has(child.id)){
-            const source = child.id;
-            visited.add(source);
-            edges.forEach(edge => {
-            const targetNode = edge.getTargetNode();
-            if (targetNode && targetNode.id) {
-              if (edge.getSourceNode()?.id === source) 
-                targets.push(targetNode.id);
-            }
-          });
-          }
-        });
-
-        initialX = container.getBBox().x + container.getBBox().width + spacing;
-        let currentY = container.getBBox().y;
-
-        if(targets && targets.length > 0){
-          targets.forEach(target => {
-            if (target) {
-              const currentNode = this.graph?.getCellById(target);
-              if (currentNode) {
-                const parent = currentNode.getParent();
-                if (parent) {
-                  parent.setProp({
-                    position: {
-                      x: initialX,
-                      y: currentY
-                    }
-                  })
-                  const childLastY = this.setTreePosition(parent.id, parent.getBBox().x, spacing, visited ,depth + 1);
-                  currentY = childLastY;
-                } 
-              }
-            }
-          });
-        }
-      }
-    }
-    return lastY;
-  }
-
-  public getNeededSpace(containerId: string, visited: Set<string> = new Set()) {
-    let maxHeight = 0; 
-    let currentMaxHeight = 0;
-    if (this.graph) {
-      const container = this.graph.getCellById(containerId);
-      if (!container) return 0;
-
-      maxHeight = container.getBBox().height;
-      
-      const children = container.getChildren();
-      const edges = this.graph.getEdges();
-      let targets: (string | undefined)[] = [];
-      
-      if (children && edges && edges.length > 0) {
-        children.forEach(child => {
-          if(!visited.has(child.id)){
-            const source = child.id;
-            visited.add(source);
-            edges.forEach(edge => {
-              const targetNode = edge.getTargetNode();
-              if (targetNode && targetNode.id) {
-                if (edge.getSourceNode()?.id === source)
-                  targets.push(targetNode.id);
-              }
-            });
-          }
-        });
-
-        if(targets && targets.length > 0){
-          targets.forEach(target => {
-            if (target) {
-              const currentNode = this.graph?.getCellById(target);
-              if (currentNode) {
-                const parent = currentNode.getParent();
-                if (parent) {
-                  currentMaxHeight += this.getNeededSpace(parent.id, visited);
-                  if(currentMaxHeight > maxHeight)
-                    maxHeight = currentMaxHeight;
-                } 
-              }
-            }
-          });
-        }
-      }
-    }
-
-    return maxHeight;
-  }
-  
-  public centerChildrenVertically(id: string, childSpacing: number){
-    if (this.graph) {
-      const currentNode = this.graph.getCellById(id);
-      if(currentNode){
-        const children = currentNode.getChildren();
-        const currentNodeBBox = currentNode.getBBox();
-        const parentCenterX = currentNodeBBox.x + currentNodeBBox.width / 2; 
-
-        if (children) {
-          let currentY = currentNodeBBox.y + childSpacing; 
-
-          children.forEach(child => {
-            const bbox = child.getBBox();
-        
-            child.setProp({
-                position: {
-                  x: parentCenterX - bbox.width / 2,
-                  y: currentY 
-                }
-            });
-
-            currentY += bbox.height + childSpacing; 
-          });
-        }
-      }
-    } 
-  }
-
-  /*
-  * End of  methods that will be deleted very soon and implemented in Java. 
   */
 
   protected render(): unknown {
