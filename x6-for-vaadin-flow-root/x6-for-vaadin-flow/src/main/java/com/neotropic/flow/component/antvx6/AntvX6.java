@@ -449,12 +449,12 @@ public class AntvX6 extends Div {
     }
     
     /**
-    * Selects a specified node in the graph. (Make sure to add the Selection plugin first)
+    * Selects a specified cell in the graph. (Make sure to add the Selection plugin first)
     *
-    * @param id id of the X6Node to be select.
+    * @param id id of the cell to be select.
     */
-    public void selectNode(String id) {
-        getElement().callJsFunction("selectNode", id);
+    public void selectCell(String id) {
+        getElement().callJsFunction("selectCell", id);
     }
     
     /**

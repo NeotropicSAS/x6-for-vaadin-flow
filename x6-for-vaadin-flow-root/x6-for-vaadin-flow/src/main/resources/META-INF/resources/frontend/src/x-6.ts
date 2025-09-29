@@ -1213,13 +1213,13 @@ export class X6 extends LitElement {
   * 
   * @param {string} id - The id of the node to select.
   */
-  public selectNode(id: string){
+  public selectCell(id: string){
     if(this.graph){
       if(id){
-        const nodeCell = this.graph.getCellById(id);
-        if(nodeCell && id !== this.graph_node_background_id){
-          this.graph.select(nodeCell);
-          this.graph.centerCell(nodeCell);
+        const cell = this.graph.getCellById(id);
+        if(cell && id !== this.graph_node_background_id){
+          this.graph.select(cell);
+          this.graph.centerCell(cell);
         }
       }
     }
