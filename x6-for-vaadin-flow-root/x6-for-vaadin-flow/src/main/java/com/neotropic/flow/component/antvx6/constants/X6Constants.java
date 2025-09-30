@@ -29,57 +29,6 @@ public class X6Constants {
     * Canvas with human-node control on interactions 
     */
     public static final int INTERACTIONS_GRAPH_TYPE = 1;
-    
-    /**
-    * The width of the graph in pixels.
-    */
-    public static final int GRAPH_WIDTH_OBJECT_VIEW = 1000;
-
-    /**
-     * The height of the graph in pixels.
-     */
-    public static final int GRAPH_HEIGHT_OBJECT_VIEW = 600;
-
-    /**
-     * The width of the graph in pixels for fiber splitter view.
-     */
-    public static final int GRAPH_WIDTH_FIBER_SPLITTER = 1500;
-
-    /**
-     * The height of the graph in pixels for fiber splitter view.
-     */
-    public static final int GRAPH_HEIGHT_FIBER_SPLITTER = 700;
-
-    /**
-     * The width of the graph in pixels for splice box view.
-     */
-    public static final int GRAPH_WIDTH_SPLICE_BOX = 1500;
-
-    /**
-     * The height of the graph in pixels for splice box view.
-     */
-    public static final int GRAPH_HEIGHT_SPLICE_BOX = 700;
-
-    /**
-     * The width of the graph in pixels for physical path view.
-     */
-    public static final int GRAPH_WIDTH_PHYSICAL_PATH = 1300;
-
-    /**
-     * The height of the graph in pixels for physical path view.
-     */
-    public static final int GRAPH_HEIGHT_PHYSICAL_PATH = 600;
-
-    /**
-    * The width of the graph in pixels for physical tree view.
-    */
-    public static final int GRAPH_WIDTH_PHYSICAL_TREE = 1500;
-
-    /**
-    * The height of the graph in pixels for physical tree view.
-    */
-    public static final int GRAPH_HEIGHT_PHYSICAL_TREE = 500;
-
     /**
     * The background color of the graph.
     */
