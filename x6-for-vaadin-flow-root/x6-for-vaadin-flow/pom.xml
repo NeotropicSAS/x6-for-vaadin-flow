@@ -5,13 +5,13 @@
 
     <groupId>com.neotropic.flow.component</groupId>
     <artifactId>x6-for-vaadin-flow</artifactId>
-    <version>2.3.0</version>
+    <version>0.1.0</version>
     <name>X6 Component for Vaadin Flow</name>
     <description>Antv6 integration for Vaadin</description>
 
     <properties>
         <vaadin.version>24.6.2</vaadin.version>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
