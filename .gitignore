@@ -1,15 +1,16 @@
 /target/
 .idea/
-x6-for-vaadin-flow-root/x6-for-vaadin-flow/.idea
-x6-for-vaadin-flow-root/x6-for-vaadin-flow/node_modules
-x6-for-vaadin-flow-root/x6-for-vaadin-flow/target/
-x6-for-vaadin-flow-root/x6-for-vaadin-flow/src/main/frontend/
-x6-for-vaadin-flow-root/x6-for-vaadin-flow/package-lock.json
-x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/.idea
-x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/target/
-x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/src/main/frontend/
-x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/src/main/bundles
-x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/package-lock.json
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow/.idea
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow/node_modules
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow/target/
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow/src/main/frontend/
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow/package-lock.json
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/.idea
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/target/
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/src/main/frontend/
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/src/main/bundles
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-rootx6-for-vaadin-flow-demo/package-lock.json
+/x6-for-vaadin-flow-root/x6-for-vaadin-flow-demo/target/
 
 .settings
 .project
