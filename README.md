@@ -4,6 +4,8 @@ This repository contains a Vaadin Flow add-on for the web component for the popu
 
 - [Antv X6 – Official site](https://x6.antv.antgroup.com/)
 
+Antv X6 version: `2.18.1`
+
 The project that containing the x6 web component can be found in the following repository: [X6 Web Component](https://github.com/NeotropicSAS/webcomponent-x6)
 
 In the web component project, you can perform tests or add functionalities.
@@ -15,7 +17,7 @@ In the web component project, you can perform tests or add functionalities.
 
 The TypeScript file (`x-6.ts`) of the web component can be found at the following location in the X6 add-on:
 
-- x6-for-vaadin-flow-root/x6-for-vaadin-flow/src/main/resources/META-INF/resources/frontend/src/`x-6.ts`
+- x6-for-vaadin-flow/src/main/resources/META-INF/resources/frontend/src/`x-6.ts`
 
 ## License
 
@@ -35,7 +37,7 @@ Apache License 2.0
 1. Navigate to the x6-flow project.
    
     ```bash
-        cd x6-for-vaadin-flow-root/x6-for-vaadin-flow
+        cd x6-for-vaadin-flow
     ```
 
 2. Install in your local repository x6 Add-on project:
@@ -63,7 +65,7 @@ Apache License 2.0
 3. Navigate to the x6-for-vaadin-flow-demo project.
    
     ```bash
-        cd x6-for-vaadin-flow-root/x6-for-vaadin-flow-demo
+        cd x6-for-vaadin-flow-demo
     ```
 
 4. Install in your local repository X6 demo project:
