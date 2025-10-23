@@ -10,6 +10,7 @@ import com.neotropic.flow.component.antvx6.objects.X6Node;
 import com.neotropic.flow.component.antvx6.objects.X6NodeBackground;
 import com.neotropic.flow.component.antvx6.objects.X6NodeText;
 import com.neotropic.flow.component.antvx6.utilities.X6NodeTextUtilities;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,7 +37,6 @@ public class ExampleNodes extends VerticalLayout{
     public ExampleNodes(X6Factory factory){
         this.factory = factory;
         
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();  
@@ -60,7 +60,12 @@ public class ExampleNodes extends VerticalLayout{
     
     private VerticalLayout createAddNode(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         // Thorough an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -100,15 +105,19 @@ public class ExampleNodes extends VerticalLayout{
             basicCanvas.drawNode(circle);
             basicCanvas.drawNode(image);
         });
-        
-        lytBasicCanvas.add(new H4(DRAW_NODE), new Paragraph(DESCRIPTION_DRAW_NODE) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_NODE), new Paragraph(DESCRIPTION_DRAW_NODE) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createAddBackground(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
-       
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("800px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
+        
         // through an event, we create the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
             //Transform plugin.
@@ -138,14 +147,19 @@ public class ExampleNodes extends VerticalLayout{
             basicCanvas.drawNode(andElement);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_BACKGROUND ), new Paragraph(DESCRIPTION_DRAW_BACKGROUND), new NoteComponent(DESCRIPTION_DRAW_BACKGROUND_NOTE) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_BACKGROUND ), new Paragraph(DESCRIPTION_DRAW_BACKGROUND), new NoteComponent(DESCRIPTION_DRAW_BACKGROUND_NOTE) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createAddNodeText(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
-       
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getInteractionsCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
+        
         //through an event, we create the node
         basicCanvas.addGraphCreatedListener(evt -> {
             //main node
@@ -182,7 +196,7 @@ public class ExampleNodes extends VerticalLayout{
             basicCanvas.drawText(text);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_NODE_TEXT), new Paragraph(DESCRIPTION_DRAW_NODE_TEXT) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_NODE_TEXT), new Paragraph(DESCRIPTION_DRAW_NODE_TEXT) ,canvasWrapper);
         return lytBasicCanvas;
     }
     

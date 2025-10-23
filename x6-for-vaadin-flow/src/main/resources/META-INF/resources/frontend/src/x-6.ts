@@ -711,18 +711,6 @@ export class X6 extends LitElement {
   context_menu_div = false;
 
   /**
-  * The width of the graph.
-  */
-  @property()
-  graph_width: number = 0;
-
-  /**
-   * The height of the graph.
-   */
-  @property()
-  graph_height: number = 0;
-
-  /**
   * The background color of the graph.
   */
   @property()
@@ -821,6 +809,12 @@ export class X6 extends LitElement {
   }
 
   /*
+  * The canvas wrapper. 
+  */
+  @query('#canvasWrapper')
+  wrapper!: HTMLDivElement;
+
+  /*
   * The main canvas element for rendering the graph. 
   */
   @query('#canvas')
@@ -912,8 +906,6 @@ export class X6 extends LitElement {
     this.graph = new Graph({
       container: this.target,
       autoResize: true,
-      width: this.graph_width, 
-      height: this.graph_height,
       grid: this.graph_grid,
       ...(this.graph_panning
         ? { panning: { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] } }
@@ -939,8 +931,6 @@ export class X6 extends LitElement {
     this.graph = new Graph({
       container: this.target,
       autoResize: true,
-      width: this.graph_width,
-      height: this.graph_height,
       grid: this.graph_grid,
       panning: this.graph_panning
         ? { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] }
@@ -1014,24 +1004,18 @@ export class X6 extends LitElement {
   * Adds the scroller plugin to the graph with the specified configuration.
   */
   public addScrollerPlugin(
-    width: number,
-    height: number,
-    padding: number,
-    minVisibleWidth: number,
-    minVisibleHeight: number,
+    padding: number
   ) {
     if (this.graph) {
       const scrollerPlugin = new Scroller({
         enabled: true,
-        pageVisible: false,
-        pageBreak: false,
-        width: width,                  
-        height: height,                  
-        autoResize: true,                
+        pageVisible: false, 
+        pageBreak: false,    
+        pannable: true,      
+        autoResize: true,    
         padding: padding,
-        minVisibleWidth: minVisibleWidth,
-        minVisibleHeight: minVisibleHeight,
-        pannable: false
+        pageWidth: 2000,
+        pageHeight: 500,
       });
 
       this.graph.use(scrollerPlugin);
@@ -1120,19 +1104,15 @@ export class X6 extends LitElement {
     }
   }
 
-  public addMinimapPluginDinamic(widthCanvas: number, heightCanvas: number, 
-    widthMiniMap: number, heightMiniMap: number){
+  public addMinimapPluginDinamic(widthMiniMap: number, heightMiniMap: number){
     if(this.graph){
-      this.graph.resize(widthCanvas, heightCanvas);
-      if(!this.minimapPlugin){
+      if(!this.minimapPlugin)
         this.addMinimapPlugin(widthMiniMap, heightMiniMap);
-      }
     }
   }
 
-  public removeMinimapDinamic(widthCanvas: number, heightCanvas: number){
+  public removeMinimapDinamic(){
     if(this.graph && this.minimapPlugin){
-      this.graph.resize(widthCanvas, heightCanvas);
       this.minimapPlugin.dispose();
       this.minimapPlugin = null;
     }
@@ -1794,6 +1774,8 @@ export class X6 extends LitElement {
           node.addTools({
             name: 'node-editor',
             args: {
+              x: '20%',
+              y: '50%',
               getText: 'label/text',
               setText: 'label/text',
             }
@@ -2164,8 +2146,8 @@ export class X6 extends LitElement {
   public centerCanvas(){
     if(this.graph){
       const center = this.graph.addNode({
-        x: this.graph_width/2,
-        y: this.graph_height/2,
+        x: this.graph.options.width /2,
+        y: this.graph.options.height/2,
         width: 32,
         height: 32,
         shape: 'rect',
@@ -2296,7 +2278,9 @@ export class X6 extends LitElement {
 
   protected render(): unknown {
     return html`
-      <div id="canvas" style="height: 100%; width: 100%;"></div>
+      <div id="canvasWrapper" style="width: 100%; height: 100%;">
+        <div id="canvas" style="width: 100%; height: 100%;"></div>
+      </div>
   
       ${this.minimap_div ? html`
         <div id="minimap"></div>

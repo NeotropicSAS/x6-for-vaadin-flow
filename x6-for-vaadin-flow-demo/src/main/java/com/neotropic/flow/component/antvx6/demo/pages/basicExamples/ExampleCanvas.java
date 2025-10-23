@@ -6,6 +6,7 @@ import com.neotropic.flow.component.antvx6.demo.components.HeaderComponent;
 import com.neotropic.flow.component.antvx6.demo.factory.X6Factory;
 import com.neotropic.flow.component.antvx6.objects.Geometry;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,8 +28,6 @@ public class ExampleCanvas extends VerticalLayout{
     
     public ExampleCanvas(X6Factory factory){
         this.factory = factory;
-        
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();
@@ -67,9 +66,13 @@ public class ExampleCanvas extends VerticalLayout{
     
     private VerticalLayout createBasicCanvas(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
         // Here we create the canvas (take a look to class X6Factory)
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
         
         /*
             Whenever a change is made to the canvas, it must be notified with an event, so that it is updated.
@@ -82,14 +85,18 @@ public class ExampleCanvas extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
         
-        lytBasicCanvas.add(new H4(BASIC_CANVAS), new Paragraph(DESCRIPTION_BASIC_CANVAS) ,basicCanvas);
+        lytBasicCanvas.add(new H4(BASIC_CANVAS), new Paragraph(DESCRIPTION_BASIC_CANVAS) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createInteractionsCanvas(){  
         VerticalLayout lytInteractionsCanvas = new VerticalLayout();
+        lytInteractionsCanvas.setWidthFull();
+        lytInteractionsCanvas.setHeight("600px");
         // Here we create the canvas (take a look to class X6Factory)
-        AntvX6 interactionsCanvas = factory.getInteractionsCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        AntvX6 interactionsCanvas = factory.getInteractionsCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        Div canvasWrapper = new Div(interactionsCanvas);
+        canvasWrapper.setSizeFull();
         
         /*
             Whenever a change is made to the canvas, it must be notified with an event, so that it is updated.
@@ -104,7 +111,7 @@ public class ExampleCanvas extends VerticalLayout{
             interactionsCanvas.drawNode(node2);
         });
         
-        lytInteractionsCanvas.add(new H4(INTERACTIONS_CANVAS), new Paragraph(DESCRIPTION_INTERACTIONS_CANVAS), interactionsCanvas);
+        lytInteractionsCanvas.add(new H4(INTERACTIONS_CANVAS), new Paragraph(DESCRIPTION_INTERACTIONS_CANVAS), canvasWrapper);
         return lytInteractionsCanvas;
         
     }

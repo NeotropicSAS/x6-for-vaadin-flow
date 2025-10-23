@@ -7,6 +7,7 @@ import com.neotropic.flow.component.antvx6.demo.factory.X6Factory;
 import com.neotropic.flow.component.antvx6.objects.Geometry;
 import com.neotropic.flow.component.antvx6.objects.X6Edge;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,7 +32,6 @@ public class ExamplesTools extends VerticalLayout{
     public ExamplesTools(X6Factory factory){
         this.factory = factory;
         
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();  
@@ -54,7 +54,12 @@ public class ExamplesTools extends VerticalLayout{
     
     private VerticalLayout createNodeEditorTool(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         // through an event, we create the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -84,13 +89,18 @@ public class ExamplesTools extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
         
-        lytBasicCanvas.add(new H4(TOOL_NODE_EDITOR), new Paragraph(DESCRIPTION_TOOL_NODE_EDITOR) ,basicCanvas);
+        lytBasicCanvas.add(new H4(TOOL_NODE_EDITOR), new Paragraph(DESCRIPTION_TOOL_NODE_EDITOR) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createNodeButtonRemoveTool() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
 
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add events to add and remove node tools.
@@ -106,13 +116,18 @@ public class ExamplesTools extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
 
-        lytBasicCanvas.add(new H4(TOOL_BUTTON_REMOVE), new Paragraph(DESCRIPTION_TOOL_BUTTON_REMOVE), basicCanvas);
+        lytBasicCanvas.add(new H4(TOOL_BUTTON_REMOVE), new Paragraph(DESCRIPTION_TOOL_BUTTON_REMOVE), canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createEdgeTools() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
 
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add events to vertices and segments
@@ -138,7 +153,7 @@ public class ExamplesTools extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
 
-        lytBasicCanvas.add(new H4(TOOL_VERTICES_SEGMENTS), new Paragraph(DESCRIPTION_TOOL_VERTICES_SEGMENTS), basicCanvas);
+        lytBasicCanvas.add(new H4(TOOL_VERTICES_SEGMENTS), new Paragraph(DESCRIPTION_TOOL_VERTICES_SEGMENTS), canvasWrapper);
         return lytBasicCanvas;
     }
     

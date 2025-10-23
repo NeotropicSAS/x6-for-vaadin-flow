@@ -13,14 +13,11 @@ public class X6Factory {
     public X6Factory() {}
 
     //create the canvas
-    private AntvX6 createCanvas(int graphType, int width, int height, String bgColor) {
+    private AntvX6 createCanvas(int graphType, String bgColor) {
         //Create the canvas
         AntvX6 x6Canvas = new AntvX6();
         //Graph type (0 = basic canvas, 1 = interactions canvas)
         x6Canvas.setGraphType(graphType);
-        //Dimensions
-        x6Canvas.setGraphWidth(width);
-        x6Canvas.setGraphHeight(height);
         //Color
         x6Canvas.setBackgroundColor(bgColor);
         //Another configuration
@@ -29,13 +26,13 @@ public class X6Factory {
     }
 
     //basic canvas its value is 0 (GRAPH_TYPE)
-    public AntvX6 getBasicCanvas(int width, int height, String bgColor) {
-        return createCanvas(X6Constants.BASIC_GRAPH_TYPE, width, height, bgColor);
+    public AntvX6 getBasicCanvas(String bgColor) {
+        return createCanvas(X6Constants.BASIC_GRAPH_TYPE, bgColor);
     }
 
     //interactions canvas its value is 1 (GRAPH_TYPE)
-    public AntvX6 getInteractionsCanvas(int width, int height, String bgColor) {
-        return createCanvas(X6Constants.INTERACTIONS_GRAPH_TYPE, width, height, bgColor);
+    public AntvX6 getInteractionsCanvas(String bgColor) {
+        return createCanvas(X6Constants.INTERACTIONS_GRAPH_TYPE, bgColor);
     } 
 }
 

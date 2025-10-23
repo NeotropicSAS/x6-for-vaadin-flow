@@ -10,6 +10,7 @@ import com.neotropic.flow.component.antvx6.objects.Vertex;
 import com.neotropic.flow.component.antvx6.objects.X6Edge;
 import com.neotropic.flow.component.antvx6.objects.X6EdgeLabel;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -40,8 +41,7 @@ public class ExampleEdges extends VerticalLayout{
     
     public ExampleEdges(X6Factory factory){
         this.factory = factory;
-        
-        setSizeFull();
+       
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();
@@ -67,7 +67,12 @@ public class ExampleEdges extends VerticalLayout{
     
     private VerticalLayout createAddBasicEdge(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
         
         //Through an event, draw the elements
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -92,13 +97,18 @@ public class ExampleEdges extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_EDGE_BASIC), new Paragraph(DESCRIPTION_DRAW_EDGE_BASIC) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_EDGE_BASIC), new Paragraph(DESCRIPTION_DRAW_EDGE_BASIC) , canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createAddX6EdgeSingleLabel(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         //Through an event, we create the elements
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -123,13 +133,18 @@ public class ExampleEdges extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_EDGE_WITH_LABEL), new Paragraph(DESCRIPTION_DRAW_EDGE_WITH_LABEL) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_EDGE_WITH_LABEL), new Paragraph(DESCRIPTION_DRAW_EDGE_WITH_LABEL) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createAddX6EdgeMultipleLabels(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         //Through an event, we create the elements
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -159,13 +174,18 @@ public class ExampleEdges extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_EDGE_MULTIPLE_LABELS), new Paragraph(DESCRIPTION_DRAW_EDGE_MULTIPLE_LABELS), basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_EDGE_MULTIPLE_LABELS), new Paragraph(DESCRIPTION_DRAW_EDGE_MULTIPLE_LABELS), canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout connectionThroughPort(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = this.factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
         //through an event, we create the elements
         basicCanvas.addGraphCreatedListener(evt -> {
             // Node source
@@ -199,14 +219,18 @@ public class ExampleEdges extends VerticalLayout{
             
         });
         
-        lytBasicCanvas.add(new H4(DRAW_EDGE_THROUGH_PORT ), new Paragraph(DESCRIPTION_DRAW_EDGE_THROUGH_PORT) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_EDGE_THROUGH_PORT ), new Paragraph(DESCRIPTION_DRAW_EDGE_THROUGH_PORT) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createVertices(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
-       
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = this.factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
         //Through an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
             //Create the nodes
@@ -237,7 +261,7 @@ public class ExampleEdges extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
         
-        lytBasicCanvas.add(new H4(DRAW_EDGE_VERTICES), new Paragraph(DESCRIPTION_DRAW_EDGE_VERTICES) ,basicCanvas);
+        lytBasicCanvas.add(new H4(DRAW_EDGE_VERTICES), new Paragraph(DESCRIPTION_DRAW_EDGE_VERTICES) ,canvasWrapper);
         return lytBasicCanvas;
     }
     

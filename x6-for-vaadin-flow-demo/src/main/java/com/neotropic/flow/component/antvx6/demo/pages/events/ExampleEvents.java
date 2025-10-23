@@ -31,7 +31,6 @@ public class ExampleEvents extends VerticalLayout{
     public ExampleEvents(){
         this.factory = new X6Factory();
         
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();
@@ -54,7 +53,12 @@ public class ExampleEvents extends VerticalLayout{
     
     private VerticalLayout createEventNodeNewPosition() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = this.factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
 
         Div positionInfo = new Div();
         positionInfo.setText("ID: N/A, X: N/A, Y: N/A");
@@ -81,13 +85,18 @@ public class ExampleEvents extends VerticalLayout{
             });
         });
 
-        lytBasicCanvas.add(new H4(LISTENER_EVENT), new Paragraph(LISTENER_EVENT_DESCRIPTION), positionInfo, basicCanvas);
+        lytBasicCanvas.add(new H4(LISTENER_EVENT), new Paragraph(LISTENER_EVENT_DESCRIPTION), positionInfo, canvasWrapper);
         return lytBasicCanvas;
     }
 
     private VerticalLayout createEventNodeTools() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = this.factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = this.factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
 
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add events to add and remove node tools
@@ -103,7 +112,7 @@ public class ExampleEvents extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
 
-        lytBasicCanvas.add(new H4(EVENT), new Paragraph(EVENT_DESCRIPTION), basicCanvas);
+        lytBasicCanvas.add(new H4(EVENT), new Paragraph(EVENT_DESCRIPTION), canvasWrapper);
         return lytBasicCanvas;
     }
     
