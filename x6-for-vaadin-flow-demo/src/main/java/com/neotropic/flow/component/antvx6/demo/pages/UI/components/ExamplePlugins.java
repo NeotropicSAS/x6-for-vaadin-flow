@@ -38,7 +38,6 @@ public class ExamplePlugins extends VerticalLayout{
     public ExamplePlugins(X6Factory factory){
         this.factory = factory;
         
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();  
@@ -62,12 +61,17 @@ public class ExamplePlugins extends VerticalLayout{
     
     private VerticalLayout createScrollerPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
-       
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
+        
         basicCanvas.addGraphCreatedListener(evt -> {
             
             //Add the scroller plugin
-            basicCanvas.addScrollerPlugin(600, 600, 100, 600, 600);
+            basicCanvas.addScrollerPlugin(100);
             
             X6Node node = new X6Node();
             node.setId(UUID.randomUUID().toString());
@@ -80,13 +84,18 @@ public class ExamplePlugins extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
         
-        lytBasicCanvas.add(new H4(PLUGIN_SCROLLER), new Paragraph(DESCRIPTION_PLUGIN_SCROLLER) ,basicCanvas);
+        lytBasicCanvas.add(new H4(PLUGIN_SCROLLER), new Paragraph(DESCRIPTION_PLUGIN_SCROLLER) ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createExportPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         basicCanvas.addGraphCreatedListener(evt -> {
             
@@ -119,13 +128,18 @@ public class ExamplePlugins extends VerticalLayout{
             basicCanvas.exportGraphAsJPEG("photograph");
         });
 
-        lytBasicCanvas.add(new H4(PLUGIN_EXPORT), new Paragraph(DESCRIPTION_PLUGIN_EXPORT), basicCanvas, exportButton);
+        lytBasicCanvas.add(new H4(PLUGIN_EXPORT), new Paragraph(DESCRIPTION_PLUGIN_EXPORT), canvasWrapper, exportButton);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createSnaplinePlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the snapline plugin
@@ -151,13 +165,18 @@ public class ExamplePlugins extends VerticalLayout{
         });
         
 
-        lytBasicCanvas.add(new H4(PLUGIN_SNAPLINE), new Paragraph(DESCRIPTION_PLUGIN_SNAPLINE), basicCanvas);
+        lytBasicCanvas.add(new H4(PLUGIN_SNAPLINE), new Paragraph(DESCRIPTION_PLUGIN_SNAPLINE), canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createTransformPlugin() {
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
 
         Div dimensionsInfo = new Div();
         dimensionsInfo.setText("Width: N/A, Height: N/A");
@@ -188,13 +207,18 @@ public class ExamplePlugins extends VerticalLayout{
             });
         });
 
-        lytBasicCanvas.add(new H4(PLUGIN_TRANSFORM), new Paragraph(DESCRIPTION_PLUGIN_TRANSFORM), dimensionsInfo, basicCanvas);
+        lytBasicCanvas.add(new H4(PLUGIN_TRANSFORM), new Paragraph(DESCRIPTION_PLUGIN_TRANSFORM), dimensionsInfo, canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createSelectionPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the selection plugin
@@ -248,20 +272,25 @@ public class ExamplePlugins extends VerticalLayout{
         });
         
 
-        lytBasicCanvas.add(new H4(PLUGIN_SELECTION), new Paragraph(DESCRIPTION_PLUGIN_SELECTION), basicCanvas);
+        lytBasicCanvas.add(new H4(PLUGIN_SELECTION), new Paragraph(DESCRIPTION_PLUGIN_SELECTION), canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createMinimapPlugin(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         //Activate the div that wraps the minimap
         basicCanvas.setMinimapState(true);
         
         basicCanvas.addGraphCreatedListener(evt -> {
             //Add the scroller plugin, It's not neccesary
-            basicCanvas.addScrollerPlugin(600, 600, 100, 600, 600);
+            basicCanvas.addScrollerPlugin(100);
             // Add the plugin
             basicCanvas.addMinimapPlugin(200, 160);
             
@@ -277,7 +306,7 @@ public class ExamplePlugins extends VerticalLayout{
             
         });
         
-        lytBasicCanvas.add(new H4(PLUGIN_MINIMAP), new Paragraph(DESCRIPTION_PLUGIN_MINIMAP), basicCanvas);
+        lytBasicCanvas.add(new H4(PLUGIN_MINIMAP), new Paragraph(DESCRIPTION_PLUGIN_MINIMAP), canvasWrapper);
         return lytBasicCanvas;
     }
 }

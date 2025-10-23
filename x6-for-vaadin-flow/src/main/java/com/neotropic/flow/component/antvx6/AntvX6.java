@@ -40,6 +40,7 @@ import com.neotropic.flow.component.antvx6.events.NodeMovedEvent;
 import com.neotropic.flow.component.antvx6.events.SendToBackEvent;
 import com.neotropic.flow.component.antvx6.jsonGenerator.JsonGenerator;
 import com.neotropic.flow.component.antvx6.objects.X6NodeText;
+import com.neotropic.flow.component.antvx6.utilities.X6NodeTextUtilities;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -71,8 +72,6 @@ public class AntvX6 extends Div {
     private static final String PROPERTY_GRAPH_TYPE = "graph_type";
     private static final String PROPERTY_MINIMAP_DIV = "minimap_div";
     private static final String PROPERTY_CONTEXT_MENU_DIV = "context_menu_div";
-    private static final String PROPERTY_GRAPH_WIDTH = "graph_width";
-    private static final String PROPERTY_GRAPH_HEIGHT = "graph_height";
     private static final String PROPERTY_GRAPH_BACKGROUND_COLOR = "graph_background_color";
     private static final String PROPERTY_GRAPH_GRID = "graph_grid";
     private static final String PROPERTY_GRAPH_PANNING = "graph_panning";
@@ -143,24 +142,6 @@ public class AntvX6 extends Div {
     */
     public void setNodeBackgroundId(String idBackground){
         getElement().setProperty(PROPERTY_GRAPH_NODE_BACKGROUND_ID, idBackground);
-    }
-    
-    /**
-    * Sets the width of the graph.
-    *
-    * @param width the width to set for the graph in pixels.
-    */
-    public void setGraphWidth(int width){
-        getElement().setProperty(PROPERTY_GRAPH_WIDTH, width);
-    }
-    
-    /**
-    * Sets the height of the graph.
-    *
-    * @param height the height to set for the graph in pixels.
-    */
-     public void setGraphHeight(int height){
-        getElement().setProperty(PROPERTY_GRAPH_HEIGHT, height);
     }
      
     /**
@@ -248,6 +229,31 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("cleanGraph");
     }
     
+    private void cleanElements(){
+        getElement().callJsFunction("cleanGraph");
+    }
+    
+    public void refreshCanvas() {
+        cleanElements();
+        if (nodeBackground != null && nodeBackground.getId() != null && !nodeBackground.getId().isBlank()) 
+            drawNodeBackground(nodeBackground);
+
+        for (X6Node node : nodes)
+            drawNodeCenter(node); 
+
+        for (X6NodeText textNode : textNodes){
+            X6Node parent = getNodeById(textNode.getParentId());
+            Geometry textGeometry =  new Geometry();
+            X6NodeTextUtilities.calculateLabelDimensions(textGeometry, textNode.getLabel(), 12);
+            X6NodeTextUtilities.calculateLabelPosition(parent.getGeometry(), textGeometry, X6Constants.BOTTOM, 10);
+            textNode.setGeometry(textGeometry);
+            drawText(textNode);
+        }
+
+        for (X6Edge edge : edges) 
+            drawEdge(edge);
+    }
+    
     public void removeCell(String id){
         removeX6Cell(id);
         getElement().callJsFunction("removeCell", id);
@@ -291,10 +297,10 @@ public class AntvX6 extends Div {
     /**
     * Adds a scroller plugin
     */
-    public void addScrollerPlugin(int width, int height, int padding, int minVisibleWidth, int minVisibleHeight)
+    public void addScrollerPlugin(int padding)
     {
         getElement().callJsFunction(
-            "addScrollerPlugin", width, height, padding, minVisibleWidth, minVisibleHeight
+            "addScrollerPlugin", padding
         );
     }
     
@@ -360,12 +366,12 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("addMinimapPlugin", width, height);
     }
     
-    public void addMinimapPluginDinamic(int widthCanvas, int heightCanvas, int widthMinimap, int heightMinimap){
-        getElement().callJsFunction("addMinimapPluginDinamic", widthCanvas, heightCanvas, widthMinimap, heightMinimap);
+    public void addMinimapPluginDinamic(int widthMinimap, int heightMinimap){
+        getElement().callJsFunction("addMinimapPluginDinamic", widthMinimap, heightMinimap);
     }
     
-    public void removeMinimapPluginDimanic(int widthCanvas, int heightCanvas){
-        getElement().callJsFunction("removeMinimapDinamic", widthCanvas, heightCanvas);
+    public void removeMinimapPluginDimanic(){
+        getElement().callJsFunction("removeMinimapDinamic");
     }   
 
     /*
@@ -386,7 +392,8 @@ public class AntvX6 extends Div {
     public void drawNodeBackground(X6NodeBackground background) {
         JsonObject backgroundData = JsonGenerator.generateJsonBackground(background);
         getElement().callJsFunction("drawBackground", backgroundData.toString());
-        nodeBackground = background;
+        if(nodeBackground == null && nodeBackground.getId().isBlank())
+            nodeBackground = background;
     }
  
     /**
@@ -408,7 +415,8 @@ public class AntvX6 extends Div {
     public void drawNode(X6Node node) {
         JsonObject nodeData = JsonGenerator.generateJsonNode(node);
         getElement().callJsFunction("drawNode", nodeData.toString());
-        nodes.add(node);
+        if(getNodeById(node.getId()) == null)
+            nodes.add(node);
     }
     
     public void drawNodeCenter(X6Node node) {
@@ -424,7 +432,8 @@ public class AntvX6 extends Div {
     public void drawText(X6NodeText nodeText) {
         JsonObject textData = JsonGenerator.generateJsonNodeText(nodeText);
         getElement().callJsFunction("drawText", textData.toString());
-        textNodes.add(nodeText);
+        if(this.getNodeTextById(nodeText.getId()) == null)
+            textNodes.add(nodeText);
     }
 
     /**
@@ -482,7 +491,8 @@ public class AntvX6 extends Div {
     public void drawEdge(X6Edge edge) {
         JsonObject edgeData = JsonGenerator.generateJsonEdge(edge);
         getElement().callJsFunction("drawEdge", edgeData.toString());
-        edges.add(edge);
+        if(getEdgeById(edge.getId()) == null)
+            edges.add(edge);
     }
 
     /**
@@ -764,6 +774,13 @@ public class AntvX6 extends Div {
                     .filter(edge -> edge.getId().equals(id))
                     .findFirst()
                     .orElse(null);
+    }
+    
+    public X6NodeText getNodeTextById(String id) {
+        return textNodes.stream()
+                        .filter(text -> text.getId().equals(id))
+                        .findFirst()
+                        .orElse(null);
     }
  
 }

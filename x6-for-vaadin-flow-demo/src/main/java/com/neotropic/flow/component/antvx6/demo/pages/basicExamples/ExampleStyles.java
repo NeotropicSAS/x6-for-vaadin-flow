@@ -11,6 +11,7 @@ import com.neotropic.flow.component.antvx6.objects.X6Edge;
 import com.neotropic.flow.component.antvx6.objects.X6EdgeLabel;
 import com.neotropic.flow.component.antvx6.objects.X6Node;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Paragraph;
@@ -44,7 +45,6 @@ public class ExampleStyles extends VerticalLayout{
     public ExampleStyles(X6Factory factory){
         this.factory = factory;
         
-        setSizeFull();
         setDefaultHorizontalComponentAlignment(Alignment.START); 
         
         createHeader();
@@ -67,7 +67,12 @@ public class ExampleStyles extends VerticalLayout{
     
     private VerticalLayout createNodeStyles(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("900px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         //Through an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -97,13 +102,18 @@ public class ExampleStyles extends VerticalLayout{
             basicCanvas.drawNode(node);
         });
         
-        lytBasicCanvas.add(new H4(STYLES_NODE), new Paragraph(DESCRIPTION_STYLES_NODE), nodeStylesSupported() ,basicCanvas);
+        lytBasicCanvas.add(new H4(STYLES_NODE), new Paragraph(DESCRIPTION_STYLES_NODE), nodeStylesSupported() ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createEdgeStyles(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("900px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         //Through an event , we draw the nodes
         basicCanvas.addGraphCreatedListener(evt -> {
@@ -149,13 +159,18 @@ public class ExampleStyles extends VerticalLayout{
             basicCanvas.drawEdge(edge);
         });
         
-        lytBasicCanvas.add(new H4(STYLES_EDGE), new Paragraph(DESCRIPTION_STYLES_EDGE), edgeStylesSupported() ,basicCanvas);
+        lytBasicCanvas.add(new H4(STYLES_EDGE), new Paragraph(DESCRIPTION_STYLES_EDGE), edgeStylesSupported() ,canvasWrapper);
         return lytBasicCanvas;
     }
     
     private VerticalLayout createExampleChangeColor(){
         VerticalLayout lytBasicCanvas = new VerticalLayout();
-        AntvX6 basicCanvas = factory.getBasicCanvas(600, 600, X6Constants.GRAPH_BACKGROUND_COLOR);
+        lytBasicCanvas.setWidthFull();
+        lytBasicCanvas.setHeight("600px");
+        AntvX6 basicCanvas = factory.getBasicCanvas(X6Constants.GRAPH_BACKGROUND_COLOR);
+        basicCanvas.setSizeFull();
+        Div canvasWrapper = new Div(basicCanvas);
+        canvasWrapper.setSizeFull();
        
         Button btnChangeColor = new Button("Change color");
         //Through an event , we draw the nodes
@@ -185,7 +200,7 @@ public class ExampleStyles extends VerticalLayout{
             });
         });
         
-        lytBasicCanvas.add(new H4(EXAMPLE_CHANGE_COLOR),new Paragraph(EXAMPLE_CHANGE_COLOR_DESCRIPTION), basicCanvas, btnChangeColor);
+        lytBasicCanvas.add(new H4(EXAMPLE_CHANGE_COLOR),new Paragraph(EXAMPLE_CHANGE_COLOR_DESCRIPTION), canvasWrapper, btnChangeColor);
         return lytBasicCanvas;
     }
     
