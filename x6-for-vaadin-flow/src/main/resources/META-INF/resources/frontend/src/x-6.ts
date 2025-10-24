@@ -741,12 +741,6 @@ export class X6 extends LitElement {
   graph_mouse_wheel: boolean = false;
 
   /**
-  * The background color of node labels.
-  */
-  @property()
-  nodes_label_bgColor: string = '#15ed32';
-  
-  /**
   * The padding for exporting the graph as a JPEG image.
   */
   @property()
@@ -809,7 +803,7 @@ export class X6 extends LitElement {
   }
 
   /*
-  * The canvas wrapper. 
+  * The canvas wrapper element. 
   */
   @query('#canvasWrapper')
   wrapper!: HTMLDivElement;
@@ -870,6 +864,8 @@ export class X6 extends LitElement {
     }
   }
 
+  //#section Basic Graph Events
+
   /**
   * Dispatches a custom event indicating that the graph has been created.
   */
@@ -881,6 +877,9 @@ export class X6 extends LitElement {
     }));
   }
 
+  /**
+   * Dispatches a custom event indicating that the graph is loading.
+   */
   public eventGraphLoading(){
     this.dispatchEvent(new CustomEvent('graph-loading', {
       detail: {
@@ -889,6 +888,9 @@ export class X6 extends LitElement {
     }));
   }
 
+  /**
+   * Dispatches a custom event indicating that the graph has finished loading.
+   */
   public eventGraphLoaded(){
     this.dispatchEvent(new CustomEvent('graph-loaded', {
       detail: {
@@ -897,7 +899,9 @@ export class X6 extends LitElement {
     }));
   }
 
-  /* Methods to init a X6 graph */
+  //#endSection Basic Graph Events
+
+  //#section Init X6 Graph
 
   /**
   * Initializes the graph with basic settings.
@@ -956,11 +960,29 @@ export class X6 extends LitElement {
     })
   }
 
+  //#endSection Init X6 Graph
+
+  //#section Graph Appearance
+
+  /**
+   * Resizes the graph canvas to the specified width and height.
+   * @param width - The new width of the canvas in pixels.
+   * @param height - The new height of the canvas in pixels.
+   */
   public resizeCanvas(width: number, height: number){
     if(this.graph)
       this.graph.resize(width, height);
   }
 
+  /**
+   * Displays a grid on the graph with the specified configuration.
+   * @param size - The size (spacing) of the grid cells in pixels.
+   * @param mainColor - The color of the primary grid lines.
+   * @param mainThickness - The thickness of the primary grid lines.
+   * @param subColor - The color of the secondary grid lines.
+   * @param subThickness - The thickness of the secondary grid lines.
+   * @param factor - The factor determining how many secondary lines appear between primary lines.
+   */
   public showGrid(
     size: number,
     mainColor: string,
@@ -989,20 +1011,22 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Hides the grid from the graph if it is currently visible.
+   */
   public hideGrid(){
     if(this.graph)
       this.graph.hideGrid();
   }
 
-  /* End of methods to init a X6 graph */
+  //#ednSection Graph Appearance
 
-  /*
-  * Methods for add X6 plugins
-  */
+  //#section Plugins AntV X6
 
   /**
-  * Adds the scroller plugin to the graph with the specified configuration.
-  */
+   * Adds the scroller plugin to the graph with the specified configuration.
+   * @param padding - The padding (in pixels) around the graph content inside the scroller.
+   */
   public addScrollerPlugin(
     padding: number
   ) {
@@ -1031,17 +1055,45 @@ export class X6 extends LitElement {
   } 
 
   /**
-  * Adds the snapline plugin to the graph with the specified configuration.
-  * @param enabled - A boolean value to enable or disable the snapline feature.
+  * Exports the current graph as a JPEG image.
+  * 
+  * This method generates a JPEG file of the graph with specified dimensions, 
+  * background color, quality, and padding. The exported file will be named 
+  * according to the provided filename.
+  * 
+  * @param {string} fileName - The name of the file to which the graph will be exported (without extension).
   */
+  public exportGraphToJPEG(fileName: string){
+    if(this.graph){
+      this.graph.exportJPEG(fileName + '.jpeg', {
+        width: 1920, 
+        height: 1080,
+        backgroundColor: this.graph_background_color,
+        quality: 1, 
+        padding: this.padding_export_graph_JPEG,
+
+      });
+    }
+  }
+
+   /**
+   * Adds the snapline plugin to the graph with the specified configuration.
+   * @param enabled - A boolean value to enable or disable the snapline feature.
+   */
   public addSnaplinePlugin(enabled : boolean){
     if(this.graph)
       this.graph.use(new Snapline({enabled: enabled}));
   }
 
   /**
-  * Adds the transform plugin to the graph.
-  */
+   * Adds the transform plugin to the graph with the specified configuration.
+   * @param rotating - Whether rotation is enabled for graph elements.
+   * @param resizingEnabled - Whether resizing is enabled for graph elements.
+   * @param resizingOrthogonal - Whether resizing is restricted to orthogonal directions.
+   * @param resizingMinWidth - The minimum width allowed when resizing elements.
+   * @param resizingMinHeight - The minimum height allowed when resizing elements.
+   * @param resizingPreserveAspectRatio - Whether to preserve the aspect ratio during resizing.
+   */
   public addTransformPlugin(
     rotating: boolean,
     resizingEnabled: boolean,
@@ -1067,8 +1119,14 @@ export class X6 extends LitElement {
   }
 
   /**
-  * Adds the selection plugin to the graph.
-  */
+   * Adds the selection plugin to the graph with the specified configuration.
+   * @param enabled - Whether selection is enabled.
+   * @param multiple - Whether multiple elements can be selected at once.
+   * @param rubberband - Whether rubberband (click-drag) selection is enabled.
+   * @param movable - Whether selected elements can be moved.
+   * @param showNodeSelectionBox - Whether a selection box is shown around selected nodes.
+   * @param showEdgeSelectionBox - Whether a selection box is shown around selected edges.
+   */
   public addSelectionPlugin(
     enabled: boolean,
     multiple: boolean,
@@ -1090,8 +1148,10 @@ export class X6 extends LitElement {
   }
 
   /**
-  * Adds the mminimap plugin to the graph.
-  */
+   * Adds the minimap plugin to the graph.
+   * @param width - The width of the minimap in pixels.
+   * @param height - The height of the minimap in pixels.
+   */
   public addMinimapPlugin(width: number, height: number){
     if(this.graph && this.minimapDiv && !this.minimapPlugin){
       const minimap = new MiniMap({
@@ -1104,6 +1164,11 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Dynamically adds the minimap plugin to the graph if it has not been initialized yet.
+   * @param widthMiniMap - The width of the minimap in pixels.
+   * @param heightMiniMap - The height of the minimap in pixels.
+   */
   public addMinimapPluginDinamic(widthMiniMap: number, heightMiniMap: number){
     if(this.graph){
       if(!this.minimapPlugin)
@@ -1111,6 +1176,10 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Removes the minimap plugin from the graph if it exists.
+   * This method is intended to be used together with {@link addMinimapPluginDinamic}
+   */
   public removeMinimapDinamic(){
     if(this.graph && this.minimapPlugin){
       this.minimapPlugin.dispose();
@@ -1118,13 +1187,9 @@ export class X6 extends LitElement {
     }
   }
 
-  /* 
-  * End of methods to add X6 plugins
-  */
+  //#endSection Plugins AntV X6
 
-  /* 
-  * Methods for Graph View Management 
-  */
+  //#section Graph View Management 
 
   /**
   * Clears the graph by removing all cells.
@@ -1154,6 +1219,25 @@ export class X6 extends LitElement {
   }
 
   /**
+  * Creates a ghost( It's a non-visible and non-manipulable node) to manage the center of the canvas.
+  * This node acts as a reference point for positioning the Scroller's bars of the graph.
+  */
+  public centerCanvas(){
+    if(this.graph){
+      const center = this.graph.addNode({
+        x: this.graph.options.width /2,
+        y: this.graph.options.height/2,
+        width: 32,
+        height: 32,
+        shape: 'rect',
+        visible: false,
+      });
+
+      this.centerGraph(center.id);
+    }
+  }  
+
+  /**
   * Refreshes the graph by clearing it and restoring its previous state.
   */
   public refreshGraph(){
@@ -1169,14 +1253,18 @@ export class X6 extends LitElement {
     }
   }
 
-  /* 
-  * End of methods for Graph View Management 
-  */
-  
-  /* 
-  * Methods for node selection functionalities
-  */
+  //#endSection Graph View Management 
 
+  //#section Node Selection Functionalities
+
+   /**
+   * Unselects a cell in the graph by its identifier.
+   * 
+   * This method retrieves the cell using the given ID and, if the selection plugin is active,
+   * removes the cell from the current selection.
+   * 
+   * @param id - The unique identifier of the cell to unselect.
+   */
   public unselectCell(id: string){
     if(this.graph){
       const cell = this.graph.getCellById(id);
@@ -1189,10 +1277,13 @@ export class X6 extends LitElement {
   }
 
   /**
-  * Selects a node in the graph and centers the view on it.
-  * 
-  * @param {string} id - The id of the node to select.
-  */
+   * Selects a cell in the graph by its identifier and centers the view on it.
+   * 
+   * If the specified cell exists and is not the background node, it becomes selected
+   * and the graph view automatically centers on it.
+   * 
+   * @param id - The unique identifier of the cell to select.
+   */
   public selectCell(id: string){
     if(this.graph){
       if(id){
@@ -1253,11 +1344,9 @@ export class X6 extends LitElement {
     }
   }
 
-  /* End of methods for node selection functionalities*/
+  //#endSection Node Selection Functionalities
 
-  /* 
-  * Methods to draw objects in X6 graph
-  */
+  //#section Draw Objects in X6 graph
 
   /**
   * Creates a background node in the graph using the specified parameters.
@@ -1426,13 +1515,31 @@ export class X6 extends LitElement {
     }
   }
 
-  /* 
-  * End of methods to draw objects in X6 graph
+  /**
+  * Establishes a parent-child relationship between two nodes in the graph.
+  *
+  * This method links a child node to its parent node by retrieving both nodes from the graph
+  * using their unique identifiers. If both nodes exist, the child is added to the parent's
+  * list of children.
+  *
+  * @param idParent - The unique identifier of the parent node.
+  * @param idChild - The unique identifier of the child node.
   */
+  public setParent(idParent: string, idChild: string){
+    if(this.graph){
+      if(idParent && idChild){
+        const father = this.graph.getCellById(idParent);
+        const child = this.graph.getCellById(idChild);
+  
+        if(father && child)
+          father.addChild(child);
+      }
+    }
+  }
 
-  /*
-  * Methods about objects configuration
-  */
+  //#endSection Draw Objects in X6 graph
+
+  //#section Objects Configuration
 
   /**
   * Creates a label position configuration for a node based on its label position settings.
@@ -1513,6 +1620,16 @@ export class X6 extends LitElement {
     return nodePort;
   }
 
+  /**
+   * Generates the label configuration objects for a given edge.
+   * 
+   * This method processes all labels associated with the specified edge and returns
+   * a list of configuration objects used by the graph to render edge labels. 
+   * Only labels with valid text and a distance between 0 and 1 are included.
+   * 
+   * @param edge - The edge whose labels will be processed.
+   * @returns An array of label configuration objects compatible with the X6 edge rendering system.
+   */
   private getEdgeLabelsConfiguration(edge: X6Edge){
     const labelConfigs = [] as any[];
     const x6Labels = edge.edgeLabels as X6EdgeLabel[];
@@ -1559,6 +1676,15 @@ export class X6 extends LitElement {
     return labelConfigs;
   }
 
+  /**
+   * Assigns a list of label configurations to the specified edge.
+   * 
+   * This method iterates through the provided label configurations
+   * and appends each one to the given edge.
+   * 
+   * @param edge - The edge to which the labels will be added.
+   * @param labels - An array of label configuration objects to append to the edge.
+   */
   private setLabelsToEdge(edge: Edge , labels: any[]){
     labels.forEach(currentLabel => {
       edge.appendLabel(currentLabel);
@@ -1606,14 +1732,90 @@ export class X6 extends LitElement {
     }));
   }
 
-  /*
-  * End of methods to objects configuration 
-  */
+  //#endSection Objects Configuration
 
-  /*
-  * Methods to set object styles
-  */
+  //#section Remove nodes/edges
 
+  /**
+  * Removes the background node from the graph.
+  * 
+  * This method checks if a background node ID is set and removes the 
+  * corresponding node from the graph if it exists.
+  */
+  public removeBackground(){
+    if(this.graph){
+      if(this.graph_node_background_id != null && this.graph_node_background_id !== ''){
+        const node = this.graph.getCellById(this.graph_node_background_id);
+        this.graph_node_background_id = '';
+        if (node)
+          this.graph.removeCell(node);
+      }
+    }
+  }
+
+  /**
+   * Removes a cell from the graph by its ID.
+   * @param id The ID of the cell to be removed.
+   */
+  public removeCell(id: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(id);
+      this.graph.removeCell(cell);
+    } 
+  }
+
+  //#endSection Remove nodes/edges
+
+  //#section Node Visibility Management
+
+  /**
+   * Makes a node visible in the graph by its identifier.
+   * 
+   * If the specified cell exists and is a node, its visibility is set to true.
+   * 
+   * @param id - The unique identifier of the node to show.
+   */
+  public showNode(id: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(id);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        node.visible = true
+      }
+    }
+  }
+
+  /**
+   * Hides a node in the graph by its identifier.
+   * 
+   * If the specified cell exists and is a node, its visibility is set to false.
+   * 
+   * @param id - The unique identifier of the node to hide.
+   */
+  public hideNode(id: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(id);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        node.visible = false;
+      }
+    }
+  }
+
+  //#ednSection Node Visibility Management
+
+  //#section Object Styles
+
+  /**
+   * Updates the visual style of a specific node in the graph.
+   * 
+   * Depending on the style type, the method updates attributes such as border radius, z-index, 
+   * or other graphical properties defined in `stylesPathNode`.
+   * 
+   * @param id - The unique identifier of the node to update.
+   * @param style - The style key to modify (must exist in `stylesPathNode`).
+   * @param value - The new value to assign to the specified style.
+   */
   public setNodeStyle(id: string, style: string, value:string){
     if(this.graph){
       const cell = this.graph.getCellById(id);
@@ -1633,26 +1835,16 @@ export class X6 extends LitElement {
     }
   }
 
-  public showNode(id: string){
-    if(this.graph){
-      const cell = this.graph.getCellById(id);
-      if(cell && cell.isNode()){
-        const node = cell as Node;
-        node.visible = true
-      }
-    }
-  }
-
-  public hideNode(id: string){
-    if(this.graph){
-      const cell = this.graph.getCellById(id);
-      if(cell && cell.isNode()){
-        const node = cell as Node;
-        node.visible = false;
-      }
-    }
-  }
-
+  /**
+   * Updates the visual style of a specific edge in the graph.
+   * 
+   * Supports modifying stroke color, z-index, connector type (rounded or normal),
+   * and other attributes defined in `stylesPathEdge`.
+   * 
+   * @param id - The unique identifier of the edge to update.
+   * @param style - The style key to modify (must exist in `stylesPathEdge`).
+   * @param value - The new value to assign to the specified style.
+   */
   public setEdgeStyle(id: string, style: string, value: string) {
     if (this.graph) {
       const cell = this.graph.getCellById(id);
@@ -1685,6 +1877,18 @@ export class X6 extends LitElement {
     }
   }
   
+  /**
+   * Modifies the style attributes of a specific label associated with an edge.
+   * 
+   * Supports customization of font, fill, stroke, and shape properties, depending 
+   * on the provided style key. The label is re-applied when necessary to reflect 
+   * text-based changes in the graph.
+   * 
+   * @param id - The unique identifier of the edge containing the label.
+   * @param style - The style property to modify (must exist in `stylesPathEdgeLabel`).
+   * @param value - The new value to assign to the label style.
+   * @param labelPos - The index position of the label to modify within the edge.
+   */
   public setEdgeLabelStyle(id: string, style: string, value: string, labelPos: number){
     if(this.graph){
       const cell = this.graph.getCellById(id);
@@ -1731,6 +1935,12 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Updates the text content of a node’s label.
+   * 
+   * @param nodeId - The unique identifier of the node whose label will be changed.
+   * @param newText - The new text to assign to the node’s label.
+   */
   public changeNodeLabel(nodeId: string, newText: string){
     if(this.graph){
       let cell = this.graph.getCellById(nodeId);
@@ -1739,13 +1949,9 @@ export class X6 extends LitElement {
     }
   }
 
-  /*
-  * End of methods to set object styles 
-  */
+  //#endSection Object Styles
 
-  /*
-  * Methods to configure x6-tools
-  */
+  //#section AntV X6 Tools
 
   /**
   * This method sets tools for a given node based on its tools array.
@@ -1801,6 +2007,9 @@ export class X6 extends LitElement {
   }
 
 
+  /**
+  * Registers an event that adds removal buttons to an edge when the mouse enters it.
+  */
   public eventAddEdgeButtonRemoveTool(){
     if(this.graph){
       this.graph.on('edge:mouseenter',({ edge })=>{   
@@ -1862,13 +2071,9 @@ export class X6 extends LitElement {
     }
   }
 
-  /*
-  * End of methods to configure x6-tools
-  */
+  //#endSection AntV X6 Tools
 
-  /*
-  * Events
-  */
+  //#section Events
 
   /**
   * Sets up an event listener for when the background node is resized.
@@ -1894,6 +2099,11 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Registers an event listener that dispatches a custom event when a cell is removed from the graph.
+   * 
+   * This event emits the cell ID and its type (`node` or `edge`) when a cell is deleted.
+   */
   public eventCellRemoved(){
     if(this.graph){
       this.graph.on('cell:removed', ({ cell }) => {
@@ -1912,6 +2122,11 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Registers an event listener that dispatches a custom event when an edge is double-clicked.
+   * 
+   * The event provides the edge ID along with its source and target node IDs.
+   */
   public eventDblClickEdge() {
     if (this.graph) {
       this.graph.on('edge:dblclick', ({ edge }) => {
@@ -1928,7 +2143,11 @@ export class X6 extends LitElement {
     }
   }
   
-
+  /**
+   * Registers an event listener that dispatches a custom event when an edge is modified.
+   * 
+   * The event emits the edge ID, its source and target node IDs, and a JSON representation of its vertices.
+   */
   public eventEdgeChanged() {
     if (this.graph) {
       this.graph.on('edge:changed', ({ edge }) => {
@@ -2001,6 +2220,12 @@ export class X6 extends LitElement {
     }
   }
 
+  /**
+   * Registers an event listener that dispatches a custom event when the background node is modified.
+   * 
+   * This event triggers whenever the node identified as the background changes its position or dimensions.
+   * It emits the node's ID, position, and size details.
+   */
   public eventBackgroundChanged(){
     if(this.graph){
       this.graph.on('node:changed', ({ node }) => {
@@ -2021,6 +2246,11 @@ export class X6 extends LitElement {
     }  
   }
 
+  /**
+   * Registers an event listener that dispatches a custom event when a node is modified.
+   * 
+   * The event provides the node ID, position, dimensions, and the updated label text.
+   */
   public eventNodeChanged(){
     if(this.graph){
       this.graph.on('node:changed', ({ node }) => {
@@ -2040,6 +2270,12 @@ export class X6 extends LitElement {
     }  
   }
 
+  /**
+   * Registers an event listener that enables node resizing when a node is double-clicked.
+   * 
+   * When a non-image node is double-clicked, this event activates the transform plugin 
+   * to display the resize widget for that node.
+   */
   public eventResizeNode(){
     if(this.graph){
       this.graph.on('node:dblclick', ({node}) => {
@@ -2068,6 +2304,14 @@ export class X6 extends LitElement {
     }
   }
 
+  //#endSection Events
+
+  //#section Context Menu
+
+  /**
+  * Shows a custom context menu when right-clicking on a graph.
+  * Positions the menu at the cursor location and stores the clicked cell ID.
+  */
   public eventContextMenu() {
     if (this.graph) {
       this.graph.on('cell:contextmenu', (e) => {
@@ -2084,80 +2328,9 @@ export class X6 extends LitElement {
     }
   }
 
-  /*
-  * End of events
-  */
-
-
-  /*
-  * Other methods
-  */
-
   /**
-  * Removes the background node from the graph.
-  * 
-  * This method checks if a background node ID is set and removes the 
-  * corresponding node from the graph if it exists.
-  */
-  public removeBackground(){
-    if(this.graph){
-      if(this.graph_node_background_id != null && this.graph_node_background_id !== ''){
-        const node = this.graph.getCellById(this.graph_node_background_id);
-        this.graph_node_background_id = '';
-        if (node)
-          this.graph.removeCell(node);
-      }
-    }
-  }
-
-  public removeCell(id: string){
-    if(this.graph){
-      const cell = this.graph.getCellById(id);
-      this.graph.removeCell(cell);
-    } 
-  }
-
-  /**
-  * Establishes a parent-child relationship between two nodes in the graph.
-  *
-  * This method links a child node to its parent node by retrieving both nodes from the graph
-  * using their unique identifiers. If both nodes exist, the child is added to the parent's
-  * list of children.
-  *
-  * @param idParent - The unique identifier of the parent node.
-  * @param idChild - The unique identifier of the child node.
-  */
-  public setParent(idParent: string, idChild: string){
-    if(this.graph){
-      if(idParent && idChild){
-        const father = this.graph.getCellById(idParent);
-        const child = this.graph.getCellById(idChild);
-  
-        if(father && child)
-          father.addChild(child);
-      }
-    }
-  }
-
-  /**
-  * Creates a ghost( It's a non-visible and non-manipulable node) to manage the center of the canvas.
-  * This node acts as a reference point for positioning the Scroller's bars of the graph.
-  */
-  public centerCanvas(){
-    if(this.graph){
-      const center = this.graph.addNode({
-        x: this.graph.options.width /2,
-        y: this.graph.options.height/2,
-        width: 32,
-        height: 32,
-        shape: 'rect',
-        visible: false,
-      });
-
-      this.centerGraph(center.id);
-    }
-  }  
-
+   * Activates the context menu behavior by listening for click events outside of it.
+   */
   public activateContextMenu(){
     this.addEventListener('click', (e: Event) => {
       if (!this.contextMenu.contains(e.target as HTMLElement)) {
@@ -2165,29 +2338,13 @@ export class X6 extends LitElement {
       }
     });
   }
-  
+
   /**
-  * Exports the current graph as a JPEG image.
-  * 
-  * This method generates a JPEG file of the graph with specified dimensions, 
-  * background color, quality, and padding. The exported file will be named 
-  * according to the provided filename.
-  * 
-  * @param {string} fileName - The name of the file to which the graph will be exported (without extension).
-  */
-  public exportGraphToJPEG(fileName: string){
-    if(this.graph){
-      this.graph.exportJPEG(fileName + '.jpeg', {
-        width: 1920, 
-        height: 1080,
-        backgroundColor: this.graph_background_color,
-        quality: 1, 
-        padding: this.padding_export_graph_JPEG,
-
-      });
-    }
-  }
-
+   * Configures event listeners for the Z-index control buttons in the context menu.
+   * 
+   * Each button (bring to front, send to back, move up, move down) is linked to 
+   * its respective action handler to modify the visual stacking order of graph elements.
+   */
   public configureZIndexControls(){
     this.bringToFrontBtn.addEventListener('click', () => this.bringToFront());
     this.sendToBackBtn.addEventListener('click', () => this.sendToBack());
@@ -2195,6 +2352,11 @@ export class X6 extends LitElement {
     this.moveDownBtn.addEventListener('click', () => this.moveDownOneLevel());
   }
 
+  /**
+   * Brings the selected cell to the front by assigning it the highest Z-index value.
+   * 
+   * Dispatches a custom event containing the cell ID and its updated Z-index.
+   */
   public bringToFront(){
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
@@ -2214,6 +2376,11 @@ export class X6 extends LitElement {
     this.contextMenu.style.display = 'none';  
   }
 
+  /**
+   * Moves the selected cell one level up in the Z-index hierarchy.
+   * 
+   * Dispatches a custom event containing the cell ID and its updated Z-index.
+   */
   public moveUpOneLevel() {
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
@@ -2234,6 +2401,11 @@ export class X6 extends LitElement {
     this.contextMenu.style.display = 'none';  
   }
 
+  /**
+   * Sends the selected cell to the back by setting its Z-index to the minimum value.
+   * 
+   * Dispatches a custom event containing the cell ID and its updated Z-index.
+   */
   public sendToBack(){
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
@@ -2252,6 +2424,11 @@ export class X6 extends LitElement {
     this.contextMenu.style.display = 'none'; 
   }
   
+  /**
+   * Moves the selected cell one level down in the Z-index hierarchy, if possible.
+   * 
+   * Dispatches a custom event containing the cell ID and its updated Z-index.
+   */
   public moveDownOneLevel() {
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
@@ -2272,9 +2449,7 @@ export class X6 extends LitElement {
     this.contextMenu.style.display = 'none'; 
   }
 
-  /*
-  * End of other methods
-  */
+  //#endSection Context Menu
 
   protected render(): unknown {
     return html`

@@ -76,7 +76,6 @@ public class AntvX6 extends Div {
     private static final String PROPERTY_GRAPH_GRID = "graph_grid";
     private static final String PROPERTY_GRAPH_PANNING = "graph_panning";
     private static final String PROPERTY_GRAPH_MOUSE_WHEEL = "graph_mouse_wheel";
-    private static final String PROPERTY_NODES_LABEL_BGCOLOR = "nodes_label_bgColor";
     private static final String PROPERTY_PADDING_EXPORT_GRAPH_JPEG = "padding_export_graph_JPEG";
     private static final String PROPERTY_GRAPH_ZOOM = "graph_zoom";
     private static final String PROPERTY_GRAPH_NODE_BACKGROUND_ID = "graph_node_background_id";
@@ -105,9 +104,7 @@ public class AntvX6 extends Div {
         this.edges = new ArrayList();
     }      
     
-    /*
-    * Methods to set property X6 web component
-    */
+    // <editor-fold desc="Set properties in AntV X6 web component">
     
     /**
     * Sets the type of the graph.
@@ -181,15 +178,6 @@ public class AntvX6 extends Div {
     }
     
     /**
-    * Sets the background color for node labels.
-    *
-    * @param color the background color.
-    */
-    public void setNodesLabelBgColor(String color){
-        getElement().setProperty(PROPERTY_NODES_LABEL_BGCOLOR, color);
-    }
-    
-     /**
     * Sets the padding for exporting the graph as a JPEG image.
     *
     * @param padding the padding value in pixels.
@@ -207,13 +195,45 @@ public class AntvX6 extends Div {
         getElement().setProperty(PROPERTY_GRAPH_ZOOM, zoom);
     }
     
-    /*
-    * End of methods to set property X6 web component
-    */
+    // </editor-fold>
     
-    /*
-    * Canvas manipulation methods
+    // <editor-fold desc="Graph Appearance">
+    
+    /**
+    * Resizes the canvas to the specified width and height.
+    *
+    * @param width  the new width of the canvas
+    * @param height the new height of the canvas
     */
+    public void resizeCanvas(int width, int height){
+        getElement().callJsFunction("resizeCanvas", width, height);
+    }
+    
+    /**
+     * Shows the grid on the graph with the given configuration.
+     *
+     * @param size The grid size (distance between lines or dots).
+     * @param mainColor The main grid color.
+     * @param mainThickness The thickness of the main grid lines.
+     * @param subColor The secondary grid color.
+     * @param subThickness The thickness of the secondary grid lines.
+     * @param factor The spacing factor between main and secondary lines.
+     */
+    public void showGrid(int size, String mainColor, double mainThickness,
+                         String subColor, double subThickness, int factor) {
+        getElement().callJsFunction("showGrid", size, mainColor, mainThickness, subColor, subThickness, factor);
+    }
+
+    /**
+     * Hides the grid on the graph.
+     */
+    public void hideGrid() {
+        getElement().callJsFunction("hideGrid");
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold desc="Graph View Management">
     
     /**
     * Clears all nodes and edges from the graph.
@@ -229,10 +249,38 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("cleanGraph");
     }
     
+    /**
+    * Clears all nodes and edges from the web component (not from the local lists).
+    */
     private void cleanElements(){
         getElement().callJsFunction("cleanGraph");
     }
     
+    /**
+    * Centers the graph view on the specified node.
+    *
+    * @param idNode The ID of the node to center the graph on.
+    */
+    public void centerGraph(String idNode){
+        getElement().callJsFunction("centerGraph", idNode);
+    }
+    
+    /**
+    * Refreshes the graph.
+    * 
+    * Creates a backup of the current graph, clears it, and then 
+    * re-populates it using the backup data.
+    */
+    public void refreshGraph(){
+        getElement().callJsFunction("refreshGraph");
+    }
+    
+    /**
+    * Refreshes the entire canvas by clearing existing elements and redrawing all components,
+    * including the background node, nodes, text nodes, and edges.
+    * 
+    * This method ensures the graph is updated and visually consistent with the current data.
+    */
     public void refreshCanvas() {
         cleanElements();
         if (nodeBackground != null && nodeBackground.getId() != null && !nodeBackground.getId().isBlank()) 
@@ -254,68 +302,108 @@ public class AntvX6 extends Div {
             drawEdge(edge);
     }
     
+    // </editor-fold>
+    
+    // <editor-fold desc="Remove Nodes/Edges">
+    
+    /**
+    * Removes the node background of the the graph.
+    */
+    public void removeNodeBackground(){
+        getElement().callJsFunction("removeBackground");
+        nodeBackground.setId("");
+        nodeBackground.setGeometry(new Geometry(0, 0 , 0, 0));
+        nodeBackground.setImgUrl("");
+        nodeBackground.setShape(X6Constants.SHAPE_IMAGE);
+    }
+    
+    /**
+    * Removes a cell (node, text, or edge) from both the internal data and the visual canvas.
+    *
+    * @param id the unique identifier of the cell to remove
+    */
     public void removeCell(String id){
         removeX6Cell(id);
         getElement().callJsFunction("removeCell", id);
     }
     
+    /**
+    * Removes a cell from internal collections.
+    *
+    * @param id the unique identifier of the cell
+    * @return true if the cell was found and removed; false otherwise
+    */
     public boolean removeX6Cell(String id) {
         return removeX6Node(id) || removeX6NodeText(id) || removeX6Edge(id);
     }
 
+    /**
+    * Removes a node from the node list.
+    *
+    * @param id the unique identifier of the node
+    * @return true if the node was removed; false otherwise
+    */
     public boolean removeX6Node(String id) {
         return nodes.removeIf(node -> node.getId().equals(id));
     }
 
+    /**
+    * Removes a text node from the text node list.
+    *
+    * @param id the unique identifier of the text node
+    * @return true if the text node was removed; false otherwise
+    */
     public boolean removeX6NodeText(String id) {
         return textNodes.removeIf(text -> text.getId().equals(id));
     }
 
+    /**
+    * Removes an edge from the edge list.
+    *
+    * @param id the unique identifier of the edge
+    * @return true if the edge was removed; false otherwise
+    */
     public boolean removeX6Edge(String id) {
         return edges.removeIf(edge -> edge.getId().equals(id));
     }
-
-
-    /**
-    * Refreshes the graph.
-    * 
-    * Creates a backup of the current graph, clears it, and then 
-    * re-populates it using the backup data.
-    */
-    public void refreshGraph(){
-        getElement().callJsFunction("refreshGraph");
-    }
     
-    /*
-    * End of canvas manipulation methods
-    */
+    // </editor-fold>
     
-    /*
-    * Methods to add X6 plugins
-    */
+    // <editor-fold desc="AntV X6 Plugins">
     
     /**
-    * Adds a scroller plugin
+    * Adds a scroller plugin to the graph, allowing users to pan and scroll within the canvas.
+    *
+    * @param padding the padding (in pixels) applied around the graph content when scrolling
     */
-    public void addScrollerPlugin(int padding)
-    {
-        getElement().callJsFunction(
-            "addScrollerPlugin", padding
-        );
+    public void addScrollerPlugin(int padding) {
+        getElement().callJsFunction("addScrollerPlugin", padding);
     }
     
     /**
-    * Adds an export plugin to the element, enabling the ability to export the graph as an image.
-    */
+     * Adds an export plugin to the graph, enabling users to export the current canvas view
+     * as an image.
+     */
     public void addExportPlugin(){
         getElement().callJsFunction("addExportPlugin");
     }
+    
+    /**
+    * Exports the current graph as a JPEG image.
+    *
+    * The function handles the conversion of the graph into a JPEG format and download the image.
+    *
+    * @param filename the desired name for the exported JPEG file.
+    */
+    public void exportGraphAsJPEG(String filename){
+        getElement().callJsFunction("exportGraphToJPEG", filename);
+    }
 
     /**
-     * Adds a snapline plugin to nodes, enabling or disabling snapline functionality for better alignment.
-     *
-     * @param enabled Whether the snapline functionality is enabled or disabled.
-     */
+    * Adds a snapline plugin to the graph, providing visual alignment guides when moving or placing nodes.
+    *
+    * @param enabled true to enable the snapline functionality; false to disable it
+    */
     public void addSnaplinePlugin(boolean enabled){
         getElement().callJsFunction("addSnaplinePlugin", enabled);
     }
@@ -366,21 +454,26 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("addMinimapPlugin", width, height);
     }
     
+    /**
+    * Adds a dynamic minimap plugin to the graph, providing a small overview of the entire canvas.
+    *
+    * @param widthMinimap  the width of the minimap in pixels
+    * @param heightMinimap the height of the minimap in pixels
+    */
     public void addMinimapPluginDinamic(int widthMinimap, int heightMinimap){
         getElement().callJsFunction("addMinimapPluginDinamic", widthMinimap, heightMinimap);
     }
     
+    /**
+    * Removes the dynamic minimap plugin from the graph, disabling the minimap overview functionality.
+    */
     public void removeMinimapPluginDimanic(){
         getElement().callJsFunction("removeMinimapDinamic");
     }   
 
-    /*
-    * End of methods to add X6 plugins
-    */
+    // </editor-fold>
     
-    /*
-    * Methods to manipulate nodes
-    */
+    // <editor-fold desc="Draw Elements">
     
     /**
     * Draws the node background for a graph.
@@ -395,17 +488,6 @@ public class AntvX6 extends Div {
         if(nodeBackground == null && nodeBackground.getId().isBlank())
             nodeBackground = background;
     }
- 
-    /**
-    * Removes the node background of the the graph.
-    */
-    public void removeNodeBackground(){
-        getElement().callJsFunction("removeBackground");
-        nodeBackground.setId("");
-        nodeBackground.setGeometry(new Geometry(0, 0 , 0, 0));
-        nodeBackground.setImgUrl("");
-        nodeBackground.setShape(X6Constants.SHAPE_IMAGE);
-    }
     
     /**
     * Draws a visual representation of a node in the graph.
@@ -419,6 +501,11 @@ public class AntvX6 extends Div {
             nodes.add(node);
     }
     
+    /**
+    * Draws a node as a center.
+    *
+    * @param node the instance to be drawn on the graph
+    */
     public void drawNodeCenter(X6Node node) {
         JsonObject nodeData = JsonGenerator.generateJsonNode(node);
         getElement().callJsFunction("drawNode", nodeData.toString());
@@ -435,53 +522,6 @@ public class AntvX6 extends Div {
         if(this.getNodeTextById(nodeText.getId()) == null)
             textNodes.add(nodeText);
     }
-
-    /**
-    * Sets the style for a specific node.
-    * 
-    * @param id the ID of the node to which the style should be applied.
-    * @param style the name of the style property to modify.
-    * @param value the value to set for the specified style property.
-    */
-    public void setNodeStyle(String id, String style, String value){
-        getElement().callJsFunction("setNodeStyle", id, style, value);
-    }
-    
-    /**
-    * Establishes a parent-child relationship between two nodes in the graph.
-    *
-    * @param idParent the id of the parent node
-    * @param idChild the id of the child node
-    */
-    public void setParent(String idParent, String idChild){
-        getElement().callJsFunction("setParent", idParent, idChild);
-    }
-    
-    /**
-    * Selects a specified cell in the graph. (Make sure to add the Selection plugin first)
-    *
-    * @param id id of the cell to be select.
-    */
-    public void selectCell(String id) {
-        getElement().callJsFunction("selectCell", id);
-    }
-    
-    /**
-    * Unselect a specified cell in the graph. (Make sure to add the Selection plugin first)
-    *
-    * @param id id of the X6Cell to be unselect.
-    */
-    public void unselectCell(String id){
-        getElement().callJsFunction("unselectCell", id);
-    }
-    
-    /*
-    * End of methods to manipulate nodes
-    */
-    
-    /*
-    * Methods to manipulate edges
-    */
     
     /**
     * Draws a visual representation of an edge in the graph with a single label.
@@ -494,7 +534,32 @@ public class AntvX6 extends Div {
         if(getEdgeById(edge.getId()) == null)
             edges.add(edge);
     }
-
+    
+    /**
+    * Establishes a parent-child relationship between two nodes in the graph.
+    *
+    * @param idParent the id of the parent node
+    * @param idChild the id of the child node
+    */
+    public void setParent(String idParent, String idChild){
+        getElement().callJsFunction("setParent", idParent, idChild);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold desc="Object Styles">
+    
+    /**
+    * Sets the style for a specific node.
+    * 
+    * @param id the ID of the node to which the style should be applied.
+    * @param style the name of the style property to modify.
+    * @param value the value to set for the specified style property.
+    */
+    public void setNodeStyle(String id, String style, String value){
+        getElement().callJsFunction("setNodeStyle", id, style, value);
+    }
+    
     /**
     * Sets the style for an edge in the graph.
     *
@@ -518,249 +583,400 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("setEdgeLabelStyle", id, style, value, labelPos);
     }
     
+    /**
+    * Changes the label text of a specific node in the graph.
+    *
+    * @param nodeId the ID of the node whose label will be updated
+    * @param newText the new text to set as the node's label
+    */
     public void changeNodeLabel(String nodeId, String newText){
         getElement().callJsFunction("changeNodeLabel", nodeId, newText);
     }
     
-    /*
-    * End of methods to manipulate edges
-    */
+    // </editor-fold>
     
+    // <editor-fold desc="Node Selection Functionalities">
+    
+    /**
+    * Selects a specified cell in the graph. (Make sure to add the Selection plugin first)
+    *
+    * @param id id of the cell to be select.
+    */
+    public void selectCell(String id) {
+        getElement().callJsFunction("selectCell", id);
+    }
+    
+    /**
+    * Unselect a specified cell in the graph. (Make sure to add the Selection plugin first)
+    *
+    * @param id id of the X6Cell to be unselect.
+    */
+    public void unselectCell(String id){
+        getElement().callJsFunction("unselectCell", id);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold desc="Node Visibility Management">
+    
+    /**
+    * Displays a specific node in the graph by its ID.
+    *
+    * @param id the ID of the node to be shown
+    */
     public void showNode(String id){
         getElement().callJsFunction("showNode", id);
     }
     
+    /**
+    * Hides a specific node in the graph by its ID.
+    *
+    * @param id the ID of the node to be hidden
+    */
     public void hideNode(String id){
         getElement().callJsFunction("hideNode", id);
     }
     
-    public void resizeCanvas(int width, int height){
-        getElement().callJsFunction("resizeCanvas", width, height);
-    }
+    // </editor-fold>
+        
+    // <editor-fold desc="Init Events">
     
-    /*
-    * Events of X6
-    * These methods must be initialized if you need the listeners for these events to work.
+    /**
+    * Initializes the event for when a cell is selected.
     */
-    
     public void initEventCellSelected() {
         getElement().callJsFunction("eventCellSelected");
     }
 
+    /**
+    * Initializes the event for when nodes are connected.
+    */
     public void initEventNodesConnected() {
         getElement().callJsFunction("eventNodesConnected");
     }
 
+    /**
+    * Initializes the event for getting the new position of a node.
+    */
     public void initEventGetNodeNewPosition() {
         getElement().callJsFunction("eventGetNodeNewPosition");
     }
 
+    /**
+    * Initializes the event for getting the new dimensions of the background node.
+    */
     public void initEventGetNodeBackgroundNewDimensions() {
         getElement().callJsFunction("eventGetNodeBackgroundNewDimensions");
     }
 
+    /**
+    * Initializes the event for resizing the background node on double-click.
+    */
     public void initEventResizeNodeBackgroundDblClick() {
         getElement().callJsFunction("eventResizeNodeBackgroundDblClick");
     }
     
+    /**
+    * Initializes the event for when a node is changed.
+    */
     public void initEventNodeChanged(){
         getElement().callJsFunction("eventNodeChanged");
     }
     
+    /**
+    * Initializes the event for when the background node changes.
+    */
     public void initEventBackgroundChanged(){
         getElement().callJsFunction("eventBackgroundChanged");
     }
     
+    /**
+    * Initializes the event for configuring Z-index controls.
+    */
     public void initEventConfigureZIndexControls() {
         getElement().callJsFunction("configureZIndexControls");
     }
 
+    /**
+    * Initializes the event for showing the context menu.
+    */
     public void initEventContextMenu() {
         getElement().callJsFunction("eventContextMenu");
     }
 
+    /**
+    * Initializes the event for resizing a node.
+    */
     public void initEventResizeNode() {
         getElement().callJsFunction("eventResizeNode");
     }
 
+    /**
+    * Initializes the event for when a cell is unselected.
+    */
     public void initEventCellUnselect() {
         getElement().callJsFunction("eventCellUnselect");
     }
 
+    /**
+    * Initializes the event to add the remove button tool to nodes.
+    */
     public void initEventAddNodeButtonRemove() {
         getElement().callJsFunction("eventAddNodeButtonRemoveTool");
     }
 
+    /**
+    * Initializes the event to remove the remove button tool from nodes.
+    */
     public void initEventRemoveNodeButtonRemoveTool() {
         getElement().callJsFunction("eventRemoveNodeButtonRemoveTool");
     }
 
+    /**
+    * Initializes the event to add the vertices tool to edges.
+    */
     public void initEventAddEdgeVerticesTool() {
         getElement().callJsFunction("eventAddEdgeVerticesTool");
     }
     
+    /**
+    * Initializes the event to add the remove button tool to edges.
+    */
     public void initEventAddEdgeButtonRemoveTool(){
         getElement().callJsFunction("eventAddEdgeButtonRemoveTool");
     }
 
+    /**
+    * Initializes the event to remove tools from edges.
+    */
     public void initEventRemoveEdgeTools() {
         getElement().callJsFunction("eventRemoveEdgeTools");
     }
     
+    /**
+    * Activates the context menu interaction.
+    */
     public void activateContextMenu(){
         getElement().callJsFunction("activateContextMenu");
     }
     
+    /**
+    * Initializes the event for when an edge is double-clicked.
+    */
     public void initEventEdgeDblclick(){
         getElement().callJsFunction("eventDblClickEdge");
     }
     
+    /**
+    * Initializes the event for when an edge is changed.
+    */
     public void initEventEdgeChanged(){
         getElement().callJsFunction("eventEdgeChanged");
     }
     
+    /**
+    * Initializes the event for when a cell is removed.
+    */
     public void initEventCellRemoved(){
         getElement().callJsFunction("eventCellRemoved");
     }
     
+    /**
+    * Fires the event for when the graph starts loading.
+    */
     public void fireGraphLoading(){
         getElement().callJsFunction("eventGraphLoading");
     }
     
+    /**
+     * Fires the event for when the graph finishes loading.
+     */
     public void fireGraphLoaded(){
         getElement().callJsFunction("eventGraphLoaded");
     }
-
-    /*
-    * End of X6 events
-    */
     
+    // </editor-fold>
     
-    /*
-    * Other methods 
-    */
-    
-    /*
-    * Center a point in the middle of the canvas, it is used to organize the canvas
-    */
-    public void centerGraph(String idNode){
-        getElement().callJsFunction("centerGraph", idNode);
-    }
+    // <editor-fold desc="Listeners">
     
     /**
-    * Exports the current graph as a JPEG image.
-    *
-    * The function handles the conversion of the graph into a JPEG format and download the image.
-    *
-    * @param filename the desired name for the exported JPEG file.
+    * Adds a listener for when nodes are connected by an edge.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
     */
-    public void exportGraphAsJPEG(String filename){
-        getElement().callJsFunction("exportGraphToJPEG", filename);
-    }
-    
-     /**
-     * Shows the grid on the graph with the given configuration.
-     *
-     * @param size The grid size (distance between lines or dots).
-     * @param mainColor The main grid color.
-     * @param mainThickness The thickness of the main grid lines.
-     * @param subColor The secondary grid color.
-     * @param subThickness The thickness of the secondary grid lines.
-     * @param factor The spacing factor between main and secondary lines.
-     */
-    public void showGrid(int size, String mainColor, double mainThickness,
-                         String subColor, double subThickness, int factor) {
-        getElement().callJsFunction("showGrid", size, mainColor, mainThickness, subColor, subThickness, factor);
-    }
-
-    /**
-     * Hides the grid on the graph.
-     */
-    public void hideGrid() {
-        getElement().callJsFunction("hideGrid");
-    }
-    
-    /*
-    * End of other methods
-    */
-    
-    
-    /*
-    * Listeners
-    */
-    
     public Registration addNodesConnectedListener(ComponentEventListener<EdgeCreatedEvent> listener) {
         return addListener(EdgeCreatedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the graph is created.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addGraphCreatedListener(ComponentEventListener<GraphCreatedEvent> listener) {
         return addListener(GraphCreatedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the graph starts loading.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addGraphLoadingListener(ComponentEventListener<GraphLoadingEvent> listener) {
         return addListener(GraphLoadingEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the graph finishes loading.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addGraphLoadedListener(ComponentEventListener<GraphLoadedEvent> listener) {
         return addListener(GraphLoadedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the graph is cleaned.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addGraphCleanedListener(ComponentEventListener<GraphCleanedEvent> listener) {
         return addListener(GraphCleanedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the graph is refreshed.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addGraphRefreshedListener(ComponentEventListener<GraphRefreshedEvent> listener) {
         return addListener(GraphRefreshedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when a cell is brought to front.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addBringToFrontCellListener(ComponentEventListener<BringToFrontEvent> listener){
         return addListener(BringToFrontEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when a cell is sent to back.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addSendToBackCellListener(ComponentEventListener<SendToBackEvent> listener){
         return addListener(SendToBackEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when a node is changed.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addNodeChangedListener(ComponentEventListener<NodeChangedEvent> listener){
         return addListener(NodeChangedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the background node changes.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addBackgroundChangedListener(ComponentEventListener<BackgroundChangedEvent> listener){
         return addListener(BackgroundChangedEvent.class, listener);
     }
-   
+
+   /**
+    * Adds a listener for when a node is moved.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addNodeMovedListener(ComponentEventListener<NodeMovedEvent> listener) {
         return addListener(NodeMovedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when the background node is resized.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addNodeBackgroundResizedListener(ComponentEventListener<NodeBackgroundResizedEvent> listener) {
         return addListener(NodeBackgroundResizedEvent.class, listener);
     }
 
+   /**
+    * Adds a listener for when a cell is selected.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addCellSelectedListener(ComponentEventListener<CellSelectedEvent> listener) {
         return addListener(CellSelectedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when a cell is unselected.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addCellUnselectedListener(ComponentEventListener<CellUnselectedEvent> listener) {
         return addListener(CellUnselectedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when an edge is double-clicked.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addEdgeDblClickListener(ComponentEventListener<EdgeDblClickEvent> listener) {
         return addListener(EdgeDblClickEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when an edge is changed.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addEdgeChangedListener(ComponentEventListener<EdgeChangedEvent> listener) {
         return addListener(EdgeChangedEvent.class, listener);
     }
-    
+
+   /**
+    * Adds a listener for when a cell is removed.
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
     public Registration addCellRemovedListener(ComponentEventListener<CellRemovedEvent> listener) {
         return addListener(CellRemovedEvent.class, listener);
     }
 
-    /*
-    * End of Listeners
-    */
+    // </editor-fold>
     
+    /**
+    * Retrieves a node from the list by its unique ID.
+    *
+    * @param id the ID of the node to retrieve
+    * @return the X6Node with the specified ID, or null.
+    */
     public X6Node getNodeById(String id) {
         return nodes.stream()
                     .filter(node -> node.getId().equals(id))
@@ -768,7 +984,12 @@ public class AntvX6 extends Div {
                     .orElse(null);
     }
 
-    
+    /**
+     * Retrieves an edge from the list by its unique ID.
+     *
+     * @param id the ID of the edge to retrieve
+     * @return the X6Edge with the specified ID, or null.
+     */
     public X6Edge getEdgeById(String id) {
         return edges.stream()
                     .filter(edge -> edge.getId().equals(id))
@@ -776,6 +997,12 @@ public class AntvX6 extends Div {
                     .orElse(null);
     }
     
+    /**
+    * Retrieves a text node from the list by its unique ID.
+    *
+    * @param id the ID of the text node to retrieve
+    * @return the X6NodeText with the specified ID, or null.
+    */
     public X6NodeText getNodeTextById(String id) {
         return textNodes.stream()
                         .filter(text -> text.getId().equals(id))
