@@ -911,9 +911,7 @@ export class X6 extends LitElement {
       container: this.target,
       autoResize: true,
       grid: this.graph_grid,
-      ...(this.graph_panning
-        ? { panning: { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] } }
-        : {}),
+      panning: false,
       mousewheel: this.graph_mouse_wheel,
       background: { color: this.graph_background_color },
       connecting: {
@@ -936,9 +934,7 @@ export class X6 extends LitElement {
       container: this.target,
       autoResize: true,
       grid: this.graph_grid,
-      panning: this.graph_panning
-        ? { enabled: true, eventTypes: ['leftMouseDown'], modifiers: ['ctrl'] }
-        : false,
+      panning: false,
       mousewheel: this.graph_mouse_wheel,
       background: { color: this.graph_background_color },
       interacting: {
@@ -1027,7 +1023,7 @@ export class X6 extends LitElement {
    * Adds the scroller plugin to the graph with the specified configuration.
    * @param padding - The padding (in pixels) around the graph content inside the scroller.
    */
-  public addScrollerPlugin(
+   public addScrollerPlugin(
     padding: number
   ) {
     if (this.graph) {
@@ -1035,16 +1031,23 @@ export class X6 extends LitElement {
         enabled: true,
         pageVisible: false, 
         pageBreak: false,    
-        pannable: true,      
+        pannable: false,      
         autoResize: true,    
         padding: padding,
         pageWidth: 2000,
         pageHeight: 500,
+        propagate: true
       });
-
+      window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey) scrollerPlugin.enablePanning();
+      });
+      window.addEventListener('keyup', () => {
+        scrollerPlugin.disablePanning();
+      });
       this.graph.use(scrollerPlugin);
     }
   }
+  
 
   /**
   * Adds the export plugin to the graph.
@@ -1140,9 +1143,11 @@ export class X6 extends LitElement {
         enabled: enabled,
         multiple: multiple,
         rubberband: rubberband,
+        modifiers: ['shift'], 
         movable: movable,
         showNodeSelectionBox: showNodeSelectionBox,
-        showEdgeSelectionBox: showEdgeSelectionBox
+        showEdgeSelectionBox: showEdgeSelectionBox,
+        pointerEvents: 'none',
       }));
     }
   }
@@ -1329,19 +1334,26 @@ export class X6 extends LitElement {
   /**
   * Registers an event listener for when a cell is unselected in the graph.
   */
-  public eventCellUnselect(){
-    if(this.graph){
-      this.graph.on('cell:unselected', ({cell}) => {
+  public eventCellUnselect() {
+    this.graph?.on('blank:mousedown', () => {
+      const selectedCells = this.graph?.getSelectedCells() ?? [];
+
+      if (selectedCells.length === 1) {
+        const deselectedId = selectedCells[0].id;
+        this.graph?.cleanSelection();
+
         this.dispatchEvent(new CustomEvent('cell-unselected', {
           detail: {
             cell: {
-              id: cell.id,
+              id: deselectedId,
               state: 'successful',
-            }
-          }
+            },
+          },
         }));
-      });
-    }
+      }else if (selectedCells.length > 1) {
+        this.graph!.cleanSelection();
+      }
+    });
   }
 
   //#endSection Node Selection Functionalities
@@ -2278,7 +2290,7 @@ export class X6 extends LitElement {
    */
   public eventResizeNode(){
     if(this.graph){
-      this.graph.on('node:dblclick', ({node}) => {
+      this.graph.on('node:mousedown', ({ node }) => {
         if(node.shape != "image"){
           const transformPlugin = this.graph?.getPlugin('transform') as Transform;
           transformPlugin.createWidget(node);
@@ -2295,7 +2307,7 @@ export class X6 extends LitElement {
   */
   public eventResizeNodeBackgroundDblClick(){
     if(this.graph){
-      this.graph.on('node:dblclick', ({node}) => {
+      this.graph.on('node:mousedown', ({ node }) => {
         if(node.id === this.graph_node_background_id){
           const transformPlugin = this.graph?.getPlugin('transform') as Transform;
           transformPlugin.createWidget(node);
