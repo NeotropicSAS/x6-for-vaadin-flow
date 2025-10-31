@@ -17,7 +17,7 @@
 
 import { LitElement, html, css } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
-import { Edge, Graph, Node } from '@antv/x6';
+import { Edge, Graph, Node, Cell } from '@antv/x6';
 import{ Snapline }from'@antv/x6-plugin-snapline';
 import { Transform } from '@antv/x6-plugin-transform';
 import { Export } from '@antv/x6-plugin-export'; 
@@ -1035,8 +1035,7 @@ export class X6 extends LitElement {
         autoResize: true,    
         padding: padding,
         pageWidth: 2000,
-        pageHeight: 500,
-        propagate: true
+        pageHeight: 500
       });
       window.addEventListener('keydown', (e) => {
         if (e.ctrlKey) scrollerPlugin.enablePanning();
@@ -2079,6 +2078,130 @@ export class X6 extends LitElement {
     if(this.graph){
       this.graph.on('node:mouseleave', ({ node }) => {
         node.removeTool('button-remove');
+      });
+    }
+  }
+
+  /**
+   * Registers a custom remove button tool for nodes.
+   * The button appears when hovering over a node and emits an event when clicked.
+   */
+  public registerConfirmRemoveToolNode(){
+    Graph.registerNodeTool('confirm-remove', {
+      inherit: 'button', 
+      markup: [
+        {
+          tagName: 'circle',
+          selector: 'button',
+          attrs: { r: 8, fill: '#ff4d4f', cursor: 'pointer' },
+        },
+        {
+          tagName: 'text',
+          textContent: '×',
+          selector: 'icon',
+          attrs: {
+            fill: '#fff',
+            'font-size': 12,
+            'text-anchor': 'middle',
+            'dominant-baseline': 'middle',
+            pointerEvents: 'none',
+          },
+        },
+      ],
+      onClick: ({ cell }: { cell: Cell }) => {
+        this.dispatchEvent(
+          new CustomEvent('btn-remove-clicked', {
+            detail: { id: cell.id },
+          }),
+        );
+      },
+    })
+  }
+
+  /**
+   * Registers a custom remove button tool for edges.
+   * The button appears when hovering over an edge and emits an event when clicked.
+   */
+  public registerConfirmRemoveToolEdge(){
+    Graph.registerEdgeTool('confirm-remove', {
+      inherit: 'button',
+      markup: [
+        {
+          tagName: 'circle',
+          selector: 'button',
+          attrs: { r: 8, fill: '#ff4d4f', cursor: 'pointer' },
+        },
+        {
+          tagName: 'text',
+          textContent: '×',
+          selector: 'icon',
+          attrs: {
+            fill: '#fff',
+            'font-size': 12,
+            'text-anchor': 'middle',
+            'dominant-baseline': 'middle',
+            pointerEvents: 'none',
+          },
+        },
+      ],
+      onClick: ({ cell }: { cell: Cell }) => {
+        this.dispatchEvent(
+          new CustomEvent('btn-remove-clicked', {
+            detail: { id: cell.id },
+          }),
+        );
+      },
+    });
+  }
+
+  /**
+   * Adds the custom remove button tool to edges when hovered.
+   * Two remove buttons are displayed on opposite sides of the edge.
+   */
+  public eventAddEdgeButtonRemoveCustomTool(){
+    if(this.graph){
+      this.graph.on('edge:mouseenter',({ edge })=>{   
+        edge.addTools({
+          name: 'confirm-remove',
+          args: { distance: 40 },
+        })
+  
+        edge.addTools({
+          name: 'confirm-remove',
+          args: { distance: -40 },
+        })
+      })
+    }
+  }
+
+  /**
+   * Adds the custom remove button tool to nodes when hovered.
+   * The button is not added to the background node.
+   */
+  public eventAddNodeButtonRemoveCustomTool(){
+    if(this.graph){
+      this.graph.on('node:mouseenter', ({ node }) => {
+        if(node.id !== this.graph_node_background_id){
+            node.addTools([
+            {
+              name: 'confirm-remove',
+              args: {
+                x: 0,
+                y: 0,
+              }
+            }])
+        }
+      });
+    }
+  }
+
+  /**
+   * Removes the custom remove button tool from nodes when the mouse leaves.
+   */
+  public eventRemoveNodeButtonRemoveCustomTool(){
+    if(this.graph){
+      this.graph.on('node:mouseleave', ({ node }) => {
+        node.removeTool('confirm-remove');
       });
     }
   }

@@ -23,6 +23,7 @@ import com.neotropic.flow.component.antvx6.objects.X6NodeBackground;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import com.neotropic.flow.component.antvx6.events.BackgroundChangedEvent;
 import com.neotropic.flow.component.antvx6.events.BringToFrontEvent;
+import com.neotropic.flow.component.antvx6.events.ButtonRemoveCustomToolClicked;
 import com.neotropic.flow.component.antvx6.events.CellRemovedEvent;
 import com.neotropic.flow.component.antvx6.events.CellSelectedEvent;
 import com.neotropic.flow.component.antvx6.events.CellUnselectedEvent;
@@ -193,6 +194,24 @@ public class AntvX6 extends Div {
     */
     public void setGraphZoom(double zoom){
         getElement().setProperty(PROPERTY_GRAPH_ZOOM, zoom);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold desc="Custom Tools">
+    
+    /**
+    * Registers the custom remove button tool for nodes.
+    */
+    public void registerConfirmRemoveToolNode(){
+        getElement().callJsFunction("registerConfirmRemoveToolNode");
+    }
+    
+    /**
+    * Registers the custom remove button tool for edges.
+    */
+    public void registerConfirmRemoveToolEdge(){
+        getElement().callJsFunction("registerConfirmRemoveToolEdge");
     }
     
     // </editor-fold>
@@ -795,6 +814,27 @@ public class AntvX6 extends Div {
         getElement().callJsFunction("eventGraphLoaded");
     }
     
+    /**
+    * Initializes the event that adds the custom remove button tool to edges when hovered.
+    */
+    public void initEventAddEdgeButtonRemoveCustomTool(){
+        getElement().callJsFunction("eventAddEdgeButtonRemoveCustomTool");
+    }
+    
+    /**
+    * Initializes the event that adds the custom remove button tool to nodes when hovered.
+    */
+    public void initEventAddNodeButtonRemoveCustomTool(){
+        getElement().callJsFunction("eventAddNodeButtonRemoveCustomTool");
+    }
+    
+    /**
+    * Initializes the event that removes the custom remove button tool from nodes when the mouse leaves.
+    */
+    public void initEventRemoveNodeButtonRemoveCustomTool(){
+        getElement().callJsFunction("eventRemoveNodeButtonRemoveCustomTool");
+    }
+    
     // </editor-fold>
     
     // <editor-fold desc="Listeners">
@@ -967,6 +1007,16 @@ public class AntvX6 extends Div {
     */
     public Registration addCellRemovedListener(ComponentEventListener<CellRemovedEvent> listener) {
         return addListener(CellRemovedEvent.class, listener);
+    }
+    
+    /**
+    * Adds a listener for when the custom remove button tool is clicked.
+    *
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
+    public Registration addButtonRemoveCustomToolClicked(ComponentEventListener<ButtonRemoveCustomToolClicked> listener){
+        return addListener(ButtonRemoveCustomToolClicked.class, listener);
     }
 
     // </editor-fold>
