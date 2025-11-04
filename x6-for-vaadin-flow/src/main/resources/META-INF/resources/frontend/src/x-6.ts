@@ -2496,8 +2496,11 @@ export class X6 extends LitElement {
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
       const cell = this.graph.getCellById(cellId);
-      let nextLevel = this.graph.getCellCount();
-      cell.setProp('zIndex', nextLevel);
+      const maxZ = Math.max(
+        ...this.graph.getCells().map(c => c.getProp('zIndex') || 0)
+      );
+
+      cell.setProp('zIndex', maxZ + 1);
 
       this.dispatchEvent(new CustomEvent('bring-to-front', {
         detail: {
@@ -2523,6 +2526,8 @@ export class X6 extends LitElement {
       let currentZIndex = cell.getProp('zIndex')
       if(currentZIndex)
         cell.setProp('zIndex', currentZIndex+=1);
+      else
+        cell.setProp('zIndex', 0);
       
       this.dispatchEvent(new CustomEvent('bring-to-front', {
         detail: {
@@ -2545,7 +2550,11 @@ export class X6 extends LitElement {
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
       const cell = this.graph.getCellById(cellId);
-      cell.setProp('zIndex', 1);
+      const minZ = Math.min(
+        ...this.graph.getCells().map(c => c.getProp('zIndex') || 0)
+      );
+
+      cell.setProp('zIndex', minZ - 1);
 
       this.dispatchEvent(new CustomEvent('send-to-back', {
         detail: {
@@ -2568,9 +2577,9 @@ export class X6 extends LitElement {
     const cellId = this.contextMenu.getAttribute('data-cell-id')
     if(this.graph && cellId){
       const cell = this.graph.getCellById(cellId);
-      let currentZIndex = cell.getProp('zIndex')
-      if(currentZIndex && currentZIndex > 1)
-        cell.setProp('zIndex', currentZIndex-=1);
+      let currentZIndex = cell.getProp('zIndex') || 0;
+      if(currentZIndex)
+        cell.setProp('zIndex', currentZIndex - 1);
 
       this.dispatchEvent(new CustomEvent('send-to-back', {
         detail: {
