@@ -106,12 +106,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.neotropic.flow.component</groupId>
-            <artifactId>x6-for-vaadin-flow</artifactId>
-            <version>0.1.0</version>
-            <type>jar</type>
-        </dependency>
-        
+            <groupId>org.vaadin.addons.x6</groupId>
+            <artifactId>xsix-for-vaadin-flow</artifactId>
+            <version>1.0.0</version>
+         </dependency>
     </dependencies>
 
     <build>
