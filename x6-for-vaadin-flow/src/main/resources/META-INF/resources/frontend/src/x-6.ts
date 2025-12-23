@@ -2084,7 +2084,7 @@ export class X6 extends LitElement {
 
   /**
    * Registers a custom remove button tool for nodes.
-   * The button appears when hovering over a node and emits an event when clicked.
+   * Emits an event when clicked.
    */
   public registerConfirmRemoveToolNode(){
     Graph.registerNodeTool('confirm-remove', {
@@ -2093,7 +2093,7 @@ export class X6 extends LitElement {
         {
           tagName: 'circle',
           selector: 'button',
-          attrs: { r: 8, fill: '#ff4d4f', cursor: 'pointer' },
+          attrs: { r: 15, fill: '#ff4d4f', cursor: 'pointer' },
         },
         {
           tagName: 'text',
@@ -2101,7 +2101,7 @@ export class X6 extends LitElement {
           selector: 'icon',
           attrs: {
             fill: '#fff',
-            'font-size': 12,
+            'font-size': 22,
             'text-anchor': 'middle',
             'dominant-baseline': 'middle',
             pointerEvents: 'none',
@@ -2116,6 +2116,73 @@ export class X6 extends LitElement {
         );
       },
     })
+  }
+
+  /**
+   * Registers a custom edit button tool for nodes.
+   * Emits an event when clicked.
+   */
+  public registerEditToolNode() {
+    Graph.registerNodeTool('edit-button', {
+      inherit: 'button',
+      markup: [
+        {
+          tagName: 'circle',
+          selector: 'button',
+          attrs: { r: 15, fill: '#1890ff', cursor: 'pointer' },
+        },
+        {
+          tagName: 'text',
+          textContent: '✎',
+          selector: 'icon',
+          attrs: {
+            fill: '#fff',
+            'font-size': 22,
+            'text-anchor': 'middle',
+            'dominant-baseline': 'middle',
+            pointerEvents: 'none',
+          },
+        },
+      ],
+      onClick: ({ cell }: { cell: Cell }) => {
+        this.dispatchEvent(
+          new CustomEvent('btn-edit-clicked', {
+            detail: { id: cell.id },
+          }),
+        );
+      },
+    });
+  }
+
+  /**
+   * Set the custom tools of edit and remove button for a node.
+   */
+  public setEditRemoveButtonCustomTool(nodeId: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(nodeId);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        const width = node.getBBox().width;
+        node.addTools(
+          [
+            {
+              name: 'edit-button',
+              args: {
+                x: width,
+                y: -17,
+              }
+            },
+            {
+              name: 'confirm-remove',
+              args: {
+                x: width + 35,
+                y: -17,
+              }
+            }
+          ]
+        );
+      }
+    }
   }
 
   /**

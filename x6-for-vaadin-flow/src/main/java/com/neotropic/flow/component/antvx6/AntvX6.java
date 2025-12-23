@@ -23,6 +23,7 @@ import com.neotropic.flow.component.antvx6.objects.X6NodeBackground;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import com.neotropic.flow.component.antvx6.events.BackgroundChangedEvent;
 import com.neotropic.flow.component.antvx6.events.BringToFrontEvent;
+import com.neotropic.flow.component.antvx6.events.ButtonEditCustomToolClicked;
 import com.neotropic.flow.component.antvx6.events.ButtonRemoveCustomToolClicked;
 import com.neotropic.flow.component.antvx6.events.CellRemovedEvent;
 import com.neotropic.flow.component.antvx6.events.CellSelectedEvent;
@@ -199,6 +200,20 @@ public class AntvX6 extends Div {
     // </editor-fold>
     
     // <editor-fold desc="Custom Tools">
+    
+    /**
+    * Set the custom tools of remove and edit button
+    */
+    public void setEditRemoveCustomButtonTool(String nodeId){
+        getElement().callJsFunction("setEditRemoveButtonCustomTool", nodeId);
+    }
+    
+    /**
+    * Registers the custom edit button tool for nodes.
+    */
+    public void registerEditToolNode(){
+        getElement().callJsFunction("registerEditToolNode");
+    }
     
     /**
     * Registers the custom remove button tool for nodes.
@@ -1017,6 +1032,16 @@ public class AntvX6 extends Div {
     */
     public Registration addButtonRemoveCustomToolClicked(ComponentEventListener<ButtonRemoveCustomToolClicked> listener){
         return addListener(ButtonRemoveCustomToolClicked.class, listener);
+    }
+    
+    /**
+    * Adds a listener for when the custom edit button tool is clicked.
+    *
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
+    public Registration addButtonEditCustomToolClicked(ComponentEventListener<ButtonEditCustomToolClicked> listener){
+        return addListener(ButtonEditCustomToolClicked.class, listener);
     }
 
     // </editor-fold>
