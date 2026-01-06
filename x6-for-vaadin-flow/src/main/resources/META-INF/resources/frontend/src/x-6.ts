@@ -857,7 +857,7 @@ export class X6 extends LitElement {
           this.initGraphWithInteractions();
         break;
         default:
-          this.initGraph();
+      this.initGraph();
         break;
       }
       this.eventInitGraph();
@@ -1818,6 +1818,55 @@ export class X6 extends LitElement {
   //#section Object Styles
 
   /**
+   * Aligns the node label to the left and centers it vertically inside the node.
+   *
+   * @param nodeId id of the node whose label will be aligned
+   */
+  public alignNodeLabelLeftMiddle(nodeId: string) {
+    if (!this.graph)
+      return
+
+    const node = this.graph.getCellById(nodeId)
+
+    if (!node || !node.isNode())
+      return
+
+    node.setAttrs({
+      label: {
+        refX: 8,
+        refY: 0.5,
+        textAnchor: 'start',
+        textVerticalAnchor: 'middle',
+      },
+    })
+  }
+
+  /**
+   * Aligns the node label to the right and centers it vertically inside the node.
+   *
+   * @param nodeId id of the node whose label will be aligned
+   */
+  public alignNodeLabelRightMiddle(nodeId: string) {
+    if (!this.graph) 
+      return
+
+    const node = this.graph.getCellById(nodeId)
+
+    if (!node || !node.isNode()) 
+      return
+    
+    node.setAttrs({
+      label: {
+        refX: '100%',
+        refX2: -8,
+        refY: 0.5,
+        textAnchor: 'end',
+        textVerticalAnchor: 'middle',
+      },
+    })
+  }
+
+  /**
    * Updates the visual style of a specific node in the graph.
    * 
    * Depending on the style type, the method updates attributes such as border radius, z-index, 
@@ -2276,6 +2325,28 @@ export class X6 extends LitElement {
   //#endSection AntV X6 Tools
 
   //#section Events
+
+  /**
+  * Sets up an event listener for when a cell is clicked.
+  * 
+  */
+  public eventClickedCell(){
+    if(this.graph){
+      this.graph.on('cell:mousedown', ({ cell }) => {
+        let cellType = 'edge';
+        if(cell.isNode())
+          cellType = 'node'
+        this.dispatchEvent(new CustomEvent('cell-clicked', {
+          detail: {
+            cell: {
+              id: cell.id,
+              cellType: cellType
+            }
+          }
+        }));
+      });
+    }
+  }
 
   /**
   * Sets up an event listener for when the background node is resized.
