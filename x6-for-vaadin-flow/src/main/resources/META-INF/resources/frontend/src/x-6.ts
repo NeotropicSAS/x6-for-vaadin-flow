@@ -2142,7 +2142,7 @@ export class X6 extends LitElement {
         {
           tagName: 'circle',
           selector: 'button',
-          attrs: { r: 15, fill: '#ff4d4f', cursor: 'pointer' },
+          attrs: { r: 12, fill: '#ff4d4f', cursor: 'pointer' },
         },
         {
           tagName: 'text',
@@ -2150,7 +2150,7 @@ export class X6 extends LitElement {
           selector: 'icon',
           attrs: {
             fill: '#fff',
-            'font-size': 22,
+            'font-size': 18,
             'text-anchor': 'middle',
             'dominant-baseline': 'middle',
             pointerEvents: 'none',
@@ -2178,7 +2178,7 @@ export class X6 extends LitElement {
         {
           tagName: 'circle',
           selector: 'button',
-          attrs: { r: 15, fill: '#1890ff', cursor: 'pointer' },
+          attrs: { r: 12, fill: '#1890ff', cursor: 'pointer' },
         },
         {
           tagName: 'text',
@@ -2186,7 +2186,7 @@ export class X6 extends LitElement {
           selector: 'icon',
           attrs: {
             fill: '#fff',
-            'font-size': 22,
+            'font-size': 18,
             'text-anchor': 'middle',
             'dominant-baseline': 'middle',
             pointerEvents: 'none',
