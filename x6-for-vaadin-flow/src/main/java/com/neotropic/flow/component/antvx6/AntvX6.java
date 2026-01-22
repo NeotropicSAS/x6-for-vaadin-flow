@@ -23,7 +23,9 @@ import com.neotropic.flow.component.antvx6.objects.X6NodeBackground;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import com.neotropic.flow.component.antvx6.events.BackgroundChangedEvent;
 import com.neotropic.flow.component.antvx6.events.BringToFrontEvent;
+import com.neotropic.flow.component.antvx6.events.ButtonEditCustomToolClicked;
 import com.neotropic.flow.component.antvx6.events.ButtonRemoveCustomToolClicked;
+import com.neotropic.flow.component.antvx6.events.CellClickedEvent;
 import com.neotropic.flow.component.antvx6.events.CellRemovedEvent;
 import com.neotropic.flow.component.antvx6.events.CellSelectedEvent;
 import com.neotropic.flow.component.antvx6.events.CellUnselectedEvent;
@@ -199,6 +201,27 @@ public class AntvX6 extends Div {
     // </editor-fold>
     
     // <editor-fold desc="Custom Tools">
+    
+    /**
+    * Set the custom tools of remove and edit button
+    */
+    public void setEditRemoveCustomButtonTool(String nodeId){
+        getElement().callJsFunction("setEditRemoveButtonCustomTool", nodeId);
+    }
+    
+    /**
+    * Set the custom tool of remove button
+    */
+    public void setRemoveCustomButtonTool(String nodeId){
+        getElement().callJsFunction("setRemoveButtonCustomTool", nodeId);
+    }
+
+    /**
+    * Registers the custom edit button tool for nodes.
+    */
+    public void registerEditToolNode(){
+        getElement().callJsFunction("registerEditToolNode");
+    }
     
     /**
     * Registers the custom remove button tool for nodes.
@@ -569,6 +592,24 @@ public class AntvX6 extends Div {
     // <editor-fold desc="Object Styles">
     
     /**
+    * Aligns the label of a node to the left and centers it vertically.
+    *
+    * @param nodeId the ID of the node whose label will be aligned
+    */
+    public void alignNodeLabelLeftMiddle(String nodeId){
+        getElement().callJsFunction("alignNodeLabelLeftMiddle", nodeId);
+    }
+
+    /**
+     * Aligns the label of a node to the right and centers it vertically.
+     *
+     * @param nodeId the ID of the node whose label will be aligned
+     */
+    public void alignNodeLabelRightMiddle(String nodeId){
+        getElement().callJsFunction("alignNodeLabelRightMiddle", nodeId);
+    }
+
+    /**
     * Sets the style for a specific node.
     * 
     * @param id the ID of the node to which the style should be applied.
@@ -659,6 +700,13 @@ public class AntvX6 extends Div {
     // </editor-fold>
         
     // <editor-fold desc="Init Events">
+    
+    /**
+    * Initializes the event for when a cell is clicked.
+    */
+    public void initEventCellClicked(){
+        getElement().callJsFunction("eventClickedCell");
+    }
     
     /**
     * Initializes the event for when a cell is selected.
@@ -840,6 +888,16 @@ public class AntvX6 extends Div {
     // <editor-fold desc="Listeners">
     
     /**
+    * Adds a listener for when cell is clicked
+    * 
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
+    public Registration addCellClickedListener(ComponentEventListener<CellClickedEvent> listener) {
+        return addListener(CellClickedEvent.class, listener);
+    }
+    
+    /**
     * Adds a listener for when nodes are connected by an edge.
     * 
     * @param listener the listener to handle the event
@@ -1017,6 +1075,16 @@ public class AntvX6 extends Div {
     */
     public Registration addButtonRemoveCustomToolClicked(ComponentEventListener<ButtonRemoveCustomToolClicked> listener){
         return addListener(ButtonRemoveCustomToolClicked.class, listener);
+    }
+    
+    /**
+    * Adds a listener for when the custom edit button tool is clicked.
+    *
+    * @param listener the listener to handle the event
+    * @return a registration for removing the listener
+    */
+    public Registration addButtonEditCustomToolClicked(ComponentEventListener<ButtonEditCustomToolClicked> listener){
+        return addListener(ButtonEditCustomToolClicked.class, listener);
     }
 
     // </editor-fold>

@@ -18,6 +18,8 @@ package com.neotropic.flow.component.antvx6.objects;
 import com.neotropic.flow.component.antvx6.constants.X6Constants;
 import com.neotropic.flow.component.antvx6.styles.X6NodeLabelStyles;
 import com.neotropic.flow.component.antvx6.styles.X6NodeStyles;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -38,6 +40,7 @@ public abstract class X6AbstractNode extends X6Cell {
     private String label;
     private X6NodeStyles nodeStyles;
     private X6NodeLabelStyles nodeLabelStyles;
+    private List<String> childrenId;
 
     public X6AbstractNode(){
         super();
@@ -45,6 +48,7 @@ public abstract class X6AbstractNode extends X6Cell {
         this.movable = true;
         this.nodeStyles = new X6NodeStyles();
         this.nodeLabelStyles = new X6NodeLabelStyles();
+        this.childrenId = new ArrayList<>();
     }
     
     public X6AbstractNode(String id, double x, double y,double width, double height, String shape){
@@ -57,5 +61,6 @@ public abstract class X6AbstractNode extends X6Cell {
         this.label = "";
         this.nodeStyles = new X6NodeStyles();
         this.nodeLabelStyles = new X6NodeLabelStyles();
+        this.childrenId = new ArrayList<>();
     }
 }
