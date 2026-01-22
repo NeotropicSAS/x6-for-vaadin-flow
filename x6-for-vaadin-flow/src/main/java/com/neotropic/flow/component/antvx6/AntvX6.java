@@ -210,6 +210,13 @@ public class AntvX6 extends Div {
     }
     
     /**
+    * Set the custom tool of remove button
+    */
+    public void setRemoveCustomButtonTool(String nodeId){
+        getElement().callJsFunction("setRemoveButtonCustomTool", nodeId);
+    }
+
+    /**
     * Registers the custom edit button tool for nodes.
     */
     public void registerEditToolNode(){

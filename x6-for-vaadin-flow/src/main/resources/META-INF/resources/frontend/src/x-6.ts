@@ -2233,6 +2233,30 @@ export class X6 extends LitElement {
       }
     }
   }
+  
+  /**
+   * Set the custom tools of remove button for a node.
+   */
+  public setRemoveButtonCustomTool(nodeId: string){
+    if(this.graph){
+      const cell = this.graph.getCellById(nodeId);
+      if(cell && cell.isNode()){
+        const node = cell as Node;
+        const width = node.getBBox().width;
+        node.addTools(
+          [
+            {
+              name: 'confirm-remove',
+              args: {
+                x: width,
+                y: -17,
+              }
+            }
+          ]
+        );
+      }
+    }
+  }
 
   /**
    * Registers a custom remove button tool for edges.
